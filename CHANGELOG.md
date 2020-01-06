@@ -8,6 +8,5 @@
 
 # Change Log
 
+This Change Log was automatically generated
 
-
-\* This Change Log was automatically generated
