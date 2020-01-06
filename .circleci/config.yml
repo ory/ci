@@ -24,6 +24,7 @@ orbs:
             type: string
         executor: changelog
         steps:
+          - run: git config --global push.default matching
           - checkout
           - run: gem install github_changelog_generator -v 1.14.3
           - run: sudo npm i -g doctoc
