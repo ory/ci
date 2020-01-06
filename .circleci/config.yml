@@ -13,6 +13,6 @@ workflows:
           orb-ref: ory/changelog@dev:${CIRCLE_BRANCH}
           publish-token-variable: "$CIRCLECI_DEV_API_TOKEN"
           validate: true
-      - changelog/generate:
+      - changelog/changelog:
           requires:
             - orb-tools/publish

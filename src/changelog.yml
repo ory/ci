@@ -55,6 +55,6 @@ examples:
       orbs:
         foo: ory/changelog@0.0.0
       workflows:
-        changelog:
+        generate:
           jobs:
             - changelog/changelog
