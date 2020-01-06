@@ -1,18 +1,18 @@
 version: 2.1
 description: Creates and updates the CHANGELOG.md file
+#
+#orbs:
+#  orb-tools: circleci/orb-tools@9.0.0
 
-orbs:
-  orb-tools: circleci/orb-tools@9.0.0
-
-workflows:
-  sdk:
-    jobs:
-      -
-        orb-tools/publish:
-          orb-path: src/sdk.yml
-          orb-ref: ory/sdk@dev:${CIRCLE_BRANCH}
-          publish-token-variable: CIRCLECI_DEV_API_TOKEN
-          validate: true
+#workflows:
+#  sdk:
+#    jobs:
+#      -
+#        orb-tools/publish:
+#          orb-path: src/sdk.yml
+#          orb-ref: ory/sdk@dev:${CIRCLE_BRANCH}
+#          publish-token-variable: CIRCLECI_DEV_API_TOKEN
+#          validate: true
 #      - orb-tools/dev-promote-prod-from-git-tag:
 #          orb-name: ory/sdk
 #          add-pr-comment: false
@@ -21,13 +21,13 @@ workflows:
 #              only: /.*/
 #            branches:
 #              ignore: /.*/
-  changelog:
-    jobs:
-      - orb-tools/publish:
-          orb-path: src/changelog.yml
-          orb-ref: ory/changelog@dev:${CIRCLE_BRANCH}
-          validate: true
-          publish-token-variable: CIRCLECI_DEV_API_TOKEN
+#  changelog:
+#    jobs:
+#      - orb-tools/publish:
+#          orb-path: src/changelog.yml
+#          orb-ref: ory/changelog@dev:${CIRCLE_BRANCH}
+#          validate: true
+#          publish-token-variable: CIRCLECI_DEV_API_TOKEN
 #      - orb-tools/dev-promote-prod-from-git-tag:
 #          orb-name: ory/changelog
 #          add-pr-comment: false
