@@ -9,7 +9,7 @@ orbs:
           -
             image: circleci/ruby:2.5-node
     jobs:
-      changelog:
+      generate:
         parameters:
           gitemail:
             description: The git committer's email
@@ -46,8 +46,18 @@ orbs:
               git commit -m "Update CHANGELOG [ci skip]" -- CHANGELOG.md
           - run: git push origin
 
+#orbs:
+#  codecov: ory/changelog/@dev:init
+
 workflows:
   changelog:
     jobs:
-      - changelog/changelog:
+      - changelog/generate:
           gitauthtoken: $GITHUB_TOKEN
+  btd:
+    jobs:
+      - orb-tools/publish:
+          orb-path: src/changelog.yml
+          orb-ref: circleci/hello-build@dev:${CIRCLE_BRANCH}
+          publish-token-variable: "$CIRCLECI_DEV_API_TOKEN"
+          validate: true

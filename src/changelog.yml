@@ -9,7 +9,7 @@ orbs:
           -
             image: circleci/ruby:2.5-node
     jobs:
-      changelog:
+      generate:
         parameters:
           gitemail:
             description: The git committer's email
@@ -37,6 +37,8 @@ orbs:
               paths:
                 - "/tmp/github_changelog_generator"
           - run: doctoc CHANGELOG.md
+          - run: "sed -i 's/\*\*Table of Contents.*/**Table of Contents**/' CHANGELOG.md"
+          - run: "sed -i 's/\*This Change Log was.*/This Change Log was automatically generated/' CHANGELOG.md"
           - run: git config --global user.email "<<parameters.gitemail>>"
           - run: git config --global user.name "<<parameters.gitusername>>"
           - run: git add CHANGELOG.md
