@@ -1,0 +1,57 @@
+version: 2.1
+description: Generates the Go SDK
+
+orbs:
+  sdk:
+    executors:
+      changelog:
+        docker:
+          -
+            image: circleci/go:1.13
+    jobs:
+      generate:
+        parameters:
+          gitemail:
+            description: The git committer's email
+            type: string
+            default: aeneas@ory.sh
+          gitusername:
+            description: The git committer's username
+            type: string
+            default: aeneasr
+          gitauthtoken:
+            description: A GitHub API Token
+            type: env_var_name
+            default: GITHUB_TOKEN
+        executor: changelog
+        steps:
+          - run: git config --global push.default matching
+          - checkout
+          - run: go install github.com/go-swagger/go-swagger/cmd/swagger github.com/ory/x/tools/listx github.com/sqs/goreturns
+          - run: |
+              if [ "$(git show -s --format=%B  | head -n 1)" != "Update SDK" ]]; then
+                echo "Generating SDK"
+                swagger generate spec -m -o ./docs/api.swagger.json -x sdk
+                swagger validate ./docs/api.swagger.json"
+                rm -rf ./sdk/go/$CIRCLE_PROJECT_REPONAME
+                swagger generate client -f ./docs/api.swagger.json -t sdk/go/$CIRCLE_PROJECT_REPONAME -A "Ory_$(tr '[:lower:]' '[:upper:]' <<< "${CIRCLE_PROJECT_REPONAME:0:1}")${CIRCLE_PROJECT_REPONAME:1})"
+                goreturns -w -local github.com/ory $(listx .)
+                git config --global user.email "<<parameters.gitemail>>"
+                git config --global user.name "<<parameters.gitusername>>"
+                git commit -m "Update SDK" -a || true
+                git push origin || true
+              else
+                echo "Skipping SDK generation"
+              fi
+
+examples:
+  sdk:
+    description: Generate and commit the SDK
+    usage:
+      version: 2.1
+      orbs:
+        foo: ory/sdk@0.0.0
+      workflows:
+        generate:
+          jobs:
+            - sdk/generate
