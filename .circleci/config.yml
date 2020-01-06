@@ -13,6 +13,14 @@ workflows:
           orb-ref: ory/sdk@dev:${CIRCLE_BRANCH}
           publish-token-variable: CIRCLECI_DEV_API_TOKEN
           validate: true
+      - orb-tools/dev-promote-prod-from-git-tag:
+          orb-name: ory/sdk
+          add-pr-comment: false
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
   changelog:
     jobs:
       - orb-tools/publish:
@@ -26,3 +34,5 @@ workflows:
           filters:
             tags:
               only: /.*/
+            branches:
+              ignore: /.*/
