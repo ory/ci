@@ -30,7 +30,7 @@ orbs:
           - restore_cache:
               keys:
                 - changelog-v1
-          - run: github_changelog_generator -u $CIRCLE_USERNAME -p $CIRCLE_PROJECT_REPONAME -o CHANGELOG.md --token <<parameters.gitauthtoken>> --cache-file /tmp/github_changelog_generator
+          - run: github_changelog_generator -u $CIRCLE_PROJECT_USERNAME -p $CIRCLE_PROJECT_REPONAME -o CHANGELOG.md --token <<parameters.gitauthtoken>> --cache-file /tmp/github_changelog_generator
           - save_cache:
               key: changelog-v1
               paths:
