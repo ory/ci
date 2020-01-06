@@ -1,5 +1,5 @@
 version: 2.1
-description: # The purpose of this orb
+description: Creates and updates the CHANGELOG.md file
 
 orbs:
   changelog:
