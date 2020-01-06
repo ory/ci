@@ -59,4 +59,4 @@ orbs:
 workflows:
   changelog:
     jobs:
-      - jobs/changelog
+      - changelog/changelog
