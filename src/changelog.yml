@@ -20,8 +20,9 @@ orbs:
             type: string
             default: aeneasr
           gitauthtoken:
-            description: The git committer's username
-            type: string
+            description: A GitHub API Token
+            type: env_var_name
+            default: GITHUB_TOKEN
         executor: changelog
         steps:
           - run: git config --global push.default matching
@@ -56,5 +57,4 @@ examples:
       workflows:
         changelog:
           jobs:
-            - changelog/changelog:
-                gitauthtoken: $GITHUB_TOKEN
+            - changelog/changelog
