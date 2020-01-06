@@ -27,10 +27,10 @@ orbs:
         steps:
           - run: git config --global push.default matching
           - checkout
-          - run: go install github.com/go-swagger/go-swagger/cmd/swagger github.com/ory/x/tools/listx github.com/sqs/goreturns
           - run: |
               if [ "$(git show -s --format=%B  | head -n 1)" != "Update SDK" ]]; then
                 echo "Generating SDK"
+                go install github.com/go-swagger/go-swagger/cmd/swagger github.com/ory/x/tools/listx github.com/sqs/goreturns
                 swagger generate spec -m -o ./docs/api.swagger.json -x sdk
                 swagger validate ./docs/api.swagger.json"
                 rm -rf ./sdk/go/$CIRCLE_PROJECT_REPONAME
