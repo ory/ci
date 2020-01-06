@@ -3,7 +3,7 @@ description: Creates and updates the CHANGELOG.md file
 
 orbs:
   orb-tools: circleci/orb-tools@2.0.0
-  changelog: ory/changelog@dev:${CIRCLE_BRANCH}
+  changelog: ory/changelog@dev:init
 
 workflows:
   btd:
