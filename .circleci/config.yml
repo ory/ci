@@ -3,7 +3,6 @@ description: Creates and updates the CHANGELOG.md file
 
 orbs:
   orb-tools: circleci/orb-tools@2.0.0
-  changelog: ory/changelog@dev:init
 
 workflows:
   btd:
@@ -13,6 +12,3 @@ workflows:
           orb-ref: ory/changelog@dev:${CIRCLE_BRANCH}
           publish-token-variable: "$CIRCLECI_DEV_API_TOKEN"
           validate: true
-      - changelog/changelog:
-          requires:
-            - orb-tools/publish
