@@ -11,12 +11,6 @@ orbs:
     jobs:
       changelog:
         parameters:
-          repo:
-            description: The GitHub repository
-            type: string
-          org:
-            description: The GitHub username
-            type: string
           gitemail:
             description: The git committer's email
             type: string
@@ -28,11 +22,9 @@ orbs:
           gitauthtoken:
             description: The git committer's username
             type: string
-            default: ORY Continuous Integration
           gitauthuser:
             description: The git committer's username
             type: string
-            default: ORY Continuous Integration
         executor: changelog
         steps:
           - checkout
@@ -41,7 +33,7 @@ orbs:
           - restore_cache:
               keys:
                 - changelog-v1
-          - run: github_changelog_generator -u <<parameters.org>> -p <<parameters.repo>> -o CHANGELOG.md --token $GITHUB_TOKEN --cache-file /tmp/github_changelog_generator
+          - run: github_changelog_generator -u $CIRCLE_USERNAME -p $CIRCLE_PROJECT_REPONAME -o CHANGELOG.md --token <<parameters.gitauthtoken>> --cache-file /tmp/github_changelog_generator
           - save_cache:
               key: changelog-v1
               paths:
@@ -59,4 +51,6 @@ orbs:
 workflows:
   changelog:
     jobs:
-      - changelog/changelog
+      - changelog/changelog:
+          gitauthuser: aeneasr
+          gitauthtoken: $GITHUB_TOKEN
