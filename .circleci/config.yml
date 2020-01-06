@@ -2,6 +2,7 @@ version: 2.1
 description: Creates and updates the CHANGELOG.md file
 
 orbs:
+  orb-tools: circleci/orb-tools@2.0.0
   changelog:
     executors:
       changelog:
