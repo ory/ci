@@ -78,7 +78,7 @@ jobs:
           command: |
             if [ "$(git show -s --format=%B | head -n 1)" != "Update SDK" ]; then
               echo "Generating SDK"
-              swagger generate spec -m -o <<parameters.swagpath>> -x sdk
+              swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.swagpath>>
               swagutil sanitize <<parameters.swagpath>>
               swagger validate <<parameters.swagpath>>
               rm -rf <<parameters.genpath>>
