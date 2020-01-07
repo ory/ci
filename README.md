@@ -3,5 +3,7 @@
 To publish an orb, install the CLI and run:
 
 ```
-circleci orb publish src/<name>.yml ory/<name>@<version>
+orb=<name>
+circleci orb validate src/${orb}.yml
+circleci orb publish increment src/${orb}.yml ory/${orb} patch
 ```

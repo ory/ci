@@ -5,11 +5,17 @@ executors:
   default:
     docker:
       -
-        image: circleci/go:1.13
+        image: circleci/golang:1.13
+        environment:
+          - GO111MODULE=on
 
 jobs:
-  generate:
+  release:
     parameters:
+      swagpath:
+        description: Path to swagger file
+        type: string
+        default: docs/api.swagger.json
       gitemail:
         description: The git committer's email
         type: string
@@ -18,30 +24,74 @@ jobs:
         description: The git committer's username
         type: string
         default: aeneasr
-      gitauthtoken:
-        description: A GitHub API Token
-        type: env_var_name
-        default: GITHUB_TOKEN
+      gittag:
+        description: The git committer's username
+        type: string
+        default: aeneasr
     executor: default
     steps:
-      - run: git config --global push.default matching
       - checkout
+      - run: go get github.com/go-swagger/go-swagger@1c98855b472d8782c366459428ec2a5e8339ccf2
+      - run: go install github.com/go-swagger/go-swagger/cmd/swagger
+      - run: swagger generate spec -m -o <<parameters.swagpath>> -x sdk
+      - run: swagger validate <<parameters.swagpath>>
+      - run: git config --global user.email "<<parameters.gitemail>>"
+      - run: git config --global user.name "<<parameters.gitusername>>"
+      - run: git clone git@github.com:ory/sdk.git ../sdk
       - run: |
-          if [ "$(git show -s --format=%B  | head -n 1)" != "Update SDK" ]]; then
-            echo "Generating SDK"
-            go install github.com/go-swagger/go-swagger/cmd/swagger github.com/ory/x/tools/listx github.com/sqs/goreturns
-            swagger generate spec -m -o ./docs/api.swagger.json -x sdk
-            swagger validate ./docs/api.swagger.json"
-            rm -rf ./sdk/go/$CIRCLE_PROJECT_REPONAME
-            swagger generate client -f ./docs/api.swagger.json -t sdk/go/$CIRCLE_PROJECT_REPONAME -A "Ory_$(tr '[:lower:]' '[:upper:]' <<< "${CIRCLE_PROJECT_REPONAME:0:1}")${CIRCLE_PROJECT_REPONAME:1})"
-            goreturns -w -local github.com/ory $(listx .)
-            git config --global user.email "<<parameters.gitemail>>"
-            git config --global user.name "<<parameters.gitusername>>"
-            git commit -m "Update SDK" -a || true
-            git push origin || true
-          else
-            echo "Skipping SDK generation"
-          fi
+          cp <<parameters.swagpath>> "../sdk/spec/$CIRCLE_PROJECT_REPONAME/$(git describe --tags).json"
+          (cd ../sdk; git add -A; git commit -a -m "Add spec for $CIRCLE_PROJECT_REPONAME:$(git describe --tags)" || true; git push origin || true)
+
+      - run: git clone git@github.com:ory/docs.git ../docs
+      - run: |
+          cp <<parameters.swagpath>> ../docs/apis/$CIRCLE_PROJECT_REPONAME.json
+          (cd ../docs; git add -A; git commit -a -m "$CIRCLE_PROJECT_REPONAME: Update API Swagger definitions" || true; git push origin || true)
+
+  generate:
+    parameters:
+      swagpath:
+        description: Path to swagger file
+        type: string
+        default: docs/api.swagger.json
+      genpath:
+        description: Where to generate the sdk to
+        type: string
+        default: internal/httpclient
+      gitemail:
+        description: The git committer's email
+        type: string
+        default: aeneas@ory.sh
+      gitusername:
+        description: The git committer's username
+        type: string
+        default: aeneasr
+      appname:
+        description: The application name for example Ory_Hydra
+        type: string
+    executor: default
+    steps:
+      - checkout
+      - run: go get github.com/go-swagger/go-swagger@1c98855b472d8782c366459428ec2a5e8339ccf2 github.com/ory/x/tools/listx github.com/sqs/goreturns  github.com/ory/sdk/swagutil
+      - run: go install github.com/go-swagger/go-swagger/cmd/swagger github.com/ory/x/tools/listx github.com/sqs/goreturns  github.com/ory/sdk/swagutil
+      - run:
+          name: "Generate and commit SDK"
+          command: |
+            if [ "$(git show -s --format=%B | head -n 1)" != "Update SDK" ]; then
+              echo "Generating SDK"
+              swagger generate spec -m -o <<parameters.swagpath>> -x sdk
+              swagutil sanitize <<parameters.swagpath>>
+              swagger validate <<parameters.swagpath>>
+              rm -rf <<parameters.genpath>>
+              mkdir -p <<parameters.genpath>>
+              swagger generate client -f <<parameters.swagpath>> -t <<parameters.genpath>> -A <<parameters.appname>>
+              goreturns -w -local github.com/ory $(listx .)
+              git config --global user.email "<<parameters.gitemail>>"
+              git config --global user.name "<<parameters.gitusername>>"
+              git commit -m "Update SDK" -a || true
+              git push origin HEAD:$CIRCLE_BRANCH || true
+            else
+              echo "Skipping SDK generation"
+            fi
 
 examples:
   sdk:
@@ -51,6 +101,10 @@ examples:
       orbs:
         foo: ory/sdk@0.0.0
       workflows:
+        release:
+          jobs:
+            - sdk/publish
         generate:
           jobs:
-            - sdk/generate
+            - sdk/release:
+                appname: Ory_Hydra
