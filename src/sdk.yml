@@ -39,8 +39,8 @@ jobs:
       - run: git config --global user.name "<<parameters.gitusername>>"
       - run: git clone git@github.com:ory/sdk.git ../sdk
       - run: |
-          cp <<parameters.swagpath>> "../sdk/spec/$CIRCLE_PROJECT_REPONAME/$(git describe --tags).json"
-          (cd ../sdk; git add -A; git commit -a -m "Add spec for $CIRCLE_PROJECT_REPONAME:$(git describe --tags)" || true; git push origin || true)
+          cp <<parameters.swagpath>> "../sdk/spec/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_TAG}.json"
+          (cd ../sdk; git add -A; git commit -a -m "Add spec for ${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}" || true; git push origin || true)
 
       - run: git clone git@github.com:ory/docs.git ../docs
       - run: |
@@ -80,6 +80,7 @@ jobs:
               echo "Generating SDK"
               swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.swagpath>>
               swagutil sanitize <<parameters.swagpath>>
+              swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
               swagger validate <<parameters.swagpath>>
               rm -rf <<parameters.genpath>>
               mkdir -p <<parameters.genpath>>
