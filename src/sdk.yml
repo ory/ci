@@ -88,6 +88,7 @@ jobs:
               goreturns -w -local github.com/ory $(listx .)
               git config --global user.email "<<parameters.gitemail>>"
               git config --global user.name "<<parameters.gitusername>>"
+              git add -A || true
               git commit -m "Update SDK" -a || true
               git push origin HEAD:$CIRCLE_BRANCH || true
             else
