@@ -28,6 +28,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - run: "source <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/release_name.sh)"
       - run: docker login --username "${<<parameters.dockeruser>>}" --password "${<<parameters.dockerkey>>}"
       - run: go get github.com/goreleaser/goreleaser@v0.124.1
       - run: GITHUB_TOKEN="${<<parameters.dockeruser>>}" goreleaser
@@ -36,7 +37,6 @@ jobs:
     executor: default
     steps:
       - checkout
-      - run:
       - run: go get github.com/goreleaser/goreleaser@v0.124.1
       - run: goreleaser check
 
@@ -50,7 +50,7 @@ examples:
       workflows:
         release:
           jobs:
-            - sdk/release
+            - goreleaser/release
         test:
           jobs:
-            - sdk/test
+            - goreleaser/test
