@@ -1,0 +1,56 @@
+version: 2.1
+description: Helpers for goreleaser
+
+executors:
+  default:
+    docker:
+      -
+        image: circleci/golang:1.13
+        environment:
+          - GO111MODULE=on
+
+jobs:
+  release:
+    parameters:
+      gitauthtoken:
+        description: A GitHub API Token
+        type: env_var_name
+        default: GITHUB_TOKEN
+      dockeruser:
+        description: The Docker Hub Username
+        type: env_var_name
+        default: DOCKER_USERNAME
+      dockerkey:
+        description: The Docker Hub Access Token
+        type: env_var_name
+        default: DOCKER_TOKEN
+    executor: default
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker login --username "${<<parameters.dockeruser>>}" --password "${<<parameters.dockerkey>>}"
+      - run: go get github.com/goreleaser/goreleaser@v0.124.1
+      - run: GITHUB_TOKEN="${<<parameters.dockeruser>>}" goreleaser
+
+  test:
+    executor: default
+    steps:
+      - checkout
+      - run:
+      - run: go get github.com/goreleaser/goreleaser@v0.124.1
+      - run: goreleaser check
+
+examples:
+  goreleaser:
+    description: Generate and commit the SDK
+    usage:
+      version: 2.1
+      orbs:
+        foo: ory/goreleaser@0.0.0
+      workflows:
+        release:
+          jobs:
+            - sdk/release
+        test:
+          jobs:
+            - sdk/test
