@@ -26,19 +26,29 @@ jobs:
         default: DOCKER_TOKEN
     executor: default
     steps:
+      # This needs to run first or we'll override the go.mod file.
+      -
+        run: go get github.com/goreleaser/goreleaser@v0.124.1
+
       - checkout
       - setup_remote_docker
-      - run: "source <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/release_name.sh)"
-      - run: docker login --username "${<<parameters.dockeruser>>}" --password "${<<parameters.dockerkey>>}"
-      - run: go get github.com/goreleaser/goreleaser@v0.124.1
-      - run: GITHUB_TOKEN="${<<parameters.dockeruser>>}" goreleaser
+      -
+        run: docker login --username "${<<parameters.dockeruser>>}" --password "${<<parameters.dockerkey>>}"
+      -
+        run: |
+          source <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/release_name.sh)
+          GITHUB_TOKEN="${<<parameters.gitauthtoken>>}" goreleaser
 
   test:
     executor: default
     steps:
+      # This needs to run first or we'll override the go.mod file.
+      -
+        run: go get github.com/goreleaser/goreleaser@v0.124.1
+
       - checkout
-      - run: go get github.com/goreleaser/goreleaser@v0.124.1
-      - run: goreleaser check
+      -
+        run: goreleaser check
 
 examples:
   goreleaser:

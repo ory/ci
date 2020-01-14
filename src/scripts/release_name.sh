@@ -2,9 +2,6 @@
 
 set -Eeuo pipefail
 
-export CIRCLE_PROJECT_USERNAME=aeneasr
-export CIRCLE_PROJECT_REPONAME=releaser-test
-
 if [[ -z "${CIRCLE_TAG-}" ]]; then
   echo "This is not a git tag, reverting to the git hash"
   echo "export RELEASE_NAME=${CIRCLE_SHA1}"
