@@ -32,12 +32,10 @@ jobs:
 
       - checkout
       - setup_remote_docker
-      -
-        run: docker login --username "${<<parameters.dockeruser>>}" --password "${<<parameters.dockerkey>>}"
-      -
-        run: |
-          source <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/release_name.sh)
-          GITHUB_TOKEN="${<<parameters.gitauthtoken>>}" goreleaser
+      - run: docker login --username "${<<parameters.dockeruser>>}" --password "${<<parameters.dockerkey>>}"
+      - run: curl -sL https://raw.githubusercontent.com/ory/ci/master/src/scripts/release_name.sh | bash > $BASH_ENV
+      - run: source $BASH_ENV
+      - run: GITHUB_TOKEN="${<<parameters.gitauthtoken>>}" goreleaser
 
   test:
     executor: default
