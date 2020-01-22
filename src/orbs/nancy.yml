@@ -1,0 +1,30 @@
+version: 2.1
+description: Run OSS Sonatype nancy
+
+executors:
+  default:
+    docker:
+      -
+        image: circleci/golang:1.13
+        environment:
+          - GO111MODULE=on
+
+jobs:
+  test:
+    executor: default
+    steps:
+      - checkout
+      - run: curl -o /usr/bin/nancy https://github.com/sonatype-nexus-community/nancy/releases/download/v0.0.40/nancy-linux.amd64-v0.0.40
+      - run: go list -m all | nancy -quiet
+
+examples:
+  nancy:
+    description: Test go.mod for CVEs using nancy
+    usage:
+      version: 2.1
+      orbs:
+        foo: ory/nancy@0.0.1
+      workflows:
+        test:
+          jobs:
+            - nancy/test
