@@ -14,7 +14,7 @@ jobs:
     executor: default
     steps:
       - checkout
-      - run: curl -o /usr/bin/nancy https://github.com/sonatype-nexus-community/nancy/releases/download/v0.0.40/nancy-linux.amd64-v0.0.40
+      - run: curl -o $GOPATH/bin https://github.com/sonatype-nexus-community/nancy/releases/download/v0.0.40/nancy-linux.amd64-v0.0.40
       - run: go list -m all | nancy -quiet
 
 examples:
