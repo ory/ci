@@ -45,6 +45,8 @@ jobs:
         run: go get github.com/goreleaser/goreleaser@v0.124.1
 
       - checkout
+      - run: go mod tidy
+      - run: git diff --exit-code
       -
         run: goreleaser check
 
