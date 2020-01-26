@@ -28,12 +28,18 @@ jobs:
         description: The git committer's username
         type: string
         default: aeneasr
+      genpath:
+        description: Where to generate the sdk to
+        type: string
+        default: internal/httpclient
     executor: default
     steps:
       - checkout
       - run: go get github.com/go-swagger/go-swagger@1c98855b472d8782c366459428ec2a5e8339ccf2
       - run: go install github.com/go-swagger/go-swagger/cmd/swagger
-      - run: swagger generate spec -m -o <<parameters.swagpath>> -x sdk
+      - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.genpath>>
+      - run: swagutil sanitize <<parameters.swagpath>>
+      - run: swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
       - run: swagger validate <<parameters.swagpath>>
       - run: git config --global user.email "<<parameters.gitemail>>"
       - run: git config --global user.name "<<parameters.gitusername>>"
@@ -78,7 +84,7 @@ jobs:
           command: |
             if [ "$(git show -s --format=%B | head -n 1)" != "Update SDK" ]; then
               echo "Generating SDK"
-              swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.swagpath>>
+              swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.genpath>>
               swagutil sanitize <<parameters.swagpath>>
               swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
               swagger validate <<parameters.swagpath>>
