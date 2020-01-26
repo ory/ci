@@ -35,7 +35,7 @@ jobs:
     executor: default
     steps:
       - checkout
-      - run: go get github.com/go-swagger/go-swagger@1c98855b472d8782c366459428ec2a5e8339ccf2
+      - run: go get github.com/go-swagger/go-swagger@1c98855b472d8782c366459428ec2a5e8339ccf2 github.com/ory/sdk/swagutil
       - run: go install github.com/go-swagger/go-swagger/cmd/swagger
       - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.genpath>>
       - run: swagutil sanitize <<parameters.swagpath>>
