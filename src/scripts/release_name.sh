@@ -3,8 +3,10 @@
 set -Eeuo pipefail
 
 if [[ -z "${CIRCLE_TAG-}" ]]; then
-  echo "This is not a git tag, reverting to the git hash"
+  echo "# This is not a git tag, reverting to the git hash"
   echo "export RELEASE_NAME=${CIRCLE_SHA1}"
+  echo "export DOCKER_FULL_TAG=${CIRCLE_SHA1}"
+  echo "export DOCKER_SHORT_TAG=${CIRCLE_SHA1}"
   exit 0
 fi
 
