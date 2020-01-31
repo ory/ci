@@ -25,6 +25,7 @@ jobs:
         type: env_var_name
         default: DOCKER_TOKEN
     executor: default
+    working_directory: /home/ory
     steps:
       - checkout
       - setup_remote_docker
@@ -36,6 +37,7 @@ jobs:
 
   test:
     executor: default
+    working_directory: /home/ory
     steps:
       - checkout
       - run: go mod download
@@ -45,6 +47,7 @@ jobs:
 
   release-dry:
     executor: default
+    working_directory: /home/ory
     steps:
       - checkout
       - setup_remote_docker
