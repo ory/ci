@@ -74,32 +74,29 @@ jobs:
       appname:
         description: The application name for example Ory_Hydra
         type: string
+      commitmessage:
+        description: The git commit message
+        type: string
+        default: "chore: Regenerate swagger spec and internal client"
     executor: default
     steps:
       - checkout
-      - run: go get github.com/go-swagger/go-swagger@1c98855b472d8782c366459428ec2a5e8339ccf2 github.com/ory/x/tools/listx github.com/sqs/goreturns  github.com/ory/sdk/swagutil
-      - run: go install github.com/go-swagger/go-swagger/cmd/swagger github.com/ory/x/tools/listx github.com/sqs/goreturns  github.com/ory/sdk/swagutil
-      - run:
-          name: "Generate and commit SDK"
-          command: |
-            if [ "$(git show -s --format=%B | head -n 1)" != "Update SDK" ]; then
-              echo "Generating SDK"
-              swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.genpath>>
-              swagutil sanitize <<parameters.swagpath>>
-              swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
-              swagger validate <<parameters.swagpath>>
-              rm -rf <<parameters.genpath>>
-              mkdir -p <<parameters.genpath>>
-              swagger generate client -f <<parameters.swagpath>> -t <<parameters.genpath>> -A <<parameters.appname>>
-              goreturns -w -local github.com/ory $(listx .)
-              git config --global user.email "<<parameters.gitemail>>"
-              git config --global user.name "<<parameters.gitusername>>"
-              git add -A || true
-              git commit -m "Update SDK" -a || true
-              git push origin HEAD:$CIRCLE_BRANCH || true
-            else
-              echo "Skipping SDK generation"
-            fi
+      - run: |
+          if [ "$(git show -s --format=%B | head -n 1)" = "<<parameters.commitmessage>>" ]; then
+            circleci-agent step halt
+          fi
+      - run: go install github.com/go-swagger/go-swagger/cmd/swagger github.com/ory/x/tools/listx github.com/sqs/goreturns github.com/ory/sdk/swagutil
+      - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.genpath>>
+      - run: swagutil sanitize <<parameters.swagpath>>
+      - run: swagger validate <<parameters.swagpath>>
+      - run: rm -rf <<parameters.genpath>>
+      - run: mkdir -p <<parameters.genpath>>
+      - run: swagger generate client -f <<parameters.swagpath>> -t <<parameters.genpath>> -A <<parameters.appname>>
+      - run: git config --global user.email "<<parameters.gitemail>>"
+      - run: git config --global user.name "<<parameters.gitusername>>"
+      - run: git add -A
+      - run: |
+          (git commit -m "<<parameters.commitmessage>>" -a && git push origin HEAD:$CIRCLE_BRANCH) || true
 
 examples:
   sdk:
