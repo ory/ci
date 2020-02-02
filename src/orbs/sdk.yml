@@ -80,13 +80,16 @@ jobs:
         default: "chore: Regenerate swagger spec and internal client"
     executor: default
     steps:
+      - run: go get -d github.com/go-swagger/go-swagger@v0.22.0 github.com/ory/x@v0.0.93 github.com/sqs/goreturns@master github.com/ory/sdk/swagutil@master
+      - run: go install github.com/go-swagger/go-swagger/cmd/swagger github.com/ory/x/tools/listx github.com/sqs/goreturns github.com/ory/sdk/swagutil
       - checkout
       - run: |
           if [ "$(git show -s --format=%B | head -n 1)" = "<<parameters.commitmessage>>" ]; then
             circleci-agent step halt
           fi
-      - run: go install github.com/go-swagger/go-swagger/cmd/swagger github.com/ory/x/tools/listx github.com/sqs/goreturns github.com/ory/sdk/swagutil
       - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.genpath>>
+      - run: swagger validate <<parameters.swagpath>>
+      - run: swagger flatten --with-flatten=remove-unused -o ./docs/api.swagger.json ./docs/api.swagger.json
       - run: swagutil sanitize <<parameters.swagpath>>
       - run: swagger validate <<parameters.swagpath>>
       - run: rm -rf <<parameters.genpath>>
