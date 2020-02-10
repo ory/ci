@@ -7,6 +7,7 @@ if [[ -z "${CIRCLE_TAG-}" ]]; then
   echo "export RELEASE_NAME=${CIRCLE_SHA1}"
   echo "export DOCKER_FULL_TAG=${CIRCLE_SHA1}"
   echo "export DOCKER_SHORT_TAG=${CIRCLE_SHA1}"
+  echo "export GORELEASER_CURRENT_TAG=${CIRCLE_SHA1}"
   exit 0
 fi
 
@@ -17,6 +18,7 @@ if [[ ${release_name} == "${CIRCLE_TAG}"* ]]; then
   echo "export RELEASE_NAME=${release_name}"
   echo "export DOCKER_FULL_TAG=$(echo "${CIRCLE_TAG}" | tr '+' '_')"
   echo "export DOCKER_SHORT_TAG=$(echo "${CIRCLE_TAG}" | cut -d '+' -f1)"
+  echo "export GORELEASER_CURRENT_TAG=$(echo "${CIRCLE_TAG}" | cut -d '+' -f1)"
 else
   echo "Exected the release title to contain the git tag which was not the case!"
   printf "Release title:\t\t%s\n" "${release_name}"

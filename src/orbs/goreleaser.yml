@@ -5,7 +5,7 @@ executors:
   default:
     docker:
       -
-        image: oryd/xgoreleaser:1.13.7
+        image: oryd/xgoreleaser:1.13.7-0.126.0
         environment:
           - GO111MODULE=on
 
