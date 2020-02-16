@@ -97,7 +97,6 @@ jobs:
           fi
       - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.genpath>>
       - run: swagutil sanitize <<parameters.swagpath>>
-      - run: swagger validate <<parameters.swagpath>>
       - run: swagger flatten --with-flatten=remove-unused -o ./docs/api.swagger.json ./docs/api.swagger.json
       - run: swagger validate <<parameters.swagpath>>
       - run: rm -rf <<parameters.genpath>>
