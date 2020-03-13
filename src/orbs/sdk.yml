@@ -33,7 +33,7 @@ jobs:
         type: string
         default: internal/httpclient
       specignorepgks:
-        description: "swagger genearte spec -x <<args>>" arguments
+        description: "swagger genearte spec -x <<args>> arguments"
         type: string
         default: internal/httpclient
     executor: default
@@ -87,7 +87,7 @@ jobs:
         type: string
         default: "chore: Regenerate swagger spec and internal client"
       specignorepgks:
-        description: "swagger genearte spec -x <<args>>" arguments
+        description: "swagger genearte spec -x <<args>> arguments"
         type: string
         default: internal/httpclient
     executor: default
