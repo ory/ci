@@ -32,9 +32,10 @@ jobs:
         description: Where to generate the sdk to
         type: string
         default: internal/httpclient
-      specargs:
-        description: Additional "swagger genearte spec" arguments
+      specignorepgks:
+        description: "swagger genearte spec -x <<args>>" arguments
         type: string
+        default: internal/httpclient
     executor: default
     steps:
       - checkout
@@ -44,7 +45,7 @@ jobs:
           sudo curl -o $GOPATH/bin/swagger -L'#' "$download_url"
           sudo chmod +x $GOPATH/bin/swagger
       - run: go get github.com/ory/sdk/swagutil@master
-      - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.genpath>> <<parameters.specargs>>
+      - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.specignorepgks>>
       - run: swagutil sanitize <<parameters.swagpath>>
       - run: swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
       - run: swagger validate <<parameters.swagpath>>
@@ -85,9 +86,10 @@ jobs:
         description: The git commit message
         type: string
         default: "chore: Regenerate swagger spec and internal client"
-      specargs:
-        description: Additional "swagger genearte spec" arguments
+      specignorepgks:
+        description: "swagger genearte spec -x <<args>>" arguments
         type: string
+        default: internal/httpclient
     executor: default
     steps:
       - run: |
@@ -101,7 +103,7 @@ jobs:
           if [ "$(git show -s --format=%B | head -n 1)" = "<<parameters.commitmessage>>" ]; then
             circleci-agent step halt
           fi
-      - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.genpath>> <<parameters.specargs>>
+      - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.specignorepgks>>
       - run: swagutil sanitize <<parameters.swagpath>>
       - run: swagger flatten --with-flatten=remove-unused -o ./docs/api.swagger.json ./docs/api.swagger.json
       - run: swagger validate <<parameters.swagpath>>
