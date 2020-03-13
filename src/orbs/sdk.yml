@@ -109,8 +109,7 @@ jobs:
       - run: mkdir -p <<parameters.genpath>>
       - run: swagger generate client -f <<parameters.swagpath>> -t <<parameters.genpath>> -A <<parameters.appname>>
       - run: git config --global user.email "<<parameters.gitemail>>"
-      - run: git config --glo
-        bal user.name "<<parameters.gitusername>>"
+      - run: git config --global user.name "<<parameters.gitusername>>"
       - run: git add -A
       - run: |
           (git commit -m "<<parameters.commitmessage>>" -a && git push origin HEAD:$CIRCLE_BRANCH) || true
