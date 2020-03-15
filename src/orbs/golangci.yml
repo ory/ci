@@ -5,7 +5,7 @@ executors:
   default:
     docker:
       -
-        image: circleci/golang:1.13
+        image: circleci/golang:1.14
         environment:
           - GO111MODULE=on
 
@@ -27,7 +27,7 @@ jobs:
           paths:
             - "/go/pkg/mod"
       -
-        run: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.23.2
+        run: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
       -
         run: golangci-lint run
 
