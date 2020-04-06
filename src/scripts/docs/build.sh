@@ -48,7 +48,7 @@ else
   (git commit -a -m "autogen(docs): generate and format documentation" && git push origin HEAD:"$CIRCLE_BRANCH") || true
 fi
 
-website_path="../web/${CIRCLE_PROJECT_REPONAME}/docs"
+website_path="../web/generated/docs/${CIRCLE_PROJECT_REPONAME}"
 git clone git@github.com:ory/web.git ../web
 rm -rf "$website_path"
 cp -R ./docs/build/* "$website_path"
