@@ -1,0 +1,43 @@
+version: 2.1
+description: Run gloangci tools
+
+executors:
+  default:
+    docker:
+      -
+        image: circleci/golang:1.14-node
+        environment:
+          - GO111MODULE=on
+
+jobs:
+  build:
+    parameters:
+      swag-spec-location:
+        description: Location where the Swagger spec should be saved to.
+        type: string
+        default: contrib/api.swagger.json
+      swag-spec-ignore:
+        description: Packages to ignore when generating the Swagger spec.
+        type: string
+        default: internal/httpclient
+    executor: default
+    steps:
+      - checkout
+      - run:
+          name: Run migrations
+          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/docs/build.sh)"
+          environment:
+            SWAG_SPEC_LOCATION: <<parameters.swag-spec-location>>
+            SWAG_SPEC_IGNORE: <<parameters.swag-spec-ignore>>
+
+examples:
+  docs:
+    description: Run doc tasks
+    usage:
+      version: 2.1
+      orbs:
+        foo: ory/doc@0.0.1
+      workflows:
+        build:
+          jobs:
+            - doc/build

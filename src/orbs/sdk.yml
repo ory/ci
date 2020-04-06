@@ -56,11 +56,6 @@ jobs:
           cp <<parameters.swagpath>> "../sdk/spec/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_TAG}.json"
           (cd ../sdk; git add -A; git commit -a -m "Add spec for ${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}" || true; git push origin || true)
 
-      - run: git clone git@github.com:ory/docs.git ../docs
-      - run: |
-          cp <<parameters.swagpath>> ../docs/apis/$CIRCLE_PROJECT_REPONAME.json
-          (cd ../docs; git add -A; git commit -a -m "$CIRCLE_PROJECT_REPONAME: Update API Swagger definitions" || true; git push origin || true)
-
   generate:
     parameters:
       swagpath:
@@ -85,7 +80,7 @@ jobs:
       commitmessage:
         description: The git commit message
         type: string
-        default: "chore: Regenerate swagger spec and internal client"
+        default: "autogen(openapi): Regenerate swagger spec and internal client"
       specignorepgks:
         description: "swagger genearte spec -x <<args>> arguments"
         type: string
