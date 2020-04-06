@@ -17,7 +17,7 @@ swagger validate "${SWAG_SPEC_LOCATION}"
 
 (cd docs; npm i)
 
-npx widdershins@3.6.7 -u docs/.widdershins/templates -e docs/.widdershins/config.json SWAG_SPEC_LOCATION -o ./docs/docs/reference/api.md
+npx widdershins@3.6.7 -u docs/.widdershins/templates -e docs/.widdershins/config.json $SWAG_SPEC_LOCATION -o ./docs/docs/reference/api.md
 
 node ./docs/scripts/fix-api.js ./docs/docs/reference/api.md
 node ./docs/scripts/config.js docs/config.js

@@ -15,7 +15,7 @@ jobs:
       swagpath:
         description: Path to swagger file
         type: string
-        default: docs/api.swagger.json
+        default: .schema/api.swagger.json
       gitemail:
         description: The git committer's email
         type: string
@@ -61,7 +61,7 @@ jobs:
       swagpath:
         description: Path to swagger file
         type: string
-        default: docs/api.swagger.json
+        default: .schema/api.swagger.json
       genpath:
         description: Where to generate the sdk to
         type: string
@@ -100,7 +100,7 @@ jobs:
           fi
       - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.specignorepgks>>
       - run: swagutil sanitize <<parameters.swagpath>>
-      - run: swagger flatten --with-flatten=remove-unused -o ./docs/api.swagger.json ./docs/api.swagger.json
+      - run: swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
       - run: swagger validate <<parameters.swagpath>>
       - run: rm -rf <<parameters.genpath>>
       - run: mkdir -p <<parameters.genpath>>

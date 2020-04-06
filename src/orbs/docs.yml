@@ -15,7 +15,7 @@ jobs:
       swag-spec-location:
         description: Location where the Swagger spec should be saved to.
         type: string
-        default: contrib/api.swagger.json
+        default: .schema/api.swagger.json
       swag-spec-ignore:
         description: Packages to ignore when generating the Swagger spec.
         type: string
