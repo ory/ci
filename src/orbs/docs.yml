@@ -24,7 +24,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Run migrations
+          name: Build and publish documentation
           command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/docs/build.sh)"
           environment:
             SWAG_SPEC_LOCATION: <<parameters.swag-spec-location>>
