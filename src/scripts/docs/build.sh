@@ -50,7 +50,7 @@ fi
 
 website_path="../web/generated/docs/${CIRCLE_PROJECT_REPONAME}"
 git clone git@github.com:ory/web.git ../web
-rm -rf "$website_path"
+rm -rf "$website_path/*"
 cp -R ./docs/build/* "$website_path"
 (cd ../web; \
   git add -A; \
