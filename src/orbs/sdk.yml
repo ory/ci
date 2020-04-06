@@ -95,7 +95,7 @@ jobs:
       - run: go get github.com/sqs/goreturns@master github.com/ory/sdk/swagutil@master
       - checkout
       - run: |
-          if [ "$(git show -s --format=%B | head -n 1)" = "autogen"* ]; then
+          if [[ "$(git show -s --format=%B | head -n 1)" == "autogen"* ]]; then
             circleci-agent step halt
           fi
       - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.specignorepgks>>

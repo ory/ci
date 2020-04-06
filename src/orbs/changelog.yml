@@ -26,11 +26,11 @@ jobs:
       commitmessage:
         description: The git commit message
         type: string
-        default: "docs: Regenerate and update changelog"
+        default: "autogen(docs): regenerate and update changelog"
     steps:
       - checkout
       - run: |
-          if [ "$(git show -s --format=%B | head -n 1)" = "<<parameters.commitmessage>>" ]; then
+          if [[ "$(git show -s --format=%B | head -n 1)" == "autogen"* ]]; then
               circleci-agent step halt
           fi
       - run: gem install github_changelog_generator -v 1.15.0
