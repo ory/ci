@@ -5,7 +5,10 @@ set -Eeuox pipefail
 export GORELEASER_CURRENT_TAG="${CIRCLE_TAG}"
 
 if [[ ! -e package.json ]]; then
-    echo '{"private": true, "version": "0.0.0"}' > package.json
+  echo '{"private": true, "version": "0.0.0"}' > package.json
+  git add package.json
+else
+  echo "package.json exists and needs not be written"
 fi
 
 changelog=$(mktemp)
@@ -22,4 +25,5 @@ conventional-changelog --config "$preset/index.js" -r 2 -o "$changelog"
 printf "\n\n" >> "$notes"
 cat "$changelog" >> "$notes"
 
+git reset --hard HEAD
 goreleaser release --release-notes <(cat "$notes")
