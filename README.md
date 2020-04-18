@@ -1,4 +1,4 @@
-# circleci-orbs
+# ci
 
 To publish an orb, install the CLI and run:
 

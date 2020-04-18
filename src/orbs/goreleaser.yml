@@ -54,7 +54,7 @@ jobs:
           environment:
             DOCKER_HUB_NAME: <<parameters.docker-org>>
 
-  notify:
+  newsletter:
     parameters:
       chimp-segment:
         description: The Mailchimp Segment ID
@@ -100,7 +100,7 @@ jobs:
 
 examples:
   goreleaser:
-    description: Generate and commit the SDK
+    description: Build pipeline. Please check https://github.com/ory/meta/blob/master/docs/releasing.md
     usage:
       version: 2.1
       orbs:
