@@ -20,4 +20,4 @@ git clone git@github.com:ory/changelog.git "$preset"
 conventional-changelog --config "$preset/index.js" -r 2 -o "$changelog"
 git tag -l --format='%(contents)' "$CIRCLE_TAG" > "$notes"
 
-releaser notify --no-send --segment "$MAILCHIMP_SEGMENT_ID" "$notes" "$changelog" "$MAILCHIMP_LIST_ID"
+releaser notify --no-send --segment "${MAILCHIMP_SEGMENT_ID}" "$notes" "$changelog" "${MAILCHIMP_LIST_ID}"

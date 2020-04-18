@@ -4,6 +4,10 @@ set -Eeuox pipefail
 
 export GORELEASER_CURRENT_TAG="${CIRCLE_TAG}"
 
+if [[ ! -e package.json ]]; then
+    echo '{"private": true, "version": "0.0.0"}' > package.json
+fi
+
 changelog=$(mktemp)
 notes=$(mktemp)
 preset=$(mktemp -d)
