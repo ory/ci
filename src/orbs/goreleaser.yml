@@ -44,15 +44,16 @@ jobs:
       -
         run:
           name: Build and publish the release
-          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/release.sh)"
-          environment:
-            GITHUB_TOKEN: <<parameters.gitauthtoken>>
+          command: |
+            export GITHUB_TOKEN="<<parameters.gitauthtoken>>"
+            bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/release.sh)
+
       -
         run:
           name: Test the release
-          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/test.sh)"
-          environment:
-            DOCKER_HUB_NAME: <<parameters.docker-org>>
+          command: |
+            export DOCKER_HUB_NAME="<<parameters.docker-org>>"
+            bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/test.sh)
 
   newsletter-draft:
     parameters:
@@ -71,10 +72,10 @@ jobs:
       -
         run:
           name: Generate changelog and send newsletter
-          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/campaign-draft.sh)"
-          environment:
-            MAILCHIMP_SEGMENT_ID: <<parameters.chimp-segment>>
-            MAILCHIMP_LIST_ID: <<parameters.chimp-list>>
+          command: |
+            export MAILCHIMP_SEGMENT_ID="<<parameters.chimp-segment>>"
+            export MAILCHIMP_LIST_ID="<<parameters.chimp-list>>"
+            bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/campaign-draft.sh)"
 
   newsletter-send:
     parameters:

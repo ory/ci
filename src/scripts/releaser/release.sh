@@ -26,4 +26,4 @@ printf "\n\n" >> "$notes"
 cat "$changelog" >> "$notes"
 
 git reset --hard HEAD
-GITHUB_TOKEN=${GITHUB_TOKEN} goreleaser release --release-header <(cat "$notes") --rm-dist
+goreleaser release --release-header <(cat "$notes") --rm-dist
