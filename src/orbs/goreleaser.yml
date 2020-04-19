@@ -68,7 +68,6 @@ jobs:
     steps:
       - checkout
       - run: GO111MODULES=off go get -u github.com/ory/release
-      - run: npm i conventional-changelog-cli@v1.1.0
       -
         run:
           name: Generate changelog and send newsletter
@@ -86,6 +85,7 @@ jobs:
     executor: node
     steps:
       - checkout
+      - run: GO111MODULES=off go get -u github.com/ory/release
       -
         run:
           name: Generate changelog and send newsletter
