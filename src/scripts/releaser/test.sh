@@ -9,7 +9,8 @@ curl -sSfL \
 "./bin/${CIRCLE_PROJECT_REPONAME}" help
 "./bin/${CIRCLE_PROJECT_REPONAME}" version | grep -q "${CIRCLE_TAG}" || exit 1
 
+hub=${DOCKER_HUB_NAME:-oryd}
 docker run --rm \
-  "${DOCKER_HUB_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}" help
+  "${hub}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}" help
 docker run --rm \
-  "${DOCKER_HUB_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}" version | grep -q "${CIRCLE_TAG}" || exit 1
+  "${hub}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}" version | grep -q "${CIRCLE_TAG}" || exit 1
