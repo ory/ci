@@ -68,7 +68,11 @@ jobs:
       -
         run:
           name: Generate changelog and send newsletter
-          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/campaign-draft.sh)"
+          environment:
+            MAILCHIMP_SEGMENT_ID: <<parameters.chimp-segment>>
+            MAILCHIMP_LIST_ID: <<parameters.chimp-list>>
+          command: |
+            bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/campaign-draft.sh)
 
   newsletter-send:
     parameters:
@@ -84,6 +88,8 @@ jobs:
         run:
           name: Generate changelog and send newsletter
           command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/campaign-send.sh)"
+          environment:
+            MAILCHIMP_LIST_ID: <<parameters.chimp-list>>
 
   test:
     executor: default
