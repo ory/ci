@@ -4,6 +4,12 @@ set -Eeuox pipefail
 
 export GORELEASER_CURRENT_TAG="${CIRCLE_TAG}"
 
+if [ -z "${GITHUB_TOKEN}" ]
+then
+  echo "\$GITHUB_TOKEN is empty"
+  exit 1
+fi
+
 if [[ ! -e package.json ]]; then
   echo '{"private": true, "version": "0.0.0"}' > package.json
   git add package.json
