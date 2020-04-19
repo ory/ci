@@ -54,7 +54,7 @@ jobs:
           environment:
             DOCKER_HUB_NAME: <<parameters.docker-org>>
 
-  newsletter:
+  newsletter-draft:
     parameters:
       chimp-segment:
         description: The Mailchimp Segment ID
@@ -67,12 +67,30 @@ jobs:
     executor: node
     steps:
       - checkout
+      - run: GO111MODULES=off go get -u github.com/ory/release
+      - run: npm i conventional-changelog-cli@v1.1.0
       -
         run:
           name: Generate changelog and send newsletter
-          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/send.sh)"
+          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/campaign-draft.sh)"
           environment:
             MAILCHIMP_SEGMENT_ID: <<parameters.chimp-segment>>
+            MAILCHIMP_LIST_ID: <<parameters.chimp-list>>
+
+  newsletter-send:
+    parameters:
+      chimp-list:
+        description: The Mailchimp List ID
+        type: string
+        default: 50ec2c014c
+    executor: node
+    steps:
+      - checkout
+      -
+        run:
+          name: Generate changelog and send newsletter
+          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/campaign-send.sh)"
+          environment:
             MAILCHIMP_LIST_ID: <<parameters.chimp-list>>
 
   test:
