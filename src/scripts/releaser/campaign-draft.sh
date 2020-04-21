@@ -28,6 +28,7 @@ npx conventional-changelog-cli@v1.1.0 --config "$presetDir/email.js" -r 2 -o "$c
 notes=$(git tag -l --format='%(contents)' "$CIRCLE_TAG")
 if [ "${notes}" == "$(git log --format=%B -n 1 HEAD)" ]; then
   echo "Git tag does not include any release noteFile."
+else
   echo "${notes}" > "${noteFile}"
 fi
 
