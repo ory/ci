@@ -23,8 +23,8 @@ npx conventional-changelog-cli@v1.1.0 --config "$preset/index.js" -r 0 -u -o CHA
 
 npx doctoc@v1.4.0 CHANGELOG.md
 
-sed -i '' "s/\*\*Table of Contents.*/**Table of Contents**/" CHANGELOG.md
-sed -i '' "s/\*This Change Log was.*/This Change Log was automatically generated/" CHANGELOG.md
+sed -i "s/\*\*Table of Contents.*/**Table of Contents**/" CHANGELOG.md
+sed -i "s/\*This Change Log was.*/This Change Log was automatically generated/" CHANGELOG.md
 
 git add CHANGELOG.md
 
