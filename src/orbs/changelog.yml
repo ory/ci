@@ -5,7 +5,7 @@ executors:
   default:
     docker:
       -
-        image: circleci/ruby:2.5-node
+        image: circleci/node:13
 
 jobs:
   generate:
@@ -19,10 +19,6 @@ jobs:
         description: The git committer's username
         type: string
         default: aeneasr
-      gitauthtoken:
-        description: A GitHub API Token
-        type: env_var_name
-        default: GITHUB_TOKEN
       commitmessage:
         description: The git commit message
         type: string
@@ -33,25 +29,13 @@ jobs:
           if [[ "$(git show -s --format=%B | head -n 1)" == "autogen"* ]]; then
               circleci-agent step halt
           fi
-      - run: gem install github_changelog_generator -v 1.15.0
-      - run: sudo npm i -g doctoc
-      - restore_cache:
-          keys:
-            - changelog-v1
-      - run: github_changelog_generator -u $CIRCLE_PROJECT_USERNAME -p $CIRCLE_PROJECT_REPONAME -o CHANGELOG.md --token ${<<parameters.gitauthtoken>>} --cache-file /tmp/github_changelog_generator
-      - save_cache:
-          key: changelog-v1
-          paths:
-            - "/tmp/github_changelog_generator"
-      - run: doctoc CHANGELOG.md
-      - run: "sed -i 's/\\*\\*Table of Contents.*/**Table of Contents**/' CHANGELOG.md"
-      - run: "sed -i 's/\\*This Change Log was.*/This Change Log was automatically generated/' CHANGELOG.md"
       - run: git config --global user.email "<<parameters.gitemail>>"
       - run: git config --global user.name "<<parameters.gitusername>>"
-      - run: git add CHANGELOG.md
+      - run:
+          name: Generate changelog
+          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/changelog/generate.sh)"
       - run: |
-          git commit --allow-empty -m "<<parameters.commitmessage>>" -- CHANGELOG.md || true
-      - run: git push origin HEAD:$CIRCLE_BRANCH || true
+          (git add -A && git commit -m "<<parameters.commitmessage>>" -- CHANGELOG.md && git push origin HEAD:$CIRCLE_BRANCH) || true
 
 examples:
   changelog:
