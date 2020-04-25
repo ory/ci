@@ -12,7 +12,7 @@ fi
 preset=$(mktemp -d)
 
 if [ -z ${CIRCLE_TAG+x} ]; then
-  CIRCLE_TAG=$(git describe --abbrev=0)
+  CIRCLE_TAG=$(git describe --abbrev=0 --tags)
 else
   isRelease=1
 fi
