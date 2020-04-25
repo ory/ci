@@ -11,4 +11,6 @@ then
   export CIRCLE_TAG=$(git tag --points-at HEAD)
 fi
 
+bash <(curl https://raw.githubusercontent.com/ory/release/master/install.sh) -b $GOPATH/bin v0.0.18
+
 release campaign send "${MAILCHIMP_LIST_ID}"

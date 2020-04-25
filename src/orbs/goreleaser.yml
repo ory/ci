@@ -64,7 +64,6 @@ jobs:
     executor: node
     steps:
       - checkout
-      - run: GO111MODULES=off go get -u github.com/ory/release
       -
         run:
           name: Generate changelog and send newsletter
@@ -83,7 +82,6 @@ jobs:
     executor: node
     steps:
       - checkout
-      - run: GO111MODULES=off go get -u github.com/ory/release
       -
         run:
           name: Generate changelog and send newsletter

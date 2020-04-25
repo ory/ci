@@ -6,6 +6,8 @@ if [[ ! -e package.json ]]; then
     echo '{"private": true, "version": "0.0.0"}' > package.json
 fi
 
+bash <(curl https://raw.githubusercontent.com/ory/release/master/install.sh) -b $GOPATH/bin v0.0.18
+
 if [ -z "${CIRCLE_SHA1}" ]
 then
   export CIRCLE_SHA1=$(git rev-parse HEAD | cut -c 1-16)
