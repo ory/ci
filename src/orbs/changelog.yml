@@ -33,7 +33,7 @@ jobs:
       - run: git config --global user.name "<<parameters.gitusername>>"
       - run:
           name: Generate changelog
-          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/changelog/generate.sh)"
+          command: "COMMIT_MESSAGE='<<parameters.commitmessage>>' bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/changelog/generate.sh)"
 
 examples:
   changelog:
