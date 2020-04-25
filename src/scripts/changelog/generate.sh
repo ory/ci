@@ -13,6 +13,8 @@ preset=$(mktemp -d)
 
 if [ -z ${CIRCLE_TAG+x} ]; then
   CIRCLE_TAG=$(git describe --abbrev=0)
+else
+  isRelease=1
 fi
 
 npm --no-git-tag-version version "$CIRCLE_TAG"
@@ -30,3 +32,12 @@ git add CHANGELOG.md
 
 t=$(mktemp)
 printf "# Changelog\n\n" | cat - CHANGELOG.md > "$t" && mv "$t" CHANGELOG.md
+
+if [ -z ${isRelease+x} ]; then
+  git add -A
+  (git commit -m "<<parameters.commitmessage>>" -- CHANGELOG.md && git push origin HEAD:$CIRCLE_BRANCH) || true
+else
+  git checkout "changelog-$(date +"%m-%d-%Y")"
+  git add -A
+  (git commit -m "<<parameters.commitmessage>>" -- CHANGELOG.md && git push origin HEAD:master) || true
+fi
