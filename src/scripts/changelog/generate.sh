@@ -37,7 +37,7 @@ if [ -z ${isRelease+x} ]; then
   git add -A
   (git commit -m "$COMMIT_MESSAGE" -- CHANGELOG.md && git push origin HEAD:$CIRCLE_BRANCH) || true
 else
-  git checkout "changelog-$(date +"%m-%d-%Y")"
+  git checkout -b "changelog-$(date +"%m-%d-%Y")"
   git add -A
   (git commit -m "$COMMIT_MESSAGE" -- CHANGELOG.md && git push origin HEAD:master) || true
 fi
