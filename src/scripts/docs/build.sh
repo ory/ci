@@ -41,9 +41,12 @@ fi
 
 if [ -n "${CIRCLE_TAG+x}" ]; then
   echo "Pushing to master becase this is a git tag."
-  git checkout -b "$(date +%s)"
+  branch="$(date +%s)"
+  git checkout -b "$branch"
   git add -A
-  (git commit -a -m "autogen(docs): generate and format documentation" && git push origin HEAD:master) || true
+  git commit -a -m "autogen(docs): generate and format documentation"
+  git pull origin master --rebase
+  git push origin HEAD:master
 else
   echo "Pushing to master becase this is a git tag."
   git add -A
