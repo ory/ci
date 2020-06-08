@@ -14,7 +14,7 @@ bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/insta
 bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/git.sh)
 
 swagger generate spec -m -o "${SWAG_SPEC_LOCATION}" -x "${SWAG_SPEC_IGNORE}"
-swagutil sanitize "${SWAG_SPEC_LOCATION}"
+ory-dev swagger sanitize "${SWAG_SPEC_LOCATION}"
 swagger flatten --with-flatten=remove-unused -o "${SWAG_SPEC_LOCATION}" "${SWAG_SPEC_LOCATION}"
 swagger validate "${SWAG_SPEC_LOCATION}"
 
