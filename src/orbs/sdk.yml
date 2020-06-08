@@ -99,7 +99,7 @@ jobs:
             circleci-agent step halt
           fi
       - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.specignorepgks>>
-      - run: go-dev swagger sanitize <<parameters.swagpath>>
+      - run: ory-dev swagger sanitize <<parameters.swagpath>>
       - run: swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
       - run: swagger validate <<parameters.swagpath>>
       - run: rm -rf <<parameters.genpath>>
