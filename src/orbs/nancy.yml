@@ -14,8 +14,9 @@ jobs:
     executor: default
     steps:
       - checkout
-      - run: curl -L -o $GOPATH/bin/nancy https://github.com/sonatype-nexus-community/nancy/releases/download/v0.0.40/nancy-linux.amd64-v0.0.40 && chmod +x $GOPATH/bin/nancy
-      - run: go list -m all | nancy -quiet
+      - run: curl -L -o $GOPATH/bin/nancy https://github.com/sonatype-nexus-community/nancy/releases/download/v0.2.6/nancy-linux.amd64-v0.2.6 && chmod +x $GOPATH/bin/nancy
+      # exclude hashicorp/consul vulnerabilities because we don't use it (referenced by old viper)
+      - run: go list -m all | nancy -quiet -exclude-vulnerability fc041c7e-0c64-4b74-991e-64196a704ace,2bfd5f1a-e9b5-4a04-b4e8-15091e145845
 
 examples:
   nancy:
