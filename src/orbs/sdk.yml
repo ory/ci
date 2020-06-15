@@ -44,9 +44,10 @@ jobs:
             jq -r '.assets[] | select(.name | contains("'"$(uname | tr '[:upper:]' '[:lower:]')"'_amd64")) | .browser_download_url')
           sudo curl -o $GOPATH/bin/swagger -L'#' "$download_url"
           sudo chmod +x $GOPATH/bin/swagger
-      - run: go get github.com/ory/meta/tools/ory-dev@master
+      - run: |
+          bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
       - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.specignorepgks>>
-      - run: ory-dev swagger sanitize <<parameters.swagpath>>
+      - run: ory dev swagger sanitize <<parameters.swagpath>>
       - run: swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
       - run: swagger validate <<parameters.swagpath>>
       - run: git config --global user.email "<<parameters.gitemail>>"
@@ -87,19 +88,21 @@ jobs:
         default: internal/httpclient
     executor: default
     steps:
-      - run: |
-          download_url=$(curl -s https://api.github.com/repos/go-swagger/go-swagger/releases/latest | \
-            jq -r '.assets[] | select(.name | contains("'"$(uname | tr '[:upper:]' '[:lower:]')"'_amd64")) | .browser_download_url')
-          sudo curl -o $GOPATH/bin/swagger -L'#' "$download_url"
-          sudo chmod +x $GOPATH/bin/swagger
-      - run: go get github.com/sqs/goreturns@master github.com/ory/meta/tools/ory-dev@master
       - checkout
       - run: |
           if [[ "$(git show -s --format=%B | head -n 1)" == "autogen"* ]]; then
             circleci-agent step halt
           fi
+      - run: |
+          download_url=$(curl -s https://api.github.com/repos/go-swagger/go-swagger/releases/latest | \
+            jq -r '.assets[] | select(.name | contains("'"$(uname | tr '[:upper:]' '[:lower:]')"'_amd64")) | .browser_download_url')
+          sudo curl -o $GOPATH/bin/swagger -L'#' "$download_url"
+          sudo chmod +x $GOPATH/bin/swagger
+      - run: go get github.com/sqs/goreturns@master
+      - run: |
+          bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
       - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.specignorepgks>>
-      - run: ory-dev swagger sanitize <<parameters.swagpath>>
+      - run: ory dev swagger sanitize <<parameters.swagpath>>
       - run: swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
       - run: swagger validate <<parameters.swagpath>>
       - run: rm -rf <<parameters.genpath>>
