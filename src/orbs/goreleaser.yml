@@ -5,7 +5,7 @@ executors:
   default:
     docker:
       -
-        image: oryd/xgoreleaser:1.14.2-0.131.1
+        image: oryd/xgoreleaser:1.14.4-0.138.0
         environment:
           - GO111MODULE=on
   node:
@@ -45,7 +45,6 @@ jobs:
         run:
           name: Build and publish the release
           command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/release.sh)"
-
       -
         run:
           name: Test the release
