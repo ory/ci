@@ -45,6 +45,11 @@ jobs:
         run:
           name: Build and publish the release
           command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/release.sh)"
+
+  release-test:
+    executor: node
+    working_directory: /home/ory
+    steps:
       -
         run:
           name: Test the release
