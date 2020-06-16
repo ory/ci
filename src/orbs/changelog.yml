@@ -26,8 +26,10 @@ jobs:
     steps:
       - checkout
       - run: |
-          if [[ "$(git show -s --format=%B | head -n 1)" == "autogen"* ]]; then
-              circleci-agent step halt
+          if [ -z ${CIRCLE_TAG+x} ]; then
+            if [[ "$(git show -s --format=%B | head -n 1)" == "autogen"* ]]; then
+                circleci-agent step halt
+            fi
           fi
       - run: git config --global user.email "<<parameters.gitemail>>"
       - run: git config --global user.name "<<parameters.gitusername>>"

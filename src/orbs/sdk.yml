@@ -90,8 +90,10 @@ jobs:
     steps:
       - checkout
       - run: |
-          if [[ "$(git show -s --format=%B | head -n 1)" == "autogen"* ]]; then
-            circleci-agent step halt
+          if [ -z ${CIRCLE_TAG+x} ]; then
+            if [[ "$(git show -s --format=%B | head -n 1)" == "autogen"* ]]; then
+              circleci-agent step halt
+            fi
           fi
       - run: |
           download_url=$(curl -s https://api.github.com/repos/go-swagger/go-swagger/releases/latest | \
