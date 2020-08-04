@@ -112,6 +112,15 @@ jobs:
           source $BASH_ENV
           goreleaser --snapshot --skip-publish --rm-dist
 
+  render-version-schema:
+    executor: default
+    working_directory: /home/ory
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          command: "bash <(curl -sL https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/render-version-schema.sh)"
+
 examples:
   goreleaser:
     description: Build pipeline. Please check https://github.com/ory/meta/blob/master/docs/releasing.md
