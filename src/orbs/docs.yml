@@ -11,6 +11,7 @@ executors:
 
 jobs:
   cli:
+    executor: default
     steps:
       - checkout
       -
