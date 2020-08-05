@@ -10,6 +10,8 @@ if [ -z ${CIRCLE_TAG+x} ]; then
   fi
 fi
 
+bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/git.sh)
+
 make .bin/clidoc
 .bin/clidoc .
 
