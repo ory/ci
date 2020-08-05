@@ -10,6 +10,14 @@ executors:
           - GO111MODULE=on
 
 jobs:
+  cli:
+    steps:
+      - checkout
+      -
+        run:
+          name: Build and push CLI docs
+          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/docs/cli.sh)"
+
   build:
     parameters:
       swag-spec-location:
