@@ -107,10 +107,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run: |
-          curl -sL https://raw.githubusercontent.com/ory/ci/master/src/scripts/release_name.sh | bash > $BASH_ENV
-          source $BASH_ENV
-          goreleaser --snapshot --skip-publish --rm-dist
+      - run: goreleaser --snapshot --skip-publish --rm-dist
 
   render-version-schema:
     executor: default
