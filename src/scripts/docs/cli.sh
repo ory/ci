@@ -15,5 +15,5 @@ bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/insta
 make .bin/clidoc
 .bin/clidoc .
 
-(git commit -a -m "autogen(docs): generate cli docs" &&  /
+(git add -A; git commit -a -m "autogen(docs): generate cli docs" &&  /
   git push origin HEAD:"$CIRCLE_BRANCH") || true
