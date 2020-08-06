@@ -5,7 +5,7 @@ set -Eeuox pipefail
 hub=${DOCKER_HUB_NAME:-oryd}
 
 BINARY_NAME=$CIRCLE_PROJECT_REPONAME
-if [[ $CIRCLE_PROJECT_REPONAME = "cli" ]] ;then
+if [[ $CIRCLE_PROJECT_REPONAME == "cli" ]]; then
   BINARY_NAME="ory"
 fi
 
