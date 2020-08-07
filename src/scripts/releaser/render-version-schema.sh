@@ -7,4 +7,4 @@ bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOP
 
 ory dev schema render-version master
 git commit -a -m "autogen: add master to version.schema.json"
-git push
+git push --set-upstream origin $CIRCLE_BRANCH
