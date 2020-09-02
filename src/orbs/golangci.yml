@@ -1,20 +1,9 @@
 version: 2.1
 description: Run gloangci tools
 
-executors:
-  default:
-    docker:
-      -
-        image: circleci/golang:1.14
-        environment:
-          - GO111MODULE=on
-
-jobs:
+commands:
   lint:
-    executor: default
     steps:
-      - checkout
-      - checkout
       -
         restore_cache:
           keys:
@@ -33,8 +22,8 @@ jobs:
         run: GOGC=20 golangci-lint run
 
 examples:
-  nancy:
-    description: Test go.mod for CVEs using nancy
+  lint:
+    description: Lint using golangci-lint
     usage:
       version: 2.1
       orbs:
@@ -42,4 +31,7 @@ examples:
       workflows:
         lint:
           jobs:
-            - golangci/lint
+            run-linter:
+              steps:
+                - checkout
+                - foo/lint
