@@ -15,7 +15,7 @@ commands:
       - run:
           command: |-
             cd docs
-            npx prettier@"$(cat package.json | jq -r .devDependencies.prettier)" --check "$(cat package.json | jq -r .consts.prettierTarget)" $(cat package.json | jq -r .consts.prettierArgs)
+            npm run format:check
 
 jobs:
   cli:
