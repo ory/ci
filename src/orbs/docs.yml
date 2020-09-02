@@ -7,7 +7,15 @@ executors:
       -
         image: circleci/golang:1.14-node
         environment:
-          - GO111MODULE=on
+          GO111MODULE: "on"
+
+commands:
+  check-format:
+    steps:
+      - run:
+          command: |-
+            cd docs
+            npm run format:check
 
 jobs:
   cli:
