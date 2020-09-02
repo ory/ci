@@ -7,4 +7,5 @@ bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOP
 
 ory dev schema render-version $CIRCLE_PROJECT_REPONAME $CIRCLE_TAG
 git commit -a -m "autogen: add $CIRCLE_TAG to version.schema.json"
-git push --set-upstream origin $CIRCLE_BRANCH
+# pushing detached HEAD to master
+git push origin HEAD:master
