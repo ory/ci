@@ -35,6 +35,8 @@ if [ -n "${CIRCLE_TAG+x}" ]; then
   (cd docs; npm run docusaurus docs:version "$doc_tag")
 fi
 
+export TERSER_PARALLEL=false
+
 (cd docs; \
   npm run format && \
   npm run build
