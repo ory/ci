@@ -5,8 +5,10 @@ set -Eeuox pipefail
 hub=${DOCKER_HUB_NAME:-oryd}
 
 BINARY_NAME=$CIRCLE_PROJECT_REPONAME
+DOCKER_NAME=$CIRCLE_PROJECT_REPONAME
 if [[ $CIRCLE_PROJECT_REPONAME == "cli" ]]; then
   BINARY_NAME="ory"
+  DOCKER_NAME="ory"
 fi
 
 curl -sSfL \
@@ -17,6 +19,6 @@ curl -sSfL \
 "./bin/${BINARY_NAME}" version | grep -q "${CIRCLE_TAG}" || exit 1
 
 docker run --rm \
-  "${hub}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}" help
+  "${hub}/${DOCKER_NAME}:${CIRCLE_TAG}" help
 docker run --rm \
-  "${hub}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}" version | grep -q "${CIRCLE_TAG}" || exit 1
+  "${hub}/${DOCKER_NAME}:${CIRCLE_TAG}" version | grep -q "${CIRCLE_TAG}" || exit 1
