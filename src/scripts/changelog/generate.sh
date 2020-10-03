@@ -35,9 +35,9 @@ printf "# Changelog\n\n" | cat - CHANGELOG.md > "$t" && mv "$t" CHANGELOG.md
 
 if [ -z ${isRelease+x} ]; then
   git add -A
-  (git commit -m "$COMMIT_MESSAGE" -- CHANGELOG.md && git push origin HEAD:$CIRCLE_BRANCH) || true
+  (git commit -m "$COMMIT_MESSAGE" -- CHANGELOG.md && git pull -ff && git push origin HEAD:$CIRCLE_BRANCH) || true
 else
   git checkout -b "changelog-$(date +"%m-%d-%Y")"
   git add -A
-  (git commit -m "$COMMIT_MESSAGE" -- CHANGELOG.md && git push origin HEAD:master) || true
+  (git commit -m "$COMMIT_MESSAGE" -- CHANGELOG.md && git pull -ff && git push origin HEAD:master) || true
 fi
