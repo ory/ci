@@ -5,7 +5,7 @@ executors:
   default:
     docker:
       -
-        image: circleci/node:13
+        image: circleci/node:14
 
 jobs:
   generate:
