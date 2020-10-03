@@ -1,6 +1,14 @@
 version: 2.1
 description: Run gloangci tools
 
+executors:
+  default:
+    docker:
+      -
+        image: circleci/golang:1.15
+        environment:
+          GO111MODULE: on
+
 commands:
   lint:
     steps:
@@ -17,7 +25,7 @@ commands:
             - "/go/pkg/mod"
       -
         #  TODO: update to >1.24.0 - see https://github.com/golangci/golangci-lint/issues/994
-        run: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.23.8
+        run: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
       -
         run: GOGC=20 golangci-lint run
 
