@@ -7,14 +7,11 @@ executors:
       -
         image: circleci/golang:1.15
         environment:
-          - GO111MODULE=on
+          GO111MODULE: 'on'
 
-jobs:
+commands:
   lint:
-    executor: default
     steps:
-      - checkout
-      - checkout
       -
         restore_cache:
           keys:
@@ -27,14 +24,13 @@ jobs:
           paths:
             - "/go/pkg/mod"
       -
-        #  TODO: update to >1.24.0 - see https://github.com/golangci/golangci-lint/issues/994
         run: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
       -
         run: GOGC=20 golangci-lint run
 
 examples:
-  nancy:
-    description: Test go.mod for CVEs using nancy
+  lint:
+    description: Lint using golangci-lint
     usage:
       version: 2.1
       orbs:
@@ -42,4 +38,7 @@ examples:
       workflows:
         lint:
           jobs:
-            - golangci/lint
+            run-linter:
+              steps:
+                - checkout
+                - foo/lint
