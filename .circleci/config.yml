@@ -1,9 +1,22 @@
 version: 2.1
-#description: Creates and updates the CHANGELOG.md file
 
-#orbs:
-#  orb-tools: circleci/orb-tools@9.0.0
-#
+orbs:
+  circleci-cli: circleci/circleci-cli@0.1.8
+
+jobs:
+  validate:
+    executor: circleci-cli/default
+    steps:
+      - checkout
+      - run: |-
+          set -euxo pipefail
+          for orb in src/orbs/*.yml; do circleci orb validate $orb; done
+
+workflows:
+  test:
+    jobs:
+      - validate
+
 #workflows:
 #  sdk:
 #    jobs:
