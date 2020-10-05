@@ -38,7 +38,7 @@ examples:
       workflows:
         lint:
           jobs:
-            run-linter:
-              steps:
-                - checkout
-                - foo/lint
+            - run-linter:
+                steps:
+                  - checkout
+                  - foo/lint
