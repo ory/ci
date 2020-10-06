@@ -15,5 +15,9 @@ bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/insta
 make .bin/clidoc
 .bin/clidoc .
 
+(cd docs
+bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/prettier.sh)
+npm run format)
+
 (git add -A; git commit -a -m "autogen(docs): generate cli docs" &&  /
   git push origin HEAD:"$CIRCLE_BRANCH") || true
