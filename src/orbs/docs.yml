@@ -13,10 +13,7 @@ commands:
   check-format:
     steps:
       - run:
-          command: |-
-            cd docs
-            npm ci
-            npm run format:check
+          command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/docs/check_format.sh)"
 
 jobs:
   cli:
