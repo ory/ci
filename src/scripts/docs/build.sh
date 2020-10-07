@@ -38,8 +38,8 @@ fi
 export TERSER_PARALLEL=false
 
 (cd docs; \
-  npm run format && \
-  npm run build
+  npm run build &&
+  npm run format
 )
 
 if [ -n "${CIRCLE_TAG+x}" ]; then
