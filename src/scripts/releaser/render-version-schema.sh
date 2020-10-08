@@ -6,6 +6,12 @@ bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/insta
 bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
 
 ory dev schema render-version $CIRCLE_PROJECT_REPONAME $CIRCLE_TAG
+
+branch="$(date +%s)"
+git fetch origin
+git stash
+git checkout -b "$branch"
+git stash pop
 git commit -a -m "autogen: add $CIRCLE_TAG to version.schema.json"
-# pushing detached HEAD to master
+git pull origin master --rebase
 git push origin HEAD:master
