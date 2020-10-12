@@ -45,7 +45,30 @@ jobs:
         run:
           name: Build and publish the release
           command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/release.sh)"
+          
 
+  release-test:
+    parameters:
+      gitauthtoken:
+        description: A GitHub API Token
+        type: env_var_name
+        default: GITHUB_TOKEN
+      dockeruser:
+        description: The Docker Hub Username
+        type: env_var_name
+        default: DOCKER_USERNAME
+      dockerkey:
+        description: The Docker Hub Access Token
+        type: env_var_name
+        default: DOCKER_TOKEN
+      docker-org:
+        description: The Docker Organization Name
+        type: string
+        default: oryd
+    executor: default
+    working_directory: /home/ory
+    steps:
+      - checkout
       -
         run:
           name: Test the release
