@@ -19,7 +19,7 @@ jobs:
       gitemail:
         description: The git committer's email
         type: string
-        default: aeneas@ory.sh
+        default: 3372410+aeneasr@users.noreply.github.com
       gitusername:
         description: The git committer's username
         type: string
@@ -70,7 +70,7 @@ jobs:
       gitemail:
         description: The git committer's email
         type: string
-        default: aeneas@ory.sh
+        default: 3372410+aeneasr@users.noreply.github.com
       gitusername:
         description: The git committer's username
         type: string
@@ -107,7 +107,7 @@ jobs:
       - run: ory dev swagger sanitize <<parameters.swagpath>>
       - run: swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
       - run: swagger validate <<parameters.swagpath>>
-      - run: rm -rf <<parameters.genpath>>
+      - run: rm -rf <<parameters.genpath>>/models/* <<parameters.genpath>>/clients/*
       - run: mkdir -p <<parameters.genpath>>
       - run: swagger generate client -f <<parameters.swagpath>> -t <<parameters.genpath>> -A <<parameters.appname>>
       - run: git config --global user.email "<<parameters.gitemail>>"
