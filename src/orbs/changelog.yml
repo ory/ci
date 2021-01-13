@@ -14,7 +14,7 @@ jobs:
       gitemail:
         description: The git committer's email
         type: string
-        default: aeneas@ory.sh
+        default: 3372410+aeneasr@users.noreply.github.com
       gitusername:
         description: The git committer's username
         type: string
