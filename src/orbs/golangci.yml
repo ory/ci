@@ -28,6 +28,13 @@ commands:
       -
         run: GOGC=20 golangci-lint run --timeout 10m0s
 
+jobs:
+  lint:
+    executor: default
+    steps:
+      - checkout
+      - lint
+
 examples:
   lint:
     description: Lint using golangci-lint
