@@ -23,6 +23,7 @@ swagger validate "${SWAG_SPEC_LOCATION}"
 
 npx widdershins@3.6.7 -u docs/.widdershins/templates -e docs/.widdershins/config.json "$SWAG_SPEC_LOCATION" -o ./docs/docs/reference/api.mdx
 
+node ./docs/scripts/gen-faq.js
 node ./docs/scripts/fix-api.js ./docs/docs/reference/api.mdx
 node ./docs/scripts/config.js docs/config.js
 
