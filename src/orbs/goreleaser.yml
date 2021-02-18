@@ -7,13 +7,13 @@ executors:
       -
         image: oryd/xgoreleaser:latest
         environment:
-          - GO111MODULE=on
+          GOPROXY: 'https://proxy.golang.org,direct'
   node:
     docker:
       -
-        image: circleci/golang:1.15-node
+        image: cimg/go:1.16-node
         environment:
-          - GO111MODULE=on
+          GOPROXY: 'https://proxy.golang.org,direct'
 
 jobs:
   release:

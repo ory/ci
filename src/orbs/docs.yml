@@ -4,10 +4,9 @@ description: Run gloangci tools
 executors:
   default:
     docker:
-      -
-        image: circleci/golang:1.15-node
+      - image: cimg/go:1.16-node
         environment:
-          GO111MODULE: 'on'
+          GOPROXY: 'https://proxy.golang.org,direct'
 
 commands:
   check-format:
