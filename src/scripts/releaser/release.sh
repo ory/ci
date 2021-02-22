@@ -26,4 +26,4 @@ printf "\n\n" >> "$notes"
 cat "$changelog" >> "$notes"
 
 git reset --hard HEAD
-goreleaser release --release-header <(cat "$notes") --rm-dist
+goreleaser release --release-header <(cat "$notes") --rm-dist --timeout 60m
