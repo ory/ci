@@ -120,6 +120,8 @@ jobs:
       -
         run: go mod download
       -
+        run: go mod tidy
+      -
         run: git diff --exit-code
       -
         run: goreleaser check
