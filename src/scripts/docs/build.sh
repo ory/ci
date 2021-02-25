@@ -28,7 +28,7 @@ npx widdershins@3.6.7 -u docs/.widdershins/templates -e docs/.widdershins/config
 # node ./docs/scripts/config.js docs/config.js
 # replace with npm run gen, runs in projects with /docs
 
-npm run gen
+(cd docs; npm run gen)
 
 if [ -n "${CIRCLE_TAG+x}" ]; then
   doc_tag=$(echo "${CIRCLE_TAG}" | cut -d '+' -f1 | cut -d '.' -f-2)
