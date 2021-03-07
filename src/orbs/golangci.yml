@@ -12,15 +12,12 @@ executors:
           GOPROXY: 'https://proxy.golang.org,direct'
 
 commands:
+  install:
+    steps:
+      - run: bash <(curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh) -b $HOME/.bin
   lint:
     steps:
-      - go/load-cache
-      - go/mod-download
-      - go/save-cache
-      -
-        run: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
-      -
-        run: GOGC=20 golangci-lint run --timeout 10m0s
+      - run: PATH=$HOME/.bin:$PATH GOGC=100 golangci-lint run --timeout 10m0s
 
 jobs:
   lint:
