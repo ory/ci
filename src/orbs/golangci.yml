@@ -1,6 +1,9 @@
 version: 2.1
 description: Run gloangci tools
 
+orbs:
+  go: circleci/go@1.5.0
+
 executors:
   default:
     docker:
@@ -11,8 +14,9 @@ executors:
 commands:
   lint:
     steps:
-      -
-        run: go mod download
+      - go/load-cache
+      - go/mod-download
+      - go/save-cache
       -
         run: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0
       -
