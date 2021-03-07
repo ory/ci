@@ -8,6 +8,24 @@ executors:
         environment:
           GOPROXY: 'https://proxy.golang.org,direct'
 
+commands:
+  install:
+    steps:
+      - restore_cache:
+          keys:
+            - v1-nancy-1.0.15
+      - run: mkdir -p $HOME/.bin
+      - run: curl -L -o $HOME/.bin/nancy https://github.com/sonatype-nexus-community/nancy/releases/download/v1.0.15/nancy-v1.0.15-linux-amd64 && chmod +x $HOME/.bin/nancy
+      - save_cache:
+          key: v1-nancy-1.0.15
+          paths:
+            - ~/.bin
+  check:
+    steps:
+      - run: |
+          export PATH=$HOME/.bin:$PATH
+          go list -m all | nancy sleuth -q
+
 jobs:
   test:
     executor: default
