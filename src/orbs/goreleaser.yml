@@ -19,11 +19,11 @@ commands:
   install:
     steps:
       - run:
-          command: curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
+          command: bash <(curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh) -b $HOME/.bin
   check:
     steps:
       - run:
-          command: goreleaser check
+          command: PATH=$HOME/.bin:$PATH goreleaser check
 
 jobs:
   release:
