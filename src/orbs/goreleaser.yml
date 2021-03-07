@@ -15,6 +15,12 @@ executors:
         environment:
           GOPROXY: 'https://proxy.golang.org,direct'
 
+commands:
+  check:
+    steps:
+      - run:
+          command: goreleaser check
+
 jobs:
   release:
     parameters:
@@ -45,7 +51,6 @@ jobs:
         run:
           name: Build and publish the release
           command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/release.sh)"
-          
 
   release-test:
     parameters:
@@ -117,14 +122,7 @@ jobs:
     working_directory: /home/ory
     steps:
       - checkout
-      -
-        run: go mod download
-      -
-        run: go mod tidy
-      -
-        run: git diff --exit-code
-      -
-        run: goreleaser check
+      - check
 
   release-dry:
     executor: default
