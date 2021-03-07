@@ -16,6 +16,10 @@ executors:
           GOPROXY: 'https://proxy.golang.org,direct'
 
 commands:
+  install:
+    steps:
+      - run:
+          command: curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
   check:
     steps:
       - run:
