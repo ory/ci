@@ -1,0 +1,54 @@
+version: 2.1
+description: Helpers for running npm prettier
+
+executors:
+  default:
+    docker:
+      - image: cimg/node:15.11.0
+
+commands:
+  install:
+    description: Install prettier
+    parameters:
+      dir:
+        type: string
+        default: ""
+    steps:
+      - restore_cache:
+          keys:
+            - v2-{{ checksum "package.json" }}
+      - run: mkdir -p << parameters.dir >>node_modules/ory-prettier-styles
+      - run: tar -xf "$(npm pack ory-prettier-styles)" -C << parameters.dir >>node_modules/ory-prettier-styles --strip-components=1
+      - run: cd << parameters.dir >>; npm i -g "prettier@$(jq -r '.devDependencies.prettier' package.json)"
+      - run: rm ory-prettier-styles-*.tgz
+      - save_cache:
+          key: v2-deps-{{ checksum "<< parameters.dir >>package-lock.json" }}
+          paths:
+            - ~/.npm
+            - << parameters.dir >>node_modules
+
+  check:
+    description: Check prettier formatting
+    parameters:
+      dir:
+        type: string
+        default: ""
+    steps:
+      - run: |
+          cd << parameters.dir >>
+          npx prettier --check $(jq -r '.config.prettierTarget' package.json)
+
+examples:
+  prettier:
+    description: Helpers for working with prettier
+    usage:
+      version: 2.1
+      orbs:
+        foo: ory/prettier@0.0.0
+      workflows:
+        use-of-prettier:
+          jobs:
+          - run-linter:
+              steps:
+                - prettier/install
+                - prettier/check
