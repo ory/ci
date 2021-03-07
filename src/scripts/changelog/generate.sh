@@ -21,9 +21,9 @@ npm --no-git-tag-version version "$CIRCLE_TAG"
 git clone git@github.com:ory/changelog.git "$preset"
 (cd "$preset"; npm i)
 
-npx conventional-changelog-cli@v1.1.0 --config "$preset/index.js" -r 0 -u -o CHANGELOG.md
+npx conventional-changelog-cli --config "$preset/index.js" -r 0 -u -o CHANGELOG.md
 
-npx doctoc@v1.4.0 CHANGELOG.md
+npx doctoc CHANGELOG.md
 
 sed -i "s/\*\*Table of Contents.*/**Table of Contents**/" CHANGELOG.md
 sed -i "s/\*This Change Log was.*/This Change Log was automatically generated/" CHANGELOG.md
