@@ -4,8 +4,7 @@ description: Creates and updates the CHANGELOG.md file
 executors:
   default:
     docker:
-      -
-        image: circleci/node:14
+      - image: cimg/node:15.11.0
 
 jobs:
   generate:
@@ -42,6 +41,7 @@ jobs:
           key: v1
           paths:
             - ~/.npm
+            - /usr/local/lib/node_modules
 
       - run:
           name: Generate changelog
