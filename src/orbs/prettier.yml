@@ -16,13 +16,15 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v2-{{ checksum "package.json" }}
-      - run: mkdir -p << parameters.dir >>node_modules/ory-prettier-styles
-      - run: tar -xf "$(npm pack ory-prettier-styles)" -C << parameters.dir >>node_modules/ory-prettier-styles --strip-components=1
-      - run: cd << parameters.dir >>; sudo npm i -g "prettier@$(jq -r '.devDependencies.prettier' package.json)"
-      - run: rm ory-prettier-styles-*.tgz
+            - v1-orbs-ory-prettier-{{ checksum "<< parameters.dir >>package.json" }}
+      - run: |
+          cd << parameters.dir >>
+          mkdir -p node_modules/ory-prettier-styles
+          tar -xf "$(npm pack ory-prettier-styles)" -C node_modules/ory-prettier-styles --strip-components=1
+          sudo npm i -g "prettier@$(jq -r '.devDependencies.prettier' package.json)"
+          rm ory-prettier-styles-*.tgz
       - save_cache:
-          key: v2-deps-{{ checksum "<< parameters.dir >>package-lock.json" }}
+          key: v1-orbs-ory-prettier-{{ checksum "<< parameters.dir >>package-lock.json" }}
           paths:
             - ~/.npm
             - /usr/local/lib/node_modules
@@ -33,7 +35,7 @@ commands:
     parameters:
       dir:
         type: string
-        default: ""
+        default: "./"
     steps:
       - run: |
           cd << parameters.dir >>
