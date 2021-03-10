@@ -24,14 +24,16 @@ commands:
     steps:
       - run: |
           export PATH=$HOME/.bin:$PATH
-          go list -m all | nancy sleuth -q
+          go list -json -m all | nancy sleuth -q
 
 jobs:
   test:
     executor: default
     steps:
       - checkout
-      - run: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/nancy/run.sh)"
+      - install
+      - check
+
 examples:
   nancy:
     description: Test go.mod for CVEs using nancy
