@@ -61,6 +61,7 @@ jobs:
         run:
           name: Build and publish the release
           command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/release.sh)"
+          no_output_timeout: 30m
 
   release-test:
     parameters:
