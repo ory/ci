@@ -35,10 +35,10 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-ory-changelog
+            - v2-ory-changelog
       - run: sudo npm i -g conventional-changelog-cli@v1.1.0 doctoc@v1.4.0
       - save_cache:
-          key: v1-ory-changelog
+          key: v2-ory-changelog
           paths:
             - ~/.npm
             - /usr/local/lib/node_modules
