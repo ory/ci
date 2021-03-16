@@ -32,7 +32,7 @@ jobs:
         type: string
         default: internal/httpclient
       specignorepgks:
-        description: "swagger genearte spec -x <<args>> arguments"
+        description: The packages to ignore, space delimited
         type: string
         default: internal/httpclient
     executor: default
@@ -45,7 +45,7 @@ jobs:
           sudo chmod +x $GOPATH/bin/swagger
       - run: |
           bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
-      - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.specignorepgks>>
+      - run: swagger generate spec -m -o <<parameters.swagpath>> $(printf -- " -x %s" <<parameters.specignorepgks>>)
       - run: ory dev swagger sanitize <<parameters.swagpath>>
       - run: swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
       - run: swagger validate <<parameters.swagpath>>
@@ -82,7 +82,7 @@ jobs:
         type: string
         default: "autogen(openapi): Regenerate swagger spec and internal client"
       specignorepgks:
-        description: "swagger genearte spec -x <<args>> arguments"
+        description: The packages to ignore, space delimited
         type: string
         default: internal/httpclient
     executor: default
@@ -102,7 +102,7 @@ jobs:
       - run: go get github.com/sqs/goreturns@master
       - run: |
           bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
-      - run: swagger generate spec -m -o <<parameters.swagpath>> -x <<parameters.specignorepgks>>
+      - run: swagger generate spec -m -o <<parameters.swagpath>> $(printf -- " -x %s" <<parameters.specignorepgks>>)
       - run: ory dev swagger sanitize <<parameters.swagpath>>
       - run: swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
       - run: swagger validate <<parameters.swagpath>>
