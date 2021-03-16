@@ -31,7 +31,7 @@ jobs:
         type: string
         default: .schema/api.swagger.json
       swag-spec-ignore:
-        description: Packages to ignore when generating the Swagger spec.
+        description: Packages to ignore when generating the Swagger spec (space delimited).
         type: string
         default: internal/httpclient
     executor: default
