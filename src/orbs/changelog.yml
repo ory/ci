@@ -33,15 +33,8 @@ jobs:
       - run: git config --global user.email "<<parameters.gitemail>>"
       - run: git config --global user.name "<<parameters.gitusername>>"
 
-      - restore_cache:
-          keys:
-            - v2-ory-changelog
+      # Caching is broken here...
       - run: sudo npm i -g conventional-changelog-cli@v1.1.0 doctoc@v1.4.0
-      - save_cache:
-          key: v2-ory-changelog
-          paths:
-            - ~/.npm
-            - /usr/local/lib/node_modules
 
       - run:
           name: Generate changelog
