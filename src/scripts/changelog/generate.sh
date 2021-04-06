@@ -28,6 +28,11 @@ npx doctoc CHANGELOG.md
 sed -i "s/\*\*Table of Contents.*/**Table of Contents**/" CHANGELOG.md
 sed -i "s/\*This Change Log was.*/This Change Log was automatically generated/" CHANGELOG.md
 
+if [ -f package.json ]; then
+  bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/prettier.sh)
+  npm run format
+fi
+
 git add CHANGELOG.md
 
 t=$(mktemp)
