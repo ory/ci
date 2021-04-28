@@ -155,7 +155,7 @@ jobs:
       commitmessage:
         description: The git commit message
         type: string
-        default: "autogen(openapi): Regenerate swagger spec and internal client"
+        default: "autogen(openapi): Regenerate openapi spec and internal client"
     executor: default
     steps:
       - checkout
