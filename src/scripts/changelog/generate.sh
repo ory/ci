@@ -44,7 +44,9 @@ if [ -z ${isRelease+x} ]; then
 else
   git add -A
   git fetch origin
+  git stash
   git checkout -b "changelog-$(date +"%m-%d-%Y")" origin/master
   git pull -ff
+  git stash pop
   (git commit -m "$COMMIT_MESSAGE" -- CHANGELOG.md && git pull -ff && git push origin HEAD:master) || true
 fi
