@@ -17,10 +17,7 @@ bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOP
 # we want word splitting here to pass the args
 # shellcheck disable=SC2046
 # shellcheck disable=SC2086
-swagger generate spec -m -o "${SWAG_SPEC_LOCATION}" $(printf -- " -x %s" ${SWAG_SPEC_IGNORE})
-ory dev swagger sanitize "${SWAG_SPEC_LOCATION}"
-swagger flatten --with-flatten=remove-unused -o "${SWAG_SPEC_LOCATION}" "${SWAG_SPEC_LOCATION}"
-swagger validate "${SWAG_SPEC_LOCATION}"
+make sdk
 
 (cd docs; npm i; npm run gen)
 
