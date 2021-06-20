@@ -34,7 +34,7 @@ jobs:
       - run: git config --global user.name "<<parameters.gitusername>>"
 
       # Caching is broken here...
-      - run: sudo npm i -g conventional-changelog-cli@v1.1.0 doctoc@v1.4.0
+      - run: sudo npm i -g conventional-changelog-cli@v1.1.1 doctoc@v1.4.0
 
       - run:
           name: Generate changelog
