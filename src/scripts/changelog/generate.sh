@@ -34,6 +34,7 @@ custom_edit_url: null
 
 EOT
   cat CHANGELOG.md >> docs/docs/CHANGELOG.md
+  git add docs/docs/CHANGELOG.md
 fi
 
 # Adding a table of contents and other things really only makes sense
@@ -54,12 +55,8 @@ t=$(mktemp)
 printf "# Changelog\n\n" | cat - CHANGELOG.md > "$t" && mv "$t" CHANGELOG.md
 
 if [ -z ${isRelease+x} ]; then
-  git add -A CHANGELOG.md
-  [ -d "docs/docs" ] && git add docs/docs/CHANGELOG.md
   (git commit -m "$COMMIT_MESSAGE" && git pull -ff && git push origin HEAD:$CIRCLE_BRANCH) || true
 else
-  git add -A CHANGELOG.md
-  [ -d "docs/docs" ] && git add docs/docs/CHANGELOG.md
   git fetch origin
   git stash
   git checkout -b "changelog-$(date +"%m-%d-%Y")" origin/master
