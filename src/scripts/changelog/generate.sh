@@ -21,7 +21,7 @@ npm --no-git-tag-version version "$CIRCLE_TAG"
 git clone git@github.com:ory/changelog.git "$preset"
 (cd "$preset"; npm i)
 
-npx conventional-changelog-cli --config "$preset/index.js" -r 0 -u -o CHANGELOG.md
+npx conventional-changelog-cli@2.1.1 --config "$preset/index.js" -r 0 -u -o CHANGELOG.md
 
 # If docs/docs exists, copy the changelog there.
 if [ -d "docs/docs" ]; then
