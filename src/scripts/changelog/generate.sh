@@ -23,6 +23,8 @@ git clone git@github.com:ory/changelog.git "$preset"
 
 npx conventional-changelog-cli@2.1.1 --config "$preset/index.js" -r 0 -u -o CHANGELOG.md
 
+bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/prettier.sh)
+
 # If docs/docs exists, copy the changelog there.
 if [ -d "docs/docs" ]; then
   cat <<EOT >> docs/docs/CHANGELOG.md
@@ -35,6 +37,7 @@ custom_edit_url: null
 EOT
   cat CHANGELOG.md >> docs/docs/CHANGELOG.md
   git add docs/docs/CHANGELOG.md
+  (cd docs; npm run format)
 fi
 
 # Adding a table of contents and other things really only makes sense
@@ -45,7 +48,6 @@ sed -i "s/\*\*Table of Contents.*/**Table of Contents**/" CHANGELOG.md
 sed -i "s/\*This Change Log was.*/This Change Log was automatically generated/" CHANGELOG.md
 
 if [ -f package.json ]; then
-  bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/prettier.sh)
   npm run format
 fi
 

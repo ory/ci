@@ -11,7 +11,7 @@ else
   echo "package.json exists and needs not be written"
 fi
 
-notes=$(mktemp)
+notes=$(mktemp).md
 preset=$(mktemp -d)
 
 npm --no-git-tag-version version "$CIRCLE_TAG"
