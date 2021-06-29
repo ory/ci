@@ -38,6 +38,9 @@ EOT
   cat CHANGELOG.md >> docs/docs/CHANGELOG.md
   git add docs/docs/CHANGELOG.md
   (cd docs; npm run format)
+
+  # Remove once https://github.com/facebook/docusaurus/issues/3018 is resolved
+  rm docs/docs/CHANGELOG.md
 fi
 
 # Adding a table of contents and other things really only makes sense
