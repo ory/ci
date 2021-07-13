@@ -26,21 +26,20 @@ npx conventional-changelog-cli@2.1.1 --config "$preset/index.js" -r 0 -u -o CHAN
 bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/prettier.sh)
 
 # If docs/docs exists, copy the changelog there.
+# Reintroduce once https://github.com/facebook/docusaurus/issues/3018 is resolved
 if [ -d "docs/docs" ]; then
-  cat <<EOT >> docs/docs/CHANGELOG.md
----
-id: changelog
-title: Changelog
-custom_edit_url: null
----
-
-EOT
-  cat CHANGELOG.md >> docs/docs/CHANGELOG.md
-  git add docs/docs/CHANGELOG.md
-  (cd docs; npm run format)
-
-  # Remove once https://github.com/facebook/docusaurus/issues/3018 is resolved
-  rm docs/docs/CHANGELOG.md
+#  cat <<EOT >> docs/docs/CHANGELOG.md
+#---
+#id: changelog
+#title: Changelog
+#custom_edit_url: null
+#---
+#
+#EOT
+#  cat CHANGELOG.md >> docs/docs/CHANGELOG.md
+#  git add docs/docs/CHANGELOG.md
+#  (cd docs; npm run format)
+#  rm docs/docs/CHANGELOG.md
 fi
 
 # Adding a table of contents and other things really only makes sense
