@@ -27,7 +27,7 @@ bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/insta
 
 # If docs/docs exists, copy the changelog there.
 # Reintroduce once https://github.com/facebook/docusaurus/issues/3018 is resolved
-if [ -d "docs/docs" ]; then
+#if [ -d "docs/docs" ]; then
 #  cat <<EOT >> docs/docs/CHANGELOG.md
 #---
 #id: changelog
@@ -40,7 +40,7 @@ if [ -d "docs/docs" ]; then
 #  git add docs/docs/CHANGELOG.md
 #  (cd docs; npm run format)
 #  rm docs/docs/CHANGELOG.md
-fi
+#fi
 
 # Adding a table of contents and other things really only makes sense
 # for the CHANGELOG in the root repository.
