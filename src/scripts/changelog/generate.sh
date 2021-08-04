@@ -17,7 +17,6 @@ else
   isRelease=1
 fi
 
-npm --no-git-tag-version version "$CIRCLE_TAG"
 git clone git@github.com:ory/changelog.git "$preset"
 (cd "$preset"; npm i)
 
