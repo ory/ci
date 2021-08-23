@@ -27,4 +27,6 @@ sed '/^# /d' "$notes" | tee "$notes"
 npx prettier -w "$notes"
 
 git reset --hard HEAD
+cat $notes
+
 goreleaser release --release-header <(cat "$notes") --rm-dist --timeout 60m --parallelism 1
