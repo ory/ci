@@ -22,14 +22,18 @@ npx conventional-changelog-cli@v2.1.1 --config "$preset/index.js" -r 2 -o "$note
 
 # Replace all h1 headings from the changelog.
 cat $notes
-sed '/^# /d' "$notes" | tee "$notes"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sed -i '' '/^# /d' "$notes"
+else
+  sed -i '/^# /d' "$notes"
+fi
+cat $notes
 
 # Format it
-cat $notes
 npx prettier -w "$notes"
 
-cat $notes
 git reset --hard HEAD
+
 cat $notes
 
 goreleaser release --release-header <(cat "$notes") --rm-dist --timeout 60m --parallelism 1
