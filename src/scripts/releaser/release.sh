@@ -21,11 +21,14 @@ git clone git@github.com:ory/changelog.git "$preset"
 npx conventional-changelog-cli@v2.1.1 --config "$preset/index.js" -r 2 -o "$notes"
 
 # Replace all h1 headings from the changelog.
+cat $notes
 sed '/^# /d' "$notes" | tee "$notes"
 
 # Format it
+cat $notes
 npx prettier -w "$notes"
 
+cat $notes
 git reset --hard HEAD
 cat $notes
 
