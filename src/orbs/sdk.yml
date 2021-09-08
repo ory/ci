@@ -141,6 +141,38 @@ jobs:
           cp <<parameters.swagpath>> "../sdk/spec/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_TAG}.json"
           (cd ../sdk; git add -A; git commit -a -m "Add spec for ${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}" || true; git push origin || true)
 
+  test:
+    docker:
+      - image: oryd/sdk:v0.0.43
+    parameters:
+      generate:
+        description: The generation command
+        type: string
+        default: make sdk
+      specpath:
+        description: Path to the spec
+        type: string
+        default: spec/api.json
+    working_directory: /project
+    steps:
+      - run: git clone --depth 1 --branch master --single-branch https://github.com/ory/sdk.git /sdk
+      - checkout
+      - run: <<parameters.generate>>
+      - run: cp <<parameters.specpath>> "/sdk/spec/${CIRCLE_PROJECT_REPONAME}/v0.0.1-test.0.json"
+      - run: |
+          git config --global user.email "3372410+aeneasr@users.noreply.github.com"
+          git config --global user.name "aeneasr"
+      - run: |
+          cd /sdk
+          export FORCE_VERSION=v0.0.1-test.0
+          export FORCE_PROJECT=${CIRCLE_PROJECT_REPONAME}
+          ./scripts/generate.sh
+      - run: |
+          cd /sdk
+          export FORCE_VERSION=v0.0.1-test.0
+          export FORCE_PROJECT=${CIRCLE_PROJECT_REPONAME}
+          ./scripts/test.sh
+
   generate-openapi:
     parameters:
       gitemail:
