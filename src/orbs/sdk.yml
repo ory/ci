@@ -143,7 +143,7 @@ jobs:
 
   test:
     docker:
-      - image: oryd/sdk:v0.0.43
+      - image: oryd/sdk:v0.0.44
     parameters:
       generate:
         description: The generation command
