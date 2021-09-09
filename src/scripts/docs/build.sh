@@ -21,15 +21,6 @@ make sdk
 
 (cd docs; npm i; npm run gen)
 
-if [ -n "${CIRCLE_TAG+x}" ]; then
-  doc_tag=$(echo "${CIRCLE_TAG}" | cut -d '+' -f1 | cut -d '.' -f-2)
-  node ./docs/scripts/docker-tag.js docs/config.js "$CIRCLE_TAG"
-  node ./docs/scripts/rerelease.js "$doc_tag"
-  rm -rf ./docs/versioned_docs/version-"$doc_tag"
-  rm -rf ./docs/versioned_sidebars/version-"$doc_tag"-sidebars.json
-  (cd docs; npm run docusaurus docs:version "$doc_tag")
-fi
-
 export TERSER_PARALLEL=false
 
 (cd docs; \
