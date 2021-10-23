@@ -24,7 +24,7 @@ commands:
     steps:
       - run: |
           export PATH=$HOME/.bin:$PATH
-          go list -json -m all | nancy sleuth -q
+          go list -json -deps | nancy sleuth
 
 jobs:
   test:
