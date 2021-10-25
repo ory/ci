@@ -4,7 +4,7 @@ description: Run gloangci tools
 executors:
   default:
     docker:
-      - image: cimg/go:1.16-node
+      - image: cimg/go:1.17-node
         environment:
           GOPROXY: 'https://proxy.golang.org,direct'
 
@@ -37,6 +37,9 @@ jobs:
     executor: default
     steps:
       - checkout
+      - run: |
+          sudo apt update
+          sudo apt install openjdk-11-jre-headless
       - run:
           name: Build and publish documentation
           command: "bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/docs/build.sh)"
