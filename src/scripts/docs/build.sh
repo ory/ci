@@ -33,13 +33,13 @@ if [ -n "${CIRCLE_TAG+x}" ]; then
   branch="$(date +%s)"
   git checkout -b "$branch"
   git add -A
-  git commit -a -m "autogen(docs): generate and format documentation"
+  git commit --allow-empty -a -m "autogen(docs): generate and format documentation"
   git pull origin master --rebase
   git push origin HEAD:master
 else
   echo "Pushing to master because this is a git tag."
   git add -A
-  (git commit -a -m "autogen(docs): generate and format documentation" && git push origin HEAD:"$CIRCLE_BRANCH") || true
+  git commit --allow-empty -a -m "autogen(docs): generate and format documentation" && git push origin HEAD:"$CIRCLE_BRANCH"
 fi
 
 website_path="../web/generated/docs/${CIRCLE_PROJECT_REPONAME}"
@@ -48,5 +48,6 @@ rm -rf "$website_path/*"
 cp -R ./docs/build/* "$website_path"
 (cd ../web; \
   git add -A; \
-  (git commit -a -m "autogen(docs): generate and bump docs for $CIRCLE_PROJECT_REPONAME" && git push origin HEAD:master) || true)
+  git commit --allow-empty -a -m "autogen(docs): generate and bump docs for $CIRCLE_PROJECT_REPONAME"; \
+  git push origin HEAD:master)
 
