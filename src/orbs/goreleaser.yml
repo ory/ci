@@ -20,11 +20,11 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v1-goreleaser-0.177.0
+            - v1-goreleaser-0.184.0
       - run: mkdir -p ~/.bin
-      - run: bash <(curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh) -b ~/.bin v0.177.0
+      - run: bash <(curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh) -b ~/.bin v0.184.0
       - save_cache:
-          key: v1-goreleaser-0.177.0
+          key: v1-goreleaser-0.184.0
           paths:
             - ~/.bin
   check:
