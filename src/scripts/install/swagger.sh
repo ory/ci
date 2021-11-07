@@ -11,4 +11,4 @@ download_url=$(curl -s https://api.github.com/repos/go-swagger/go-swagger/releas
 sudo curl -o "$path/swagger" -L'#' "$download_url"
 sudo chmod +x "$path/swagger"
 
-bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
+bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory

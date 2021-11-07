@@ -12,7 +12,7 @@ fi
 
 bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/swagger.sh)
 bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/git.sh)
-bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
+bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
 
 # we want word splitting here to pass the args
 # shellcheck disable=SC2046

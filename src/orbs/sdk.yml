@@ -44,7 +44,7 @@ jobs:
           sudo curl -o $GOPATH/bin/swagger -L'#' "$download_url"
           sudo chmod +x $GOPATH/bin/swagger
       - run: |
-          bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
+          bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
       - run: swagger generate spec -m -o <<parameters.swagpath>> $(printf -- " -x %s" <<parameters.specignorepgks>>)
       - run: ory dev swagger sanitize <<parameters.swagpath>>
       - run: swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
@@ -100,7 +100,7 @@ jobs:
           sudo curl -o $GOPATH/bin/swagger -L'#' "$download_url"
           sudo chmod +x $GOPATH/bin/swagger
       - run: |
-          bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
+          bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
       - run: swagger generate spec -m -o <<parameters.swagpath>> $(printf -- " -x %s" <<parameters.specignorepgks>>)
       - run: ory dev swagger sanitize <<parameters.swagpath>>
       - run: swagger flatten --with-flatten=remove-unused -o <<parameters.swagpath>> <<parameters.swagpath>>
@@ -133,7 +133,7 @@ jobs:
     steps:
       - checkout
       - run: |
-          bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
+          bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
       - run: make sdk
       - run: git config --global user.email "<<parameters.gitemail>>"
       - run: git config --global user.name "<<parameters.gitusername>>"
@@ -199,7 +199,7 @@ jobs:
             fi
           fi
       - run: |
-          bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
+          bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
       - run: make sdk
       - run: git config --global user.email "<<parameters.gitemail>>"
       - run: git config --global user.name "<<parameters.gitusername>>"

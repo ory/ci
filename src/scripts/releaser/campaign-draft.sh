@@ -2,7 +2,7 @@
 
 set -Eeuox pipefail
 
-bash <(curl https://raw.githubusercontent.com/ory/cli/master/install.sh) -b $GOPATH/bin
+bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
 
 ory dev release notify draft --segment "${MAILCHIMP_SEGMENT_ID}" "${MAILCHIMP_LIST_ID}"
 
