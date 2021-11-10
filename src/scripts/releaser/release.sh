@@ -41,6 +41,9 @@ cat $notes
 goreleaser release --release-header <(cat "$notes") --rm-dist --timeout 60m --parallelism 1
 
 git add -A
+git stash
+git checkout master
+git stash pop
 git commit -a -m "autogen: update release artifacts" || true
 git pull origin master --rebase || true
 git push origin HEAD:master || true
