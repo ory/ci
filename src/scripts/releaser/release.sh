@@ -4,6 +4,8 @@ set -Eeuox pipefail
 
 export GORELEASER_CURRENT_TAG="${CIRCLE_TAG}"
 
+bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/git.sh)
+
 if [[ ! -e package.json ]]; then
   echo '{"private": true, "version": "0.0.0"}' > package.json
   git add package.json
@@ -37,3 +39,8 @@ git reset --hard HEAD
 cat $notes
 
 goreleaser release --release-header <(cat "$notes") --rm-dist --timeout 60m --parallelism 1
+
+git add -A
+git commit -a -m "autogen: update release artifacts" || true
+git pull origin master --rebase || true
+git push origin HEAD:master || true
