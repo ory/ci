@@ -22,7 +22,7 @@ commands:
           keys:
             - v1-goreleaser-0.184.0
       - run: mkdir -p ~/.bin
-      - run: bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/install.sh) ~/.bin v0.184.0
+      - run: bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/releaser/install.sh) ~/.bin v1.1.0
       - save_cache:
           key: v1-goreleaser-0.184.0
           paths:
