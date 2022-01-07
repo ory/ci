@@ -39,7 +39,9 @@ if [ -n "${CIRCLE_TAG+x}" ]; then
 else
   echo "Pushing to master because this is a git tag."
   git add -A
-  git commit --allow-empty -a -m "autogen(docs): generate and format documentation" && git push origin HEAD:"$CIRCLE_BRANCH"
+  git commit --allow-empty -a -m "autogen(docs): generate and format documentation"
+  git pull origin $CIRCLE_BRANCH --rebase
+  git push origin HEAD:"$CIRCLE_BRANCH"
 fi
 
 website_path="../web/generated/docs/${CIRCLE_PROJECT_REPONAME}"
