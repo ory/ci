@@ -2,7 +2,7 @@
 
 set -Eeuox pipefail
 
-export GORELEASER_CURRENT_TAG="${CIRCLE_TAG}"
+export GORELEASER_CURRENT_TAG="${CURRENT_TAG}"
 
 bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/git.sh)
 
@@ -16,7 +16,7 @@ fi
 notes="$(mktemp).md"
 preset=$(mktemp -d)
 
-npm --no-git-tag-version version "$CIRCLE_TAG"
+npm --no-git-tag-version version "$CURRENT_TAG"
 git clone git@github.com:ory/changelog.git "$preset"
 (cd "$preset"; npm i)
 
