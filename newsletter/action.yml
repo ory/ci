@@ -1,0 +1,38 @@
+name: 'Newsletter'
+description: 'Newsletter draft/send automation'
+inputs:
+  mailchimp_api_key:
+    description: Mailchimp API key
+    required: true
+  mailchimp_list_id:
+    description: Mailchimp list ID
+    required: true
+  mailchmip_segment_id:
+    description: Mailchimp segment ID
+    required: true
+  draft:
+    description: Set this to 'false' to send
+    required: false
+    # not a boolean! ref: https://github.com/actions/runner/issues/1483
+    default: 'true'
+
+runs:
+  using: "composite"
+  steps:
+    - env:
+        MAILCHIMP_LIST_ID: ${{ inputs.mailchimp_list_id }}
+        MAILCHIMP_SEGMENT_ID: ${{ inputs.mailchmip_segment_id }}
+        MAILCHIMP_API_KEY: ${{ inputs.mailchimp_api_key }}
+      run: |
+        bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b . ory
+        if [[ "${{ inputs.draft }}" == "false" ]]; then
+          # production run
+          ory dev release notify send "${MAILCHIMP_LIST_ID}"
+        elif [[ "${{ inputs.draft }}" == "true" ]]; then
+          # draft run
+          ory dev release notify draft --segment "${MAILCHIMP_SEGMENT_ID}" "${MAILCHIMP_LIST_ID}"
+          ory dev release notify send --dry "${MAILCHIMP_LIST_ID}"
+        else
+          echo "inputs.draft should be either 'true' or 'false'"
+          exit 1
+        fi
