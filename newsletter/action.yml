@@ -27,11 +27,11 @@ runs:
         bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b . ory
         if [[ "${{ inputs.draft }}" == "false" ]]; then
           # production run
-          ory dev release notify send "${MAILCHIMP_LIST_ID}"
+          ./ory dev release notify send "${MAILCHIMP_LIST_ID}"
         elif [[ "${{ inputs.draft }}" == "true" ]]; then
           # draft run
-          ory dev release notify draft --segment "${MAILCHIMP_SEGMENT_ID}" "${MAILCHIMP_LIST_ID}"
-          ory dev release notify send --dry "${MAILCHIMP_LIST_ID}"
+          ./ory dev release notify draft --segment "${MAILCHIMP_SEGMENT_ID}" "${MAILCHIMP_LIST_ID}"
+          ./ory dev release notify send --dry "${MAILCHIMP_LIST_ID}"
         else
           echo "inputs.draft should be either 'true' or 'false'"
           exit 1
