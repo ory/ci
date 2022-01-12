@@ -1,47 +1,61 @@
 name: 'Releaser'
 description: 'Release automation action'
+inputs:
+  token:
+    description: Personal access token
+    required: false
+    default: ${{ github.token }}
+  goreleaser_key:
+    description: GoReleaser Pro license key
+    required: true
 
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v2
       with:
-        path: current-repo
+        token: ${{ inputs.token }}
+        fetch-depth: 0
 
     - run: |
         git config --global user.email "github-actions@github.com"
         git config --global user.name "github-actions"
 
-        (
-          cd current-repo
-          if [[ ! -e package.json ]]; then
-            echo '{"private": true, "version": "0.0.0"}' > package.json
-            git add package.json
-          else
-            echo "package.json exists and needs not be written"
-          fi
-        )
+        if [[ ! -e package.json ]]; then
+          echo '{"private": true, "version": "0.0.0"}' > package.json
+          git add package.json
+        else
+          echo "package.json exists and needs not be written"
+        fi
 
         echo 'notes='"$(mktemp).md" >> $GITHUB_ENV
+      shell: bash
 
     - uses: actions/setup-node@v2
       with:
         node-version: '16'
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '1.16'
 
     - uses: actions/checkout@v2
       with:
         repository: ory/changelog
         path: changelog
-      env:
+        token: ${{ inputs.token }}
+
+    - env:
         CURRENT_TAG: ${{ github.ref_name }}
-      run:
+      run: |
         npm --no-git-tag-version version "$CURRENT_TAG"
+
         (
-          cd changelog
+          cd "$GITHUB_WORKSPACE/changelog";
           npm i
         )
 
         npx conventional-changelog-cli@v2.1.1 --config "changelog/index.js" -r 2 -o "$notes"
+
         if [[ "$OSTYPE" == "darwin"* ]]; then
           sed -i '' '/^# /d' "$notes"
         else
@@ -50,14 +64,22 @@ runs:
 
         npx prettier -w "$notes"
         git reset --hard HEAD
+      shell: bash
 
     - uses: goreleaser/goreleaser-action@v2
       with:
         install-only: true
+        distribution: goreleaser-pro
       env:
+        GORELEASER_KEY: ${{ inputs.goreleaser_key }}
+
+    - env:
         GORELEASER_CURRENT_TAG: ${{ github.ref_name }}
-    - run: |
-        cd current-repo
+        GITHUB_TOKEN: ${{ inputs.token }}
+      run: |
+        cat "$notes"
+        # clean up ory/changelog checkout
+        rm -rf changelog
         goreleaser release --release-header <(cat "$notes") --rm-dist --timeout 60m --parallelism 1
 
         git add -A
@@ -67,4 +89,4 @@ runs:
         git commit -a -m "autogen: update release artifacts" || true
         git pull origin master --rebase || true
         git push origin HEAD:master || true
-
+      shell: bash
