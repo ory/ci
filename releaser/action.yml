@@ -70,11 +70,10 @@ runs:
       with:
         install-only: true
         distribution: goreleaser-pro
-      env:
-        GORELEASER_KEY: ${{ inputs.goreleaser_key }}
 
     - env:
         GORELEASER_CURRENT_TAG: ${{ github.ref_name }}
+        GORELEASER_KEY: ${{ inputs.goreleaser_key }}
         GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         cat "$notes"
