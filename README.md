@@ -1,16 +1,33 @@
 # ci
+> GitHub Actions CI
 
-To publish an orb, install the CLI and run:
+This repository contains reusable actions for various CI tasks.
 
-```
-orb=<name>
-circleci orb validate src/orbs/${orb}.yml
-circleci orb publish increment src/orbs/${orb}.yml ory/${orb} patch
+### releaser
+
+Release automation action.
+
+Inputs:
+- `token`: Personal access token
+- `goreleaser_key`: GoReleaser Pro license key
+
+Usage:
+```yaml
+uses: ory/ci/releaser@ref
 ```
 
-To create a new orb, run:
+### newsletter
 
+Newsletter draft/send automation.
+
+Inputs:
+- `mailchimp_api_key`: Mailchimp API key
+- `mailchimp_list_id`: Mailchimp list ID
+- `mailchmip_segment_id`: Mailchimp segment ID
+- `draft`: Either `"true"` or `"false"` (string, not boolean!)
+
+Usage:
+```yaml
+uses: ory/ci/newsletter@ref
 ```
-orb=<name>
-circleci orb create ory/$orb
-```
+
