@@ -19,6 +19,7 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: actions/checkout@v2
     - env:
         MAILCHIMP_LIST_ID: ${{ inputs.mailchimp_list_id }}
         MAILCHIMP_SEGMENT_ID: ${{ inputs.mailchmip_segment_id }}
