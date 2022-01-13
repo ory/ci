@@ -32,7 +32,7 @@ runs:
         chmod 600 /home/runner/.ssh/github_actions
         ssh-agent -a $SSH_AUTH_SOCK > /dev/null
         ssh-add /home/runner/.ssh/github_actions
-        git config --global core.sshCommand="ssh -i /home/runner/.ssh/github_actions"
+        git config --global core.sshCommand "ssh -i /home/runner/.ssh/github_actions"
       shell: bash
     - env:
         MAILCHIMP_LIST_ID: ${{ inputs.mailchimp_list_id }}
