@@ -32,11 +32,13 @@ runs:
         chmod 600 /home/runner/.ssh/github_actions
         ssh-agent -a $SSH_AUTH_SOCK > /dev/null
         ssh-add /home/runner/.ssh/github_actions
+        git config --global core.sshCommand="ssh -i /home/runner/.ssh/github_actions"
       shell: bash
     - env:
         MAILCHIMP_LIST_ID: ${{ inputs.mailchimp_list_id }}
         MAILCHIMP_SEGMENT_ID: ${{ inputs.mailchmip_segment_id }}
         MAILCHIMP_API_KEY: ${{ inputs.mailchimp_api_key }}
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
       run: |
         bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b . ory
         if [[ "${{ inputs.draft }}" == "false" ]]; then
