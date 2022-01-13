@@ -15,11 +15,24 @@ inputs:
     required: false
     # not a boolean! ref: https://github.com/actions/runner/issues/1483
     default: 'true'
+  ssh_key:
+    description: SSH private key used to fetch the repository
+    required: true
 
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v2
+    - env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      run: |
+        mkdir -p /home/runner/.ssh
+        ssh-keyscan github.com >> /home/runner/.ssh/known_hosts
+        echo "${{ inputs.ssh_key }}" > /home/runner/.ssh/github_actions
+        chmod 600 /home/runner/.ssh/github_actions
+        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+        ssh-add /home/runner/.ssh/github_actions
+      shell: bash
     - env:
         MAILCHIMP_LIST_ID: ${{ inputs.mailchimp_list_id }}
         MAILCHIMP_SEGMENT_ID: ${{ inputs.mailchmip_segment_id }}
