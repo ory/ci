@@ -66,11 +66,6 @@ runs:
         git reset --hard HEAD
       shell: bash
 
-    - uses: goreleaser/goreleaser-action@v2
-      with:
-        install-only: true
-        distribution: goreleaser-pro
-
     - env:
         GORELEASER_CURRENT_TAG: ${{ github.ref_name }}
         GORELEASER_KEY: ${{ inputs.goreleaser_key }}
@@ -79,7 +74,13 @@ runs:
         cat "$notes"
         # clean up ory/changelog checkout
         rm -rf changelog
-        goreleaser release --release-header <(cat "$notes") --rm-dist --timeout 60m --parallelism 1
+
+        docker pull --platform linux/amd64 oryd/xgoreleaser:latest
+        docker run --mount type=bind,source="$(pwd)",target=/project \
+            --platform linux/amd64 \
+            -e GORELEASER_KEY=$GORELEASER_KEY \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            oryd/xgoreleaser:latest release --release-header <(cat "$notes") --rm-dist --timeout 60m --parallelism 1
 
         git add -A
         git stash || true
