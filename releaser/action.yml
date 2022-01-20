@@ -79,6 +79,8 @@ runs:
         docker run --mount type=bind,source="$(pwd)",target=/project \
             --platform linux/amd64 \
             -e GORELEASER_KEY=$GORELEASER_KEY \
+            -e GITHUB_TOKEN=$GITHUB_TOKEN \
+            -e GORELEASER_CURRENT_TAG=$GORELEASER_CURRENT_TAG \
             -v /var/run/docker.sock:/var/run/docker.sock \
             oryd/xgoreleaser:latest release --release-header <(cat "$notes") --rm-dist --timeout 60m --parallelism 1
 
