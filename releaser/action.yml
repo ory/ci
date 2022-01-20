@@ -8,6 +8,9 @@ inputs:
   goreleaser_key:
     description: GoReleaser Pro license key
     required: true
+  cosign_pwd:
+    description: Password to decrypt signing key
+    required: true
 
 runs:
   using: "composite"
@@ -70,6 +73,7 @@ runs:
         GORELEASER_CURRENT_TAG: ${{ github.ref_name }}
         GORELEASER_KEY: ${{ inputs.goreleaser_key }}
         GITHUB_TOKEN: ${{ inputs.token }}
+        COSIGN_PWD: ${{ inputs.cosign_pwd }}
       run: |
         cat "$notes"
         # clean up ory/changelog checkout
@@ -81,6 +85,7 @@ runs:
             --platform linux/amd64 \
             -e GORELEASER_KEY=$GORELEASER_KEY \
             -e GITHUB_TOKEN=$GITHUB_TOKEN \
+            -e COSIGN_PWD=$COSIGN_PWD \
             -e GORELEASER_CURRENT_TAG=$GORELEASER_CURRENT_TAG \
             -v /var/run/docker.sock:/var/run/docker.sock \
             oryd/xgoreleaser:latest release --release-header "/notes.md" --rm-dist --timeout 60m --parallelism 1
