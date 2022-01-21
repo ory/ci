@@ -93,7 +93,7 @@ runs:
 
         docker pull --platform linux/amd64 oryd/xgoreleaser:latest
         docker run --privileged --mount type=bind,source="$(pwd)",target=/project \
-            --mount type=bind,source="$HOME/.docker/config.json",target=/notes.md \
+            --mount type=bind,source="$notes",target=/notes.md \
             --platform linux/amd64 \
             -e GORELEASER_KEY \
             -e GITHUB_TOKEN \
