@@ -11,6 +11,12 @@ inputs:
   cosign_pwd:
     description: Password to decrypt signing key
     required: true
+  docker_username:
+    description: Docker username
+    required: true
+  docker_password:
+    description: Docker password
+    required: true
 
 runs:
   using: "composite"
@@ -78,19 +84,24 @@ runs:
         GORELEASER_KEY: ${{ inputs.goreleaser_key }}
         GITHUB_TOKEN: ${{ inputs.token }}
         COSIGN_PWD: ${{ inputs.cosign_pwd }}
+        DOCKER_USERNAME: ${{ inputs.docker_username }}
+        DOCKER_PASSWORD: ${{ inputs.docker_password }}
       run: |
         cat "$notes"
         # clean up ory/changelog checkout
         rm -rf changelog
 
         docker pull --platform linux/amd64 oryd/xgoreleaser:latest
-        docker run --mount type=bind,source="$(pwd)",target=/project \
+        docker run --privileged --mount type=bind,source="$(pwd)",target=/project \
+            --mount type=bind,source="$HOME/.docker/config.json",target=/notes.md \
             --mount type=bind,source="$notes",target=/notes.md \
             --platform linux/amd64 \
-            -e GORELEASER_KEY=$GORELEASER_KEY \
-            -e GITHUB_TOKEN=$GITHUB_TOKEN \
-            -e COSIGN_PWD=$COSIGN_PWD \
-            -e GORELEASER_CURRENT_TAG=$GORELEASER_CURRENT_TAG \
+            -e GORELEASER_KEY \
+            -e GITHUB_TOKEN \
+            -e COSIGN_PWD \
+            -e DOCKER_USERNAME \
+            -e DOCKER_PASSWORD \
+            -e GORELEASER_CURRENT_TAG \
             -v /var/run/docker.sock:/var/run/docker.sock \
             oryd/xgoreleaser:latest release --release-header "/notes.md" --rm-dist --timeout 60m --parallelism 1
 
