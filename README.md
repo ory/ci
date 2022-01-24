@@ -10,6 +10,9 @@ Release automation action.
 Inputs:
 - `token`: Personal access token
 - `goreleaser_key`: GoReleaser Pro license key
+- `cosign_pwd`: Password to decrypt signing key
+- `docker_username`: Docker username
+- `docker_password`: Docker password
 
 Usage:
 ```yaml
@@ -25,6 +28,7 @@ Inputs:
 - `mailchimp_list_id`: Mailchimp list ID
 - `mailchmip_segment_id`: Mailchimp segment ID
 - `draft`: Either `"true"` or `"false"` (string, not boolean!)
+- `ssh_key`: SSH private key used to fetch the repository
 
 Usage:
 ```yaml
