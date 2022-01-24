@@ -17,4 +17,4 @@ runs:
         npm i -g "prettier@$(jq -r '.devDependencies.prettier' package.json)"
         rm ory-prettier-styles-*.tgz
         npx prettier --check $(jq -r '.config.prettierTarget' package.json)
-
+      shell: bash
