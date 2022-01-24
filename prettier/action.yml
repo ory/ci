@@ -1,0 +1,20 @@
+name: 'Prettier'
+description: 'Runs prettier with some Ory-specific config'
+inputs:
+  dir:
+    description: Directory to 'cd' into before running prettier
+    default: '.'
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - run: |
+        cd ${{ inputs.dir }}
+        mkdir -p node_modules/ory-prettier-styles
+        tar -xf "$(npm pack ory-prettier-styles)" -C node_modules/ory-prettier-styles --strip-components=1
+        npm i -g "prettier@$(jq -r '.devDependencies.prettier' package.json)"
+        rm ory-prettier-styles-*.tgz
+        npx prettier --check $(jq -r '.config.prettierTarget' package.json)
+
