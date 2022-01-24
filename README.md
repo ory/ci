@@ -31,3 +31,14 @@ Usage:
 uses: ory/ci/newsletter@ref
 ```
 
+### prettier
+
+Runs prettier with some Ory-specific configuration.
+
+Inputs:
+- `dir`: Directory to 'cd' into before running prettier
+
+Usage:
+```yaml
+uses: ory/ci/prettier@ref
+```
