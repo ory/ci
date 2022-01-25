@@ -17,13 +17,17 @@ runs:
         cd ${{ inputs.dir }}
         mkdir -p node_modules/ory-prettier-styles
         tar -xf "$(npm pack ory-prettier-styles)" -C node_modules/ory-prettier-styles --strip-components=1
-        sudo npm i -g "prettier@$(jq -r '.devDependencies.prettier' package.json)"
+        npm i -g "prettier@$(jq -r '.devDependencies.prettier' package.json)"
         rm ory-prettier-styles-*.tgz
       shell: bash
     - if: ${{ inputs.action == 'check' }}
-      run: npm run format:check
+      run: |
+        cd ${{ inputs.dir }}
+        npm run format:check
       shell: bash
     - if: ${{ inputs.action == 'write' }}
-      run: npm run format
+      run: |
+        cd ${{ inputs.dir }}
+        npm run format
       shell: bash
 
