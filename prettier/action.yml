@@ -21,11 +21,9 @@ runs:
         rm ory-prettier-styles-*.tgz
       shell: bash
     - if: ${{ inputs.action == 'check' }}
-      run: |
-        npm run format:check
+      run: npm run format:check
       shell: bash
-    - if ${{ inputs.action == 'write' }}
-      run: |
-        npm run format
+    - if: ${{ inputs.action == 'write' }}
+      run: npm run format
       shell: bash
 
