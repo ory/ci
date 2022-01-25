@@ -48,6 +48,6 @@ runs:
         swagger generate client -f ${{ inputs.swag-spec-location }} -t ${{ inputs.swag-gen-path }} -A ${{ inputs.app-name }}
 
         git add -A
-        git commit -m -a "autogen(openapi): regenerate swagger spec and internal client" || true
+        git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" || true
         git push origin HEAD:"$GITHUB_REF_NAME" || true
       shell: bash
