@@ -112,4 +112,4 @@ runs:
         cd current-repo
         git add -A
         git commit -a -m "autogen(docs): generate cli docs" || true
-        git push origin HEAD:"$GITHUB_REF_NAME") || true
+        git push origin HEAD:"$GITHUB_REF_NAME" || true
