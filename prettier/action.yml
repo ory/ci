@@ -20,10 +20,12 @@ runs:
         npm i -g "prettier@$(jq -r '.devDependencies.prettier' package.json)"
         rm ory-prettier-styles-*.tgz
       shell: bash
-    - if: ${{ inputs.action == "check" }}
+    - if: ${{ inputs.action == 'check' }}
       run: |
         npm run format:check
-    - if ${{ inputs.action == "write" }}
+      shell: bash
+    - if ${{ inputs.action == 'write' }}
       run: |
         npm run format
+      shell: bash
 
