@@ -63,20 +63,20 @@ runs:
         git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" || true
         git push origin HEAD:"$GITHUB_REF_NAME" || true
       shell: bash
-  - if: ${{ inputs.job == 'release' }}
-    uses: actions/checkout@v2
-    with:
-      repository: ory/sdk
-      path: sdk
-      fetch-depth: 0
-  - if: ${{ inputs.job == 'release' }}
-    run: |
-      x=(${GITHUB_REPOSITORY//// })
-      repo="${x[1]}"
+    - if: ${{ inputs.job == 'release' }}
+      uses: actions/checkout@v2
+      with:
+        repository: ory/sdk
+        path: sdk
+        fetch-depth: 0
+    - if: ${{ inputs.job == 'release' }}
+      run: |
+        x=(${GITHUB_REPOSITORY//// })
+        repo="${x[1]}"
 
-      cp current-repo/${{ inputs.swag-spec-location }} "sdk/spec/$repo/$GITHUB_REF_NAME.json"
-      cd sdk
-      git add -A
-      git commit -a -m "Add spec for $repo:$GITHUB_REF_NAME" || true
-      git push origin master || true
-    shell: bash
+        cp current-repo/${{ inputs.swag-spec-location }} "sdk/spec/$repo/$GITHUB_REF_NAME.json"
+        cd sdk
+        git add -A
+        git commit -a -m "Add spec for $repo:$GITHUB_REF_NAME" || true
+        git push origin master || true
+      shell: bash
