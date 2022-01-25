@@ -16,11 +16,18 @@ inputs:
     description: Where to generate the SDK to
     default: "internal/httpclient"
     required: false
+  job:
+    description: >-
+      Job to run. Options: generate (default), release
+    default: 'generate'
+    required: false
 
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v2
+      with:
+        path: current-repo
     - uses: actions/setup-go@v2
       with:
         go-version: ^1.16
@@ -31,6 +38,7 @@ runs:
     - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
       shell: bash
     - run: |
+        cd current-repo
         wget https://github.com/go-swagger/go-swagger/releases/latest/download/swagger_linux_amd64 \
           -O "$GOPATH/bin/swagger"
         chmod +x "$GOPATH/bin/swagger"
@@ -42,12 +50,33 @@ runs:
 
         swagger flatten --with-flatten=remove-unused -o ${{ inputs.swag-spec-location }} ${{ inputs.swag-spec-location }}
         swagger validate ${{ inputs.swag-spec-location }}
-
+      shell: bash
+    - if: ${{ inputs.job == 'generate' }}
+      run: |
+        cd current-repo
         rm -rf ${{ inputs.swag-gen-path }}/models/* ${{ inputs.swag-gen-path }}/clients/*
         mkdir -p ${{ inputs.swag-gen-path }}
+
         swagger generate client -f ${{ inputs.swag-spec-location }} -t ${{ inputs.swag-gen-path }} -A ${{ inputs.app-name }}
 
         git add -A
         git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" || true
         git push origin HEAD:"$GITHUB_REF_NAME" || true
       shell: bash
+  - if: ${{ inputs.job == 'release' }}
+    uses: actions/checkout@v2
+    with:
+      repository: ory/sdk
+      path: sdk
+      fetch-depth: 0
+  - if: ${{ inputs.job == 'release' }}
+    run: |
+      x=(${GITHUB_REPOSITORY//// })
+      repo="${x[1]}"
+
+      cp current-repo/${{ inputs.swag-spec-location }} "sdk/spec/$repo/$GITHUB_REF_NAME.json"
+      cd sdk
+      git add -A
+      git commit -a -m "Add spec for $repo:$GITHUB_REF_NAME" || true
+      git push origin master || true
+    shell: bash
