@@ -1,0 +1,54 @@
+name: 'SDK'
+description: 'SDK generation automation'
+inputs:
+  app-name:
+    description: Name of the application
+    required: true
+  swag-spec-location:
+    description: Location where the Swagger spec should be saved to
+    default: .schema/api.swagger.json
+    required: false
+  swag-spec-ignore:
+    description: Packages to ignore when generating the Swagger spec (space delimited).
+    default: "internal/httpclient"
+    required: false
+  swag-gen-path:
+    description: Where to generate the SDK to
+    default: "internal/httpclient"
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with:
+        go-version: ^1.16
+    - run: |
+        git config --global user.email "60093411+ory-bot@users.noreply.github.com"
+        git config --global user.name "ory-bot"
+      shell: bash
+    - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
+      shell: bash
+    - run: |
+        wget https://github.com/go-swagger/go-swagger/releases/latest/download/swagger_linux_amd64 \
+          -O "$GOPATH/bin/swagger"
+        chmod +x "$GOPATH/bin/swagger"
+
+        bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
+
+        ory dev swagger sanitize ${{ inputs.swag-spec-location }}
+
+        swagger flatten --with-flatten=remove-unused -o ${{ inputs.swag-spec-location }}
+        swagger validate ${{ inputs.swag-spec-location }}
+
+        rm -rf ${{ inputs.swag-gen-path }}/models/* ${{ inputs.swag-gen-path }}/clients/*
+        mkdir -p ${{ inputs.swag-gen-path }}
+        swagger generate client -f ${{ inputs.swag-spec-location }} -t ${{ inputs.swag-gen-path }} -A ${{ inputs.app-name }}
+
+        git add -A
+        git commit -m -a "autogen(openapi): regenerate swagger spec and internal client" || true
+        git push origin HEAD:"$GITHUB_REF_NAME" || true
+
+
+      shell: bash
