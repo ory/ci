@@ -63,8 +63,8 @@ runs:
         else
           git add -A
           git commit --allow-empty -a -m "autogen(docs): generate and format documentation"
-          git pull origin "$GITHUB_REF_NAME" --rebase
-          git push origin HEAD:"$GITHUB_REF_NAME"
+          git pull origin master --rebase
+          git push origin master
         fi
       shell: bash
       env:
@@ -112,4 +112,4 @@ runs:
         cd current-repo
         git add -A
         git commit -a -m "autogen(docs): generate cli docs" || true
-        git push origin HEAD:"$GITHUB_REF_NAME" || true
+        git push origin master || true

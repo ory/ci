@@ -61,7 +61,7 @@ runs:
 
         git add -A
         git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" || true
-        git push origin HEAD:"$GITHUB_REF_NAME" || true
+        git push origin master || true
       shell: bash
     - if: ${{ inputs.job == 'release' }}
       uses: actions/checkout@v2

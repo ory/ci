@@ -81,6 +81,6 @@ runs:
 
           git commit -m "autogen(docs): regenerate and update changelog" || true
           git pull -ff
-          git push origin HEAD:$GITHUB_REF_NAME || true
+          git push origin master || true
         fi
       shell: bash
