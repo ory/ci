@@ -40,7 +40,7 @@ runs:
         swagger generate spec -m -o ${{ inputs.swag-spec-location }} $(printf -- " -x %s" ${{ inputs.swag-spec-ignore }})
         ory dev swagger sanitize ${{ inputs.swag-spec-location }}
 
-        swagger flatten --with-flatten=remove-unused -o ${{ inputs.swag-spec-location }}
+        swagger flatten --with-flatten=remove-unused -o ${{ inputs.swag-spec-location }} ${{ inputs.swag-spec-location }}
         swagger validate ${{ inputs.swag-spec-location }}
 
         rm -rf ${{ inputs.swag-gen-path }}/models/* ${{ inputs.swag-gen-path }}/clients/*
@@ -50,6 +50,4 @@ runs:
         git add -A
         git commit -m -a "autogen(openapi): regenerate swagger spec and internal client" || true
         git push origin HEAD:"$GITHUB_REF_NAME" || true
-
-
       shell: bash
