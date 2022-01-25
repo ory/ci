@@ -83,5 +83,4 @@ runs:
           git pull -ff
           git push origin HEAD:$GITHUB_REF_NAME || true
         fi
-
-
+      shell: bash
