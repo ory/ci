@@ -41,8 +41,31 @@ Runs prettier with some Ory-specific configuration.
 
 Inputs:
 - `dir`: Directory to 'cd' into before running prettier
+- `action`: Action to perform: 'check' or 'write'
 
 Usage:
 ```yaml
 uses: ory/ci/prettier@ref
 ```
+
+### docs
+
+Documentation generation action.
+
+Inputs:
+- `job`: Job to run. Options: build (default), cli
+- `swag-spec-location`: Location where the Swagger spec should be saved to
+- `swag-spec-ignore`: Packages to ignore when generating the Swagger spec (space delimited).
+- `token`: Personal access token
+
+Usage:
+```yaml
+uses: ory/ci/docs@ref
+```
+
+### changelog
+
+Changlelog generation action.
+
+Inputs:
+- `token`: Personal access token
