@@ -75,10 +75,10 @@ runs:
           git pull -ff
           git push origin HEAD:$GITHUB_REF_NAME || true
         else
-          git stash || true
-          git checkout master || true
-          git stash pop || true
           git commit -m "autogen(docs): regenerate and update changelog" || true
+          hash=$(git log -n 1 --pretty=format:"%H")
+          git checkout master || true
+          git merge "$hash"
           git pull origin master --rebase || true
           git push origin HEAD:master || true
         fi
