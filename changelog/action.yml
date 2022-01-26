@@ -36,20 +36,13 @@ runs:
         repository: ory/changelog
         token: ${{ inputs.token }}
     - run: |
-        git_tag="$GITHUB_REF_NAME"
-
-        if [ -z ${git_tag+x} ]; then
-          git_tag=$(git describe --abbrev=0 --tags)
-        else
-          is_release=1
-        fi
-
         (
           cd changelog
           npm i
         )
 
         npx conventional-changelog-cli@2.1.1 --config "changelog/index.js" -r 0 -u -o CHANGELOG.md
+        rm -rf changelog/
       shell: bash
     - uses: ory/ci/prettier@master
       with:
@@ -65,21 +58,15 @@ runs:
           npm run format
         fi
 
-        git add CHANGELOG.md
 
         t=$(mktemp)
         printf "# Changelog\n\n" | cat - CHANGELOG.md > "$t" && mv "$t" CHANGELOG.md
 
-        if [ -z ${is_release+x} ]; then
-          git commit -m "autogen(docs): regenerate and update changelog" || true
-          git pull -ff
-          git push origin HEAD:$GITHUB_REF_NAME || true
-        else
-          git commit -m "autogen(docs): regenerate and update changelog" || true
-          hash=$(git log -n 1 --pretty=format:"%H")
-          git checkout master || true
-          git merge "$hash"
-          git pull origin master --rebase || true
-          git push origin HEAD:master || true
-        fi
+        git stash || true
+        git checkout master || true
+        git stash pop || true
+        git add CHANGELOG.md
+        git commit -m "autogen(docs): regenerate and update changelog" || true
+        git pull origin master --rebase || true
+        git push origin HEAD:master || true
       shell: bash
