@@ -35,6 +35,8 @@ runs:
     - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
       shell: bash
     - if: ${{ inputs.job == 'build' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         cd current-repo
         sudo apt install openjdk-11-jre-headless
@@ -78,6 +80,8 @@ runs:
         fetch-depth: 0
         token: ${{ inputs.token }}
     - if: ${{ inputs.job == 'build' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         x=(${GITHUB_REPOSITORY//// })
         repo="${x[1]}"
@@ -107,6 +111,8 @@ runs:
         dir: current-repo/docs
         action: write
     - if: ${{ inputs.job == 'cli' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
       shell: bash
       run: |
         cd current-repo

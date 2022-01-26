@@ -1,6 +1,10 @@
 name: 'SDK'
 description: 'SDK generation automation'
 inputs:
+  token:
+    description: Personal access token
+    required: false
+    default: ${{ github.token }}
   app-name:
     description: Name of the application
     required: true
@@ -52,6 +56,8 @@ runs:
         swagger validate ${{ inputs.swag-spec-location }}
       shell: bash
     - if: ${{ inputs.job == 'generate' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         cd current-repo
         rm -rf ${{ inputs.swag-gen-path }}/models/* ${{ inputs.swag-gen-path }}/clients/*
@@ -70,6 +76,8 @@ runs:
         path: sdk
         fetch-depth: 0
     - if: ${{ inputs.job == 'release' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         x=(${GITHUB_REPOSITORY//// })
         repo="${x[1]}"

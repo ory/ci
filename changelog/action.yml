@@ -54,7 +54,9 @@ runs:
     - uses: ory/ci/prettier@master
       with:
         action: 'check'
-    - run: |
+    - env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+      run: |
         npx doctoc CHANGELOG.md
         sed -i "s/\*\*Table of Contents.*/**Table of Contents**/" CHANGELOG.md
         sed -i "s/\*This Change Log was.*/This Change Log was automatically generated/" CHANGELOG.md
@@ -73,14 +75,11 @@ runs:
           git pull -ff
           git push origin HEAD:$GITHUB_REF_NAME || true
         else
-          git fetch origin
-          git stash
-          git checkout -b "changelog-$(date +"%m-%d-%Y")" origin/master
-          git pull -ff
-          git stash pop
-
+          git stash || true
+          git checkout master || true
+          git stash pop || true
           git commit -m "autogen(docs): regenerate and update changelog" || true
-          git pull -ff
-          git push origin master || true
+          git pull origin master --rebase || true
+          git push origin HEAD:master || true
         fi
       shell: bash
