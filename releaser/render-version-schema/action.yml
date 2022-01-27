@@ -1,0 +1,48 @@
+name: 'Render Version Schema'
+description: 'Render version schema action'
+inputs:
+  token:
+    description: Personal access token
+    required: false
+    default: ${{ github.token }}
+  schema-path:
+    description: Path to version schema
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+      with:
+        token: ${{ inputs.token }}
+        fetch-depth: 0
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.16'
+    - run: |
+        git config --global user.email "60093411+ory-bot@users.noreply.github.com"
+        git config --global user.name "ory-bot"
+      shell: bash
+    - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
+      shell: bash
+    - run: |
+        x=(${GITHUB_REPOSITORY//// })
+        repo="${x[1]}"
+
+        bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
+        ory dev schema render-version $repo $GITHUB_REF_NAME ${{ inputs.schema-path }}
+
+        branch="$(date +%s)"
+        git fetch origin
+        git stash || true
+        git checkout -b "$branch"
+        git stash pop || true
+        git add -A
+        git commit -a -m "autogen: add $GITHUB_REF_NAME to version.schema.json" || true
+        git pull origin master --rebase || true
+        git push origin HEAD:master || true
+      shell: bash
+

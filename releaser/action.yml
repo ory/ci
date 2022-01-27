@@ -7,20 +7,16 @@ inputs:
     default: ${{ github.token }}
   goreleaser_key:
     description: GoReleaser Pro license key
-    required: false
+    required: true
   cosign_pwd:
     description: Password to decrypt signing key
-    required: false
+    required: true
   docker_username:
     description: Docker username
-    required: false
+    required: true
   docker_password:
     description: Docker password
-    required: false
-  schema-path:
-    description: Path to version schema. Will run standalone, and only if specified.
-    required: false
-    default: "false"
+    required: true
 
 runs:
   using: "composite"
@@ -41,26 +37,7 @@ runs:
       shell: bash
     - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
       shell: bash
-    - if: ${{ inputs.schema-path != 'false' }}
-      run: |
-        x=(${GITHUB_REPOSITORY//// })
-        repo="${x[1]}"
-
-        bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
-        ory dev schema render-version $repo $GITHUB_REF_NAME ${{ inputs.schema-path }}
-
-        branch="$(date +%s)"
-        git fetch origin
-        git stash || true
-        git checkout -b "$branch"
-        git stash pop || true
-        git add -A
-        git commit -a -m "autogen: add $GITHUB_REF_NAME to version.schema.json" || true
-        git pull origin master --rebase || true
-        git push origin HEAD:master || true
-      shell: bash
-    - if: ${{ inputs.schema-path == 'false' }}
-      run: |
+    - run: |
         if [[ ! -e package.json ]]; then
           echo '{"private": true, "version": "0.0.0"}' > package.json
           git add package.json
@@ -71,14 +48,12 @@ runs:
         echo 'notes='"$(mktemp).md" >> $GITHUB_ENV
       shell: bash
     - uses: actions/checkout@v2
-      if: ${{ inputs.schema-path == 'false' }}
       with:
         repository: ory/changelog
         path: changelog
         token: ${{ inputs.token }}
 
-    - if: ${{ inputs.schema-path == 'false' }}
-      env:
+    - env:
         CURRENT_TAG: ${{ github.ref_name }}
       run: |
         npm --no-git-tag-version version "$CURRENT_TAG"
@@ -100,13 +75,10 @@ runs:
         git reset --hard HEAD
       shell: bash
 
-    - if: ${{ inputs.schema-path == 'false' }}
-      uses: docker/setup-qemu-action@v1
-    - if: ${{ inputs.schema-path == 'false' }}
-      uses: docker/setup-buildx-action@v1
+    - uses: docker/setup-qemu-action@v1
+    - uses: docker/setup-buildx-action@v1
 
-    - if: ${{ inputs.schema-path == 'false' }}
-      env:
+    - env:
         GORELEASER_CURRENT_TAG: ${{ github.ref_name }}
         GORELEASER_KEY: ${{ inputs.goreleaser_key }}
         GITHUB_TOKEN: ${{ inputs.token }}
