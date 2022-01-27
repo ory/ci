@@ -1,4 +1,4 @@
-name: 'SDK'
+name: 'SDK Generate'
 description: 'SDK generation automation'
 inputs:
   token:
@@ -19,11 +19,6 @@ inputs:
   swag-gen-path:
     description: Where to generate the SDK to
     default: "internal/httpclient"
-    required: false
-  job:
-    description: >-
-      Job to run. Options: generate (default), release
-    default: 'generate'
     required: false
 
 runs:
@@ -55,8 +50,7 @@ runs:
         swagger flatten --with-flatten=remove-unused -o ${{ inputs.swag-spec-location }} ${{ inputs.swag-spec-location }}
         swagger validate ${{ inputs.swag-spec-location }}
       shell: bash
-    - if: ${{ inputs.job == 'generate' }}
-      env:
+    - env:
         GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         cd current-repo
@@ -66,25 +60,10 @@ runs:
         swagger generate client -f ${{ inputs.swag-spec-location }} -t ${{ inputs.swag-gen-path }} -A ${{ inputs.app-name }}
 
         git add -A
+        git stash || true
+        git checkout master || true
+        git stash pop || true
         git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" || true
-        git push origin master || true
-      shell: bash
-    - if: ${{ inputs.job == 'release' }}
-      uses: actions/checkout@v2
-      with:
-        repository: ory/sdk
-        path: sdk
-        fetch-depth: 0
-    - if: ${{ inputs.job == 'release' }}
-      env:
-        GITHUB_TOKEN: ${{ inputs.token }}
-      run: |
-        x=(${GITHUB_REPOSITORY//// })
-        repo="${x[1]}"
-
-        cp current-repo/${{ inputs.swag-spec-location }} "sdk/spec/$repo/$GITHUB_REF_NAME.json"
-        cd sdk
-        git add -A
-        git commit -a -m "Add spec for $repo:$GITHUB_REF_NAME" || true
-        git push origin master || true
+        git pull origin master --rebase || true
+        git push origin HEAD:master || true
       shell: bash

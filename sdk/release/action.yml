@@ -1,0 +1,74 @@
+name: 'SDK Release'
+description: 'SDK release automation'
+inputs:
+  token:
+    description: Personal access token
+    required: false
+    default: ${{ github.token }}
+  app-name:
+    description: Name of the application
+    required: true
+  swag-spec-location:
+    description: Location where the Swagger spec should be saved to
+    default: .schema/api.swagger.json
+    required: false
+  swag-spec-ignore:
+    description: Packages to ignore when generating the Swagger spec (space delimited)
+    default: "internal/httpclient"
+    required: false
+  swag-gen-path:
+    description: Where to generate the SDK to
+    default: "internal/httpclient"
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+      with:
+        path: current-repo
+    - uses: actions/setup-go@v2
+      with:
+        go-version: ^1.16
+    - run: |
+        git config --global user.email "60093411+ory-bot@users.noreply.github.com"
+        git config --global user.name "ory-bot"
+      shell: bash
+    - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
+      shell: bash
+    - run: |
+        cd current-repo
+        wget https://github.com/go-swagger/go-swagger/releases/latest/download/swagger_linux_amd64 \
+          -O "$GOPATH/bin/swagger"
+        chmod +x "$GOPATH/bin/swagger"
+
+        bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
+
+        swagger generate spec -m -o ${{ inputs.swag-spec-location }} $(printf -- " -x %s" ${{ inputs.swag-spec-ignore }})
+        ory dev swagger sanitize ${{ inputs.swag-spec-location }}
+
+        swagger flatten --with-flatten=remove-unused -o ${{ inputs.swag-spec-location }} ${{ inputs.swag-spec-location }}
+        swagger validate ${{ inputs.swag-spec-location }}
+      shell: bash
+    - uses: actions/checkout@v2
+      with:
+        repository: ory/sdk
+        path: sdk
+        fetch-depth: 0
+    - env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+      run: |
+        x=(${GITHUB_REPOSITORY//// })
+        repo="${x[1]}"
+
+        cp current-repo/${{ inputs.swag-spec-location }} "sdk/spec/$repo/$GITHUB_REF_NAME.json"
+        cd sdk
+
+        git add -A
+        git stash || true
+        git checkout master || true
+        git stash pop || true
+        git commit -a -m "Add spec for $repo:$GITHUB_REF_NAME" || true
+        git pull origin master --rebase || true
+        git push origin HEAD:master || true
+      shell: bash
