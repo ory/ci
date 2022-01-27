@@ -40,7 +40,7 @@ runs:
         git stash || true
         git checkout -b "$branch"
         git stash pop || true
-        git add -A
+        git add .schema/version.schema.json
         git commit -a -m "autogen: add $GITHUB_REF_NAME to version.schema.json" || true
         git pull origin master --rebase || true
         git push origin HEAD:master || true
