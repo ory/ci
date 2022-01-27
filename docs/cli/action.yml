@@ -1,14 +1,6 @@
-name: 'Docs'
-description: 'Documentation action'
+name: 'Docs CLI'
+description: 'Build CLI docs'
 inputs:
-  swag-spec-location:
-    description: Location where the Swagger spec should be saved to
-    default: .schema/api.swagger.json
-    required: false
-  swag-spec-ignore:
-    description: Packages to ignore when generating the Swagger spec (space delimited).
-    default: "internal/httpclient"
-    required: false
   token:
     description: Personal access token
     default: ${{ github.token }}

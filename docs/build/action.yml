@@ -1,5 +1,5 @@
-name: 'Docs'
-description: 'Documentation action'
+name: 'Docs Build'
+description: 'Build and publish docs'
 inputs:
   swag-spec-location:
     description: Location where the Swagger spec should be saved to

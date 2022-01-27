@@ -19,6 +19,19 @@ Usage:
 uses: ory/ci/releaser@ref
 ```
 
+### releaser/render-version-schema
+
+Render version schema at a specified path.
+
+Inputs:
+
+- `schema-path`: Path to version schema
+
+Usage:
+```yaml
+uses: ory/ci/releaser/render-version-schema@ref
+```
+
 ### newsletter
 
 Newsletter draft/send automation.
@@ -48,24 +61,67 @@ Usage:
 uses: ory/ci/prettier@ref
 ```
 
-### docs
+### docs/build
 
-Documentation generation action.
+Build and publish docs to [ory/web](https://github.com/ory/web).
 
 Inputs:
-- `job`: Job to run. Options: build (default), cli
 - `swag-spec-location`: Location where the Swagger spec should be saved to
 - `swag-spec-ignore`: Packages to ignore when generating the Swagger spec (space delimited).
 - `token`: Personal access token
 
 Usage:
 ```yaml
-uses: ory/ci/docs@ref
+uses: ory/ci/docs/build@ref
+```
+
+### docs/cli
+
+Build CLI docs.
+
+Inputs:
+- `token`: Personal access token
+
+Usage:
+```yaml
+uses: ory/ci/docs/cli@ref
 ```
 
 ### changelog
 
-Changlelog generation action.
+Changelog generation action.
 
 Inputs:
 - `token`: Personal access token
+
+### sdk/generate
+
+SDK generation action.
+
+Inputs:
+- `token`: Personal access token
+- `app-name`: Name of the application
+- `swag-spec-location:` Location where the Swagger spec should be saved to
+- `swag-spec-ignore`: Packages to ignore when generating the Swagger spec (space delimited)
+- `swag-gen-path`: Where to generate the SDK to
+
+Usage:
+```yaml
+uses: ory/ci/sdk/generate@ref
+```
+
+### sdk/release
+
+Release SDKs to [ory/sdk](https://github.com/ory/sdk).
+
+Inputs:
+- `token`: Personal access token
+- `app-name`: Name of the application
+- `swag-spec-location:` Location where the Swagger spec should be saved to
+- `swag-spec-ignore`: Packages to ignore when generating the Swagger spec (space delimited)
+- `swag-gen-path`: Where to generate the SDK to
+
+Usage:
+```yaml
+uses: ory/ci/sdk/generate@ref
+```
