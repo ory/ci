@@ -1,0 +1,49 @@
+name: 'Docs'
+description: 'Documentation action'
+inputs:
+  swag-spec-location:
+    description: Location where the Swagger spec should be saved to
+    default: .schema/api.swagger.json
+    required: false
+  swag-spec-ignore:
+    description: Packages to ignore when generating the Swagger spec (space delimited).
+    default: "internal/httpclient"
+    required: false
+  token:
+    description: Personal access token
+    default: ${{ github.token }}
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+      with:
+        path: current-repo
+    - uses: actions/setup-go@v2
+      with:
+        go-version: ^1.16
+    - run: |
+        git config --global user.email "60093411+ory-bot@users.noreply.github.com"
+        git config --global user.name "ory-bot"
+      shell: bash
+    - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
+      shell: bash
+    - name: Build and push CLI docs
+      shell: bash
+      run: |
+        cd current-repo
+        make .bin/clidoc
+        .bin/clidoc .
+    - uses: ory/ci/prettier@master
+      with:
+        dir: current-repo/docs
+        action: write
+    - env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+      shell: bash
+      run: |
+        cd current-repo
+        git add -A
+        git commit -a -m "autogen(docs): generate cli docs" || true
+        git push origin master || true
