@@ -45,5 +45,9 @@ runs:
       run: |
         cd current-repo
         git add -A
+        git stash || true
+        git checkout master || true
+        git stash pop || true
         git commit -a -m "autogen(docs): generate cli docs" || true
-        git push origin master || true
+        git pull origin master --rebase || true
+        git push origin HEAD:master || true
