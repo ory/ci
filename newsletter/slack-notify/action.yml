@@ -1,0 +1,38 @@
+name: 'Newsletter Slack Notify'
+description: 'Pending newsletter send notification'
+inputs:
+  slack-webhook-url:
+    description: Incoming webhook URL
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: slackapi/slack-github-action@v1.16.0
+      with:
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Pending approval for newsletter send (*${{ github.repository }}*)"
+                },
+                "accessory": {
+                  "type": "button",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "View workflow",
+                    "emoji": true
+                  },
+                  "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                  "action_id": "workflow_link"
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
