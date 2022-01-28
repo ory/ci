@@ -101,7 +101,7 @@ runs:
             -e DOCKER_PASSWORD \
             -e GORELEASER_CURRENT_TAG \
             -v /var/run/docker.sock:/var/run/docker.sock \
-            oryd/xgoreleaser:latest release --release-header "/notes.md" --rm-dist --timeout 60m --parallelism 1
+            oryd/xgoreleaser:latest release --release-header "/notes.md" --rm-dist --timeout 60m
 
         git add -A
         git stash || true
