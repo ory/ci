@@ -65,5 +65,7 @@ runs:
         git stash pop || true
         git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" || true
         git pull origin master --rebase || true
-        git push origin HEAD:master || true
+        if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
+          git push origin "$GITHUB_REF_NAME" || true
+        fi
       shell: bash

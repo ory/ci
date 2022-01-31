@@ -47,6 +47,10 @@ runs:
     - uses: ory/ci/prettier@master
       with:
         action: 'check'
+    - uses: ory/ci/prettier@master
+      with:
+        action: 'write'
+        dir: './CHANGELOG.md'
     - env:
         GITHUB_TOKEN: ${{ inputs.token }}
       run: |
@@ -68,5 +72,7 @@ runs:
         git add CHANGELOG.md
         git commit -m "autogen(docs): regenerate and update changelog" || true
         git pull origin master --rebase || true
-        git push origin HEAD:master || true
+        if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
+          git push origin "$GITHUB_REF_NAME" || true
+        fi
       shell: bash

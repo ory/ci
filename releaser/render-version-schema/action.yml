@@ -43,6 +43,8 @@ runs:
         git add .schema/version.schema.json
         git commit -a -m "autogen: add $GITHUB_REF_NAME to version.schema.json" || true
         git pull origin master --rebase || true
-        git push origin HEAD:master || true
+        if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
+          git push origin "$GITHUB_REF_NAME" || true
+        fi
       shell: bash
 

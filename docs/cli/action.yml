@@ -42,4 +42,6 @@ runs:
         git stash pop || true
         git commit -a -m "autogen(docs): generate cli docs" || true
         git pull origin master --rebase || true
-        git push origin HEAD:master || true
+        if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
+          git push origin "$GITHUB_REF_NAME" || true
+        fi

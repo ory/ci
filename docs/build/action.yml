@@ -58,6 +58,9 @@ runs:
           git add -A
           git commit --allow-empty -a -m "autogen(docs): generate and format documentation"
           git pull origin master --rebase
+          if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
+            git push origin "$GITHUB_REF_NAME" || true
+          fi
           git push origin master
         fi
       shell: bash
