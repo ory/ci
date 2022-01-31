@@ -46,11 +46,10 @@ runs:
       shell: bash
     - uses: ory/ci/prettier@master
       with:
-        action: 'check'
+        action: 'write'
     - uses: ory/ci/prettier@master
       with:
-        action: 'write'
-        dir: './CHANGELOG.md'
+        action: 'check'
     - env:
         GITHUB_TOKEN: ${{ inputs.token }}
       run: |
