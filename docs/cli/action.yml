@@ -12,6 +12,8 @@ runs:
     - uses: actions/checkout@v2
       with:
         path: current-repo
+        with:
+          fetch-depth: 0
     - uses: actions/setup-go@v2
       with:
         go-version: ^1.16
@@ -37,11 +39,7 @@ runs:
       run: |
         cd current-repo
         git add -A
-        git stash || true
-        git checkout master || true
-        git stash pop || true
         git commit -a -m "autogen(docs): generate cli docs" || true
-        git pull origin master --rebase || true
         if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
-          git push origin "$GITHUB_REF_NAME" || true
+          git push origin HEAD:"$GITHUB_REF_NAME" || true
         fi
