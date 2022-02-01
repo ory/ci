@@ -55,13 +55,16 @@ runs:
           git pull origin master --rebase
           git push origin HEAD:master
         else
-          git add -A
-          git commit --allow-empty -a -m "autogen(docs): generate and format documentation"
-          git pull origin master --rebase
-          if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
-            git push origin "$GITHUB_REF_NAME" || true
+          if [[ "$(git log --format=%B -n1)" =~ "autogen"* ]]; then
+            echo "No-op because the previous commit was autogen"
+          else
+            git add -A
+            git commit --allow-empty -a -m "autogen(docs): generate and format documentation"
+            if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
+              git pull origin "$GITHUB_REF_NAME" --rebase
+              git push origin "$GITHUB_REF_NAME" || true
+            fi
           fi
-          git push origin master
         fi
       shell: bash
       env:

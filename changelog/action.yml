@@ -65,13 +65,29 @@ runs:
         t=$(mktemp)
         printf "# Changelog\n\n" | cat - CHANGELOG.md > "$t" && mv "$t" CHANGELOG.md
 
-        git stash || true
-        git checkout master || true
-        git stash pop || true
-        git add CHANGELOG.md
-        git commit -m "autogen(docs): regenerate and update changelog" || true
-        git pull origin master --rebase || true
-        if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
-          git push origin "$GITHUB_REF_NAME" || true
+
+        if [[ "$GITHUB_REF_TYPE" != "tag" ]]; then
+          if [[ "$(git log --format=%B -n1)" =~ "autogen"* ]]; then
+            echo "No-op because the previous commit was autogen"
+          else
+            git commit -m "autogen(docs): regenerate and update changelog" || true
+            git pull -ff || true
+            git push origin HEAD:"$GITHUB_REF_NAME" || true
+          fi
+        else
+          if [[ "$(git log --format=%B -n1)" =~ "autogen"* ]]; then
+            echo "No-op because the previous commit was autogen"
+          else
+            git fetch origin
+            git stash
+            git checkout -b "changelog-$(date +"%m-%d-%Y")" origin/master
+            git pull -ff
+            git stash pop
+            (
+              git commit -m "autogen(docs): regenerate and update changelog" &&
+              git pull -ff &&
+              git push origin HEAD:master
+            ) || true
+          fi
         fi
       shell: bash
