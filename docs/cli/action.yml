@@ -38,8 +38,12 @@ runs:
       shell: bash
       run: |
         cd current-repo
-        git add -A
-        git commit -a -m "autogen(docs): generate cli docs" || true
-        if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
-          git push origin HEAD:"$GITHUB_REF_NAME" || true
+        if [[ "$(git log --format=%B -n1)" =~ "autogen"* ]]; then
+          echo "No-op because the previous commit was autogen"
+        else
+          git add -A
+          git commit -a -m "autogen(docs): generate cli docs" || true
+          if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
+            git push origin HEAD:"$GITHUB_REF_NAME" || true
+          fi
         fi
