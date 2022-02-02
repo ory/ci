@@ -58,6 +58,7 @@ runs:
         mkdir -p ${{ inputs.swag-gen-path }}
 
         swagger generate client -f ${{ inputs.swag-spec-location }} -t ${{ inputs.swag-gen-path }} -A ${{ inputs.app-name }}
+      shell: bash
     - run: |
         cd current-repo
         echo "::set-output name=msg::$(git log --format=%B -n1)"
