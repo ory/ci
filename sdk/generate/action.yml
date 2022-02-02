@@ -58,14 +58,17 @@ runs:
         mkdir -p ${{ inputs.swag-gen-path }}
 
         swagger generate client -f ${{ inputs.swag-spec-location }} -t ${{ inputs.swag-gen-path }} -A ${{ inputs.app-name }}
-
-        if [[ "$(git log --format=%B -n1)" =~ "autogen"* ]]; then
-          echo "No-op because the previous commit was autogen"
-        else
-          git add -A
-          git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" || true
-          if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
-            git push origin HEAD:"$GITHUB_REF_NAME" || true
-          fi
+    - run: |
+        cd current-repo
+        echo "::set-output name=msg::$(git log --format=%B -n1)"
+      id: commit-msg
+      shell: bash
+    - if: ${{ !startsWith(steps.commit-msg.outputs.msg, 'autogen') }}
+      run: |
+        cd current-repo
+        git add -A
+        git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" || true
+        if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
+          git push origin HEAD:"$GITHUB_REF_NAME" || true
         fi
       shell: bash

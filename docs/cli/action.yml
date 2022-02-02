@@ -33,17 +33,19 @@ runs:
       with:
         dir: current-repo/docs
         action: write
-    - env:
+    - run: |
+        cd current-repo
+        echo "::set-output name=msg::$(git log --format=%B -n1)"
+      shell: bash
+      id: commit-msg
+    - if: ${{ !startsWith(steps.commit-msg.outputs.msg, 'autogen') }}
+      env:
         GITHUB_TOKEN: ${{ inputs.token }}
       shell: bash
       run: |
         cd current-repo
-        if [[ "$(git log --format=%B -n1)" =~ "autogen"* ]]; then
-          echo "No-op because the previous commit was autogen"
-        else
-          git add -A
-          git commit -a -m "autogen(docs): generate cli docs" || true
-          if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
-            git push origin HEAD:"$GITHUB_REF_NAME" || true
-          fi
+        git add -A
+        git commit -a -m "autogen(docs): generate cli docs" || true
+        if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
+          git push origin HEAD:"$GITHUB_REF_NAME" || true
         fi

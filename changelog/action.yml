@@ -61,33 +61,29 @@ runs:
           npm run format
         fi
 
-
         t=$(mktemp)
         printf "# Changelog\n\n" | cat - CHANGELOG.md > "$t" && mv "$t" CHANGELOG.md
-
-
-        if [[ "$GITHUB_REF_TYPE" != "tag" ]]; then
-          if [[ "$(git log --format=%B -n1)" =~ "autogen"* ]]; then
-            echo "No-op because the previous commit was autogen"
-          else
-            git commit -m "autogen(docs): regenerate and update changelog" || true
-            git pull -ff || true
-            git push origin HEAD:"$GITHUB_REF_NAME" || true
-          fi
-        else
-          if [[ "$(git log --format=%B -n1)" =~ "autogen"* ]]; then
-            echo "No-op because the previous commit was autogen"
-          else
-            git fetch origin
-            git stash
-            git checkout -b "changelog-$(date +"%m-%d-%Y")" origin/master
-            git pull -ff
-            git stash pop
-            (
-              git commit -m "autogen(docs): regenerate and update changelog" &&
-              git pull -ff &&
-              git push origin HEAD:master
-            ) || true
-          fi
-        fi
+      shell: bash
+    - run: |
+        echo "::set-output name=msg::$(git log --format=%B -n1)"
+      shell: bash
+      id: commit-msg
+    - if: ${{ github.ref_type != 'tag' && !startsWith(steps.commit-msg.outputs.msg, 'autogen') }}
+      run: |
+        git commit -m "autogen(docs): regenerate and update changelog" || true
+        git pull -ff || true
+        git push origin HEAD:"$GITHUB_REF_NAME" || true
+      shell: bash
+    - if ${{ github.ref_type == 'tag' }}
+      run: |
+        git fetch origin
+        git stash
+        git checkout -b "changelog-$(date +"%m-%d-%Y")" origin/master
+        git pull -ff
+        git stash pop
+        (
+          git commit -m "autogen(docs): regenerate and update changelog" &&
+          git pull -ff &&
+          git push origin HEAD:master
+        ) || true
       shell: bash
