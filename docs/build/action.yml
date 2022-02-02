@@ -46,31 +46,36 @@ runs:
           npm run build
           npm run format
         )
-
-        if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
-          branch="$(date +%s)"
-          git checkout -b "$branch"
-          git add -A
-          git commit --allow-empty -a -m "autogen(docs): generate and format documentation"
-          git pull origin master --rebase
-          git push origin HEAD:master
-        else
-          if [[ "$(git log --format=%B -n1)" =~ "autogen"* ]]; then
-            echo "No-op because the previous commit was autogen"
-          else
-            git add -A
-            git commit --allow-empty -a -m "autogen(docs): generate and format documentation"
-            if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
-              git pull origin "$GITHUB_REF_NAME" --rebase
-              git push origin "$GITHUB_REF_NAME" || true
-            fi
-          fi
-        fi
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
         SWAG_SPEC_LOCATION: ${{ inputs.swag-spec-location }}
         SWAG_SPEC_IGNORE: ${{ inputs.swag-spec-ignore }}
+    - run: |
+        cd current-repo
+        echo "::set-output name=msg::$(git log --format=%B -n1)"
+      shell: bash
+      id: commit-msg
+    - if ${{ github.ref_type == 'tag' }}
+      run: |
+        cd current-repo
+        branch="$(date +%s)"
+        git checkout -b "$branch"
+        git add -A
+        git commit --allow-empty -a -m "autogen(docs): generate and format documentation"
+        git pull origin master --rebase
+        git push origin HEAD:master
+      shell: bash
+    - if: ${{ github.ref_type != 'tag' && !startsWith(steps.commit-msg.outputs.msg, 'autogen') }}
+      run: |
+        cd current-repo
+        git add -A
+        git commit --allow-empty -a -m "autogen(docs): generate and format documentation"
+        if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
+          git pull origin "$GITHUB_REF_NAME" --rebase
+          git push origin "$GITHUB_REF_NAME" || true
+        fi
+      shell: bash
     - uses: actions/checkout@v2
       with:
         repository: ory/web
