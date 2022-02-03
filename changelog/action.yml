@@ -83,6 +83,7 @@ runs:
         git pull -ff
         git stash pop
         (
+          git add CHANGELOG.md
           git commit -m "autogen(docs): regenerate and update changelog" &&
           git pull -ff &&
           git push origin HEAD:master
