@@ -61,7 +61,7 @@ runs:
         x=(${GITHUB_REPOSITORY//// })
         repo="${x[1]}"
 
-        cp current-repo/${{ inputs.swag-spec-location }} "sdk/spec/$repo/$GITHUB_REF_NAME.json"
+        cp current-repo/${{ inputs.swag-spec-location }} "sdk/spec/$repo/${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}.json"
         cd sdk
 
         git add -A

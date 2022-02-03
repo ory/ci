@@ -70,6 +70,7 @@ runs:
         git add -A
         git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" || true
         if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
-          git push origin HEAD:"$GITHUB_REF_NAME" || true
+          git pull --rebase origin "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          git push origin HEAD:"${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" || true
         fi
       shell: bash

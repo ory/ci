@@ -33,7 +33,7 @@ runs:
         repo="${x[1]}"
 
         bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
-        ory dev schema render-version $repo $GITHUB_REF_NAME ${{ inputs.schema-path }}
+        ory dev schema render-version $repo ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME} ${{ inputs.schema-path }}
 
         branch="$(date +%s)"
         git fetch origin
