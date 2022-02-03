@@ -38,7 +38,7 @@ git reset --hard HEAD
 
 cat $notes
 
-goreleaser release --release-header <(cat "$notes") --rm-dist --timeout 60m --parallelism 1 --debug
+goreleaser release --release-header <(cat "$notes") --rm-dist --timeout 60m --parallelism 1
 
 git add -A
 git stash || true
