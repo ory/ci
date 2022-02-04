@@ -113,3 +113,12 @@ runs:
           git push origin "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" || true
         fi
       shell: bash
+    - run: |
+        docs_version="$(echo "$GITHUB_REF_NAME" | awk -F'.' '{ printf("%s.%s", $1, $2) }')"
+        echo 'DOCS_VERSION='"$docs_version" >> $GITHUB_ENV
+      shell: bash
+    - run: |
+        bash <(curl -s https://raw.githubusercontent.com/ory/xgoreleaser/master/docs.sh)
+      env:
+        TAG_VERSION: ${{ github.ref_name }}
+      shell: bash
