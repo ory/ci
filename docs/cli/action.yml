@@ -37,8 +37,7 @@ runs:
         echo "::set-output name=msg::$(git log --format=%B -n1)"
       shell: bash
       id: commit-msg
-    - if: ${{ !startsWith(steps.commit-msg.outputs.msg, 'autogen') }}
-      env:
+    - env:
         GITHUB_TOKEN: ${{ inputs.token }}
       shell: bash
       run: |
@@ -46,14 +45,20 @@ runs:
         git add -A
         git commit -a -m "autogen(docs): generate cli docs" || true
     - if: ${{ github.ref_type == 'branch' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         cd current-repo
         git pull --rebase origin "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
         git push origin HEAD:"${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" || true
       shell: bash
     - if: ${{ github.ref_type == 'tag' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         cd current-repo
+        git stash || true
         git pull --rebase origin master || true
+        git stash apply || true
         git push origin HEAD:master || true
       shell: bash

@@ -58,6 +58,8 @@ runs:
       shell: bash
       id: commit-msg
     - if: ${{ github.ref_type == 'tag' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         cd current-repo
         branch="$(date +%s)"
@@ -67,7 +69,8 @@ runs:
         git pull origin master --rebase
         git push origin HEAD:master
       shell: bash
-    - if: ${{ github.ref_type != 'tag' && !startsWith(steps.commit-msg.outputs.msg, 'autogen') }}
+    - env:
+        GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         cd current-repo
         git add -A

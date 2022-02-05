@@ -68,7 +68,8 @@ runs:
         echo "::set-output name=msg::$(git log --format=%B -n1)"
       shell: bash
       id: commit-msg
-    - if: ${{ github.ref_type != 'tag' && !startsWith(steps.commit-msg.outputs.msg, 'autogen') }}
+    - env:
+        GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         git add CHANGELOG.md
         git commit -m "autogen(docs): regenerate and update changelog" || true
@@ -76,6 +77,8 @@ runs:
         git push origin HEAD:"${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" || true
       shell: bash
     - if: ${{ github.ref_type == 'tag' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         git fetch origin
         git stash
