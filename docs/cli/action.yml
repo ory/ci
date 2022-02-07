@@ -16,11 +16,11 @@ runs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
         repository: ${{ github.event.pull_request.head.repo.full_name }}
-        token: ${{ inputs.token }}
+        token: ${{ inputs.token || github.token }}
     - if: ${{ github.event_name != 'pull_request' }}
       uses: actions/checkout@v2
       with:
-        token: ${{ inputs.token }}
+        token: ${{ inputs.token || github.token }}
         path: current-repo
         fetch-depth: 0
     - uses: actions/setup-go@v2
@@ -48,7 +48,7 @@ runs:
       shell: bash
       id: commit-msg
     - env:
-        GITHUB_TOKEN: ${{ inputs.token }}
+        GITHUB_TOKEN: ${{ inputs.token || github.token }}
       shell: bash
       run: |
         cd current-repo
@@ -56,7 +56,7 @@ runs:
         git commit -a -m "autogen(docs): generate cli docs" || true
     - if: ${{ github.ref_type == 'branch' && github.event.pull_request.head.repo.full_name == github.repository }}
       env:
-        GITHUB_TOKEN: ${{ inputs.token }}
+        GITHUB_TOKEN: ${{ inputs.token || github.token }}
       run: |
         cd current-repo
         git pull --rebase origin "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
@@ -64,7 +64,7 @@ runs:
       shell: bash
     - if: ${{ github.ref_type == 'tag' }}
       env:
-        GITHUB_TOKEN: ${{ inputs.token }}
+        GITHUB_TOKEN: ${{ inputs.token || github.token }}
       run: |
         cd current-repo
         git stash || true
