@@ -68,7 +68,8 @@ runs:
         echo "::set-output name=msg::$(git log --format=%B -n1)"
       shell: bash
       id: commit-msg
-    - env:
+    - if: ${{ github.ref_type == 'branch' }}
+      env:
         GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         git add CHANGELOG.md
