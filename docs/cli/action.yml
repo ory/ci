@@ -16,11 +16,11 @@ runs:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref }}
         repository: ${{ github.event.pull_request.head.repo.full_name }}
-        token: ${{ github.token }}
+        token: ${{ inputs.token }}
     - if: ${{ github.event_name != 'pull_request' }}
       uses: actions/checkout@v2
       with:
-        token: ${{ github.token }}
+        token: ${{ inputs.token }}
         path: current-repo
         fetch-depth: 0
     - uses: actions/setup-go@v2
