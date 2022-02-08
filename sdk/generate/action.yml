@@ -61,14 +61,18 @@ runs:
       run: |
         cd current-repo
         make sdk
+        # Hack to ensure actions/cache uses the same path
+        # as the caller.
+        mkdir ../internal
+        mv internal/httpclient ../internal
       shell: bash
     - uses: actions/cache@v2
       with:
         path: |
-          current-repo/internal/httpclient
-        key: sdk-${{ github.run_id }}-${{ hashFiles('current-repo/internal/httpclient/**') }}
+          internal/httpclient
+        key: sdk-${{ github.run_id }}-${{ hashFiles('internal/httpclient/**') }}
     - run: |
-        key="sdk-${{ github.run_id }}-${{ hashFiles('current-repo/internal/httpclient/**') }}"
+        key="sdk-${{ github.run_id }}-${{ hashFiles('internal/httpclient/**') }}"
         echo "::set-output name=cache-key::$key"
       id: cache-sdk
       shell: bash
