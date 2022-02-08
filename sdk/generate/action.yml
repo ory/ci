@@ -20,6 +20,10 @@ inputs:
     description: Where to generate the SDK to
     default: "internal/httpclient"
     required: false
+outputs:
+  sdk-cache-key:
+    description: Cache key for the generated SDK
+    value: ${{ steps.cache-sdk.outputs.cache-key }}
 
 runs:
   using: "composite"
@@ -58,27 +62,25 @@ runs:
         cd current-repo
         make sdk
       shell: bash
+    - uses: actions/cache@v2
+      with:
+        path: |
+          current-repo/internal/httpclient
+        key: sdk-${{ github.run_id }}-${{ hashFiles('current-repo/internal/httpclient/**') }}
     - run: |
-        cd current-repo
-        echo "::set-output name=msg::$(git log --format=%B -n1)"
-      id: commit-msg
+        key="sdk-${{ github.run_id }}-${{ hashFiles('current-repo/internal/httpclient/**') }}"
+        echo "::set-output name=cache-key::$key"
+      id: cache-sdk
       shell: bash
     - env:
         GITHUB_TOKEN: ${{ inputs.token || github.token }}
+      if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }
       run: |
         cd current-repo
         git add -A
         git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" || true
       shell: bash
-    - if: ${{ github.ref_type == 'branch' && github.event.pull_request.head.repo.full_name == github.repository }}
-      env:
-        GITHUB_TOKEN: ${{ inputs.token || github.token }}
-      run: |
-        cd current-repo
-        git pull --rebase origin "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
-        git push origin HEAD:"${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" || true
-      shell: bash
-    - if: ${{ github.ref_type == 'tag' }}
+      if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }
       env:
         GITHUB_TOKEN: ${{ inputs.token || github.token }}
       run: |

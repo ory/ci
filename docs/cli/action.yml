@@ -42,27 +42,15 @@ runs:
       with:
         dir: current-repo/docs
         action: write
-    - run: |
-        cd current-repo
-        echo "::set-output name=msg::$(git log --format=%B -n1)"
-      shell: bash
-      id: commit-msg
     - env:
         GITHUB_TOKEN: ${{ inputs.token || github.token }}
+      if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }
       shell: bash
       run: |
         cd current-repo
         git add -A
         git commit -a -m "autogen(docs): generate cli docs" || true
-    - if: ${{ github.ref_type == 'branch' && github.event.pull_request.head.repo.full_name == github.repository }}
-      env:
-        GITHUB_TOKEN: ${{ inputs.token || github.token }}
-      run: |
-        cd current-repo
-        git pull --rebase origin "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
-        git push origin HEAD:"${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" || true
-      shell: bash
-    - if: ${{ github.ref_type == 'tag' }}
+    - if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }
       env:
         GITHUB_TOKEN: ${{ inputs.token || github.token }}
       run: |
