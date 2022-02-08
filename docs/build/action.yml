@@ -65,7 +65,7 @@ runs:
         branch="$(date +%s)"
         git checkout -b "$branch"
         git add -A
-        git commit --allow-empty -a -m 'autogen(docs): generate and format documentation' -m '[skip ci]'
+        git commit -a -m 'autogen(docs): generate and format documentation' -m '[skip ci]'
         git pull origin master --rebase
         git push origin HEAD:master
       shell: bash
