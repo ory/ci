@@ -1,0 +1,77 @@
+name: 'Docs CLI (Next Generation)'
+description: 'Build CLI docs and commit to ory/docs'
+inputs:
+  token:
+    description: Personal access token
+    default: ${{ github.token }}
+    required: false
+  docs-branch:
+    description: On which ory/docs branch to operate on
+    default: 'next-generation'
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - if: ${{ github.event_name == 'pull_request' }}
+      uses: actions/checkout@v2
+      with:
+        path: current-repo
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.ref }}
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+        token: ${{ inputs.token || github.token }}
+    - if: ${{ github.event_name != 'pull_request' }}
+      uses: actions/checkout@v2
+      with:
+        token: ${{ inputs.token || github.token }}
+        path: current-repo
+        fetch-depth: 0
+    - uses: actions/setup-go@v2
+      with:
+        go-version: ^1.16
+    - run: |
+        git config --global user.email "60093411+ory-bot@users.noreply.github.com"
+        git config --global user.name "ory-bot"
+      shell: bash
+    - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
+      shell: bash
+
+    - uses: actions/checkout@v2
+      with:
+        repository: ory/docs
+        path: docs
+        branch: ${{ inputs.docs-branch }}
+        fetch-depth: 0
+        token: ${{ inputs.token }}
+
+    - name: Build and push CLI docs
+      shell: bash
+      run: |
+        cd current-repo
+        make .bin/clidoc
+        .bin/clidoc ../docs/src/sidebars/oathkeeper
+
+    - uses: ory/ci/prettier@master
+      with:
+        dir: docs
+        action: write
+
+    - env:
+        GITHUB_TOKEN: ${{ inputs.token || github.token }}
+      if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
+      shell: bash
+      run: |
+        cd docs
+        git add -A
+        git commit -a -m "autogen(docs): generate cli docs" || true
+    - if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token || github.token }}
+      run: |
+        cd docs
+        git stash || true
+        git pull --rebase origin ${{ inputs.docs-branch }} || true
+        git stash apply || true
+        git push origin HEAD:${{ inputs.docs-branch }} || true
+      shell: bash
