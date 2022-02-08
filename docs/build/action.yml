@@ -60,7 +60,7 @@ runs:
       id: commit-msg
     - if: ${{ github.ref_type == 'tag' }}
       env:
-        GITHUB_TOKEN: ${{ inputs.token }}
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
         cd current-repo
         branch="$(date +%s)"
@@ -71,7 +71,7 @@ runs:
         git push origin HEAD:master
       shell: bash
     - env:
-        GITHUB_TOKEN: ${{ inputs.token }}
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
         cd current-repo
         git add -A
