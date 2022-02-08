@@ -41,7 +41,7 @@ runs:
       with:
         repository: ory/docs
         path: docs
-        branch: ${{ inputs.docs-branch }}
+        ref: ${{ inputs.docs-branch }}
         fetch-depth: 0
         token: ${{ inputs.token }}
 
