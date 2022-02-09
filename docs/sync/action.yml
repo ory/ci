@@ -66,7 +66,7 @@ runs:
         mkdir -p "$web_path"
         (cd docs; git pull -ff || true)
         cp "current-repo/${{ inputs.spec-location }}" "$web_path/api.json"
-        cp "current-repo/${{ inputs.config-spec-location }}" "$web_path/api.json"
+        cp "current-repo/${{ inputs.config-spec-location }}" "$web_path/config.schema.json"
         cd docs
         git add -A
         git commit -a -m "autogen(docs): generate and bump docs for $repo" || true
