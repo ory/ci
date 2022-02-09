@@ -1,0 +1,76 @@
+name: 'Synchronize with Docs'
+description: 'Synchronizes files such as OpenAPI and Config Schema with the docs'
+inputs:
+  api-spec-location:
+    description: Location where the OpenAPI Schema is available at
+    default: spec/api.json
+    required: false
+  config-spec-location:
+    description: Location where the Configuratino Schema is available at
+    default: .schem/config.schema.json
+    required: false
+  token:
+    description: Personal access token
+    default: ${{ github.token }}
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+      with:
+        path: current-repo
+        fetch-depth: 0
+        token: ${{ inputs.token }}
+    - uses: actions/setup-go@v2
+      with:
+        go-version: ^1.16
+    - run: |
+        git config --global user.email "60093411+ory-bot@users.noreply.github.com"
+        git config --global user.name "ory-bot"
+      shell: bash
+    - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
+      shell: bash
+    - run: |
+        cd current-repo
+        sudo apt install openjdk-11-jre-headless
+        wget https://github.com/go-swagger/go-swagger/releases/latest/download/swagger_linux_amd64 \
+          -O "$GOPATH/bin/swagger"
+        chmod +x "$GOPATH/bin/swagger"
+
+        bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
+
+        make sdk
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        SWAG_SPEC_LOCATION: ${{ inputs.swag-spec-location }}
+        SWAG_SPEC_IGNORE: ${{ inputs.swag-spec-ignore }}
+    - run: |
+        cd current-repo
+        echo "::set-output name=msg::$(git log --format=%B -n1)"
+      shell: bash
+      id: commit-msg
+    - uses: actions/checkout@v2
+      with:
+        repository: ory/docs
+        path: docs
+        fetch-depth: 0
+        token: ${{ inputs.token }}
+    - env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+      run: |
+        x=(${GITHUB_REPOSITORY//// })
+        repo="${x[1]}"
+        web_path="docs/docs/$repo/reference"
+        mkdir -p "$web_path"
+        (cd docs; git pull -ff || true)
+        cp "current-repo/${{ inputs.spec-location }}" "$web_path/api.json"
+        cp "current-repo/${{ inputs.config-spec-location }}" "$web_path/api.json"
+        cd docs
+        git add -A
+        git commit -a -m "autogen(docs): generate and bump docs for $repo" || true
+        git pull origin master --rebase || true
+        git push origin HEAD:master || true
+      shell: bash
+
