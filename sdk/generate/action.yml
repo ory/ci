@@ -64,7 +64,7 @@ runs:
         # Hack to ensure actions/cache uses the same path
         # as the caller.
         mkdir ../internal
-        mv internal/httpclient ../internal
+        cp -R internal/httpclient ../internal
       shell: bash
     - uses: actions/cache@v2
       with:
