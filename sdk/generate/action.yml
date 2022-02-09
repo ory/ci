@@ -82,7 +82,7 @@ runs:
       run: |
         cd current-repo
         git add -A
-        git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" || true
+        git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" -m "[skip ci]" || true
       shell: bash
     - if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       env:

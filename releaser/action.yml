@@ -107,7 +107,7 @@ runs:
         git stash || true
         git checkout master || true
         git stash pop || true
-        git commit -a -m "autogen: update release artifacts" || true
+        git commit -a -m "autogen: update release artifacts" -m "[skip ci]" || true
         git pull origin master --rebase || true
         if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
           git push origin "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" || true

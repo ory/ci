@@ -59,7 +59,7 @@ runs:
       shell: bash
       id: commit-msg
     - env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ inputs.token || github.token }}
       run: |
         cd current-repo
         branch="$(date +%s)"

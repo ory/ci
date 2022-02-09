@@ -73,7 +73,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         git add CHANGELOG.md
-        git commit -m "autogen(docs): regenerate and update changelog" || true
+        git commit -m "autogen(docs): regenerate and update changelog" -m "[skip ci]" || true
         git pull -ff || true
         git push origin HEAD:"${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" || true
       shell: bash
@@ -88,7 +88,7 @@ runs:
         git stash pop
         (
           git add CHANGELOG.md
-          git commit -m "autogen(docs): regenerate and update changelog" &&
+          git commit -m "autogen(docs): regenerate and update changelog" -m "[skip ci]" &&
           git pull -ff &&
           git push origin HEAD:master
         ) || true
