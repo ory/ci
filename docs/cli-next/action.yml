@@ -41,6 +41,7 @@ runs:
       shell: bash
 
     - uses: actions/checkout@v2
+      if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       with:
         repository: ory/docs
         path: docs
@@ -49,6 +50,7 @@ runs:
         token: ${{ inputs.token }}
 
     - name: Build and push CLI docs
+      if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       shell: bash
       run: |
         cd current-repo
@@ -56,6 +58,7 @@ runs:
         .bin/clidoc ../docs/${{ inputs.output-dir }}
 
     - uses: ory/ci/prettier@master
+      if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       with:
         dir: docs
         action: write
