@@ -63,11 +63,11 @@ runs:
       run: |
         cd current-repo
         branch="$(date +%s)"
-        git checkout -b "$branch"
-        git add -A
-        git commit -a -m 'autogen(docs): generate and format documentation' -m '[skip ci]'
-        git pull origin master --rebase
-        git push origin HEAD:master
+        git checkout -b "$branch" || true
+        git add -A || true
+        git commit -a -m 'autogen(docs): generate and format documentation' -m '[skip ci]' || true
+        git pull origin master --rebase || true
+        git push origin HEAD:master || true
       shell: bash
     - uses: actions/checkout@v2
       with:
