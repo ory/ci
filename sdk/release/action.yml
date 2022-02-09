@@ -43,12 +43,7 @@ runs:
         chmod +x "$GOPATH/bin/swagger"
 
         bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
-
-        swagger generate spec -m -o ${{ inputs.swag-spec-location }} $(printf -- " -x %s" ${{ inputs.swag-spec-ignore }})
-        ory dev swagger sanitize ${{ inputs.swag-spec-location }}
-
-        swagger flatten --with-flatten=remove-unused -o ${{ inputs.swag-spec-location }} ${{ inputs.swag-spec-location }}
-        swagger validate ${{ inputs.swag-spec-location }}
+        make sdk
       shell: bash
     - uses: actions/checkout@v2
       with:
@@ -61,7 +56,7 @@ runs:
         x=(${GITHUB_REPOSITORY//// })
         repo="${x[1]}"
 
-        cp current-repo/${{ inputs.swag-spec-location }} "sdk/spec/$repo/${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}.json"
+        cp current-repo/${{ inputs.swag-spec-location }} "sdk/spec/$repo/$GITHUB_REF_NAME.json"
         cd sdk
 
         git add -A
