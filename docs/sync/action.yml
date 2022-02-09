@@ -62,12 +62,12 @@ runs:
       run: |
         x=(${GITHUB_REPOSITORY//// })
         repo="${x[1]}"
-        web_path="docs/docs/$repo/reference"
-        mkdir -p "$web_path"
-        (cd docs; git pull -ff || true)
-        cp "current-repo/${{ inputs.spec-location }}" "$web_path/api.json"
-        cp "current-repo/${{ inputs.config-spec-location }}" "$web_path/config.schema.json"
         cd docs
+        git pull -ff || true
+        web_path="docs/$repo/reference"
+        mkdir -p "$web_path"
+        cp "../current-repo/${{ inputs.spec-location }}" "$web_path/api.json"
+        cp "../current-repo/${{ inputs.config-spec-location }}" "$web_path/config.schema.json"
         git add -A
         git commit -a -m "autogen(docs): generate and bump docs for $repo" || true
         git pull origin master --rebase || true
