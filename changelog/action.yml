@@ -9,6 +9,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: actions/checkout@v2
+      with:
+        token: ${{ inputs.token }}
+        fetch-depth: 0
     - run: |
         if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
           if [[ "$(git show -s --format=%B | head -n 1)" == "autogen"* ]]; then
@@ -70,7 +74,7 @@ runs:
       id: commit-msg
     - if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       env:
-        GITHUB_TOKEN: ${{ inputs.token }}
+        GITHUB_TOKEN: ${{ inputs.token || github.token }}
       run: |
         git fetch origin
         git stash
