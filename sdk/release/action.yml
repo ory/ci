@@ -5,20 +5,9 @@ inputs:
     description: Personal access token
     required: false
     default: ${{ github.token }}
-  app-name:
-    description: Name of the application
-    required: true
   swag-spec-location:
     description: Location where the Swagger spec should be saved to
     default: .schema/api.swagger.json
-    required: false
-  swag-spec-ignore:
-    description: Packages to ignore when generating the Swagger spec (space delimited)
-    default: "internal/httpclient"
-    required: false
-  swag-gen-path:
-    description: Where to generate the SDK to
-    default: "internal/httpclient"
     required: false
 
 runs:
@@ -50,6 +39,7 @@ runs:
         repository: ory/sdk
         path: sdk
         fetch-depth: 0
+        token: ${{ inputs.token }}
     - env:
         GITHUB_TOKEN: ${{ inputs.token }}
       run: |
