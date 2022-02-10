@@ -7,7 +7,7 @@ inputs:
     required: false
   docs-branch:
     description: On which ory/docs branch to operate on
-    default: 'next-generation'
+    default: 'master'
     required: false
   output-dir:
     description: Directory without leading slash in ory/docs to write the CLI docs to
