@@ -122,17 +122,15 @@ runs:
           echo "This is a pre-release, skipping docs publishing."
           exit 0
         fi
-        
-        bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/install/git.sh)
-        
+
         make post-release
-        
+
         git add -A
         git stash || true
         git checkout master || true
         git pull -ff || true
         git stash pop || true
-        git commit --allow-empty -a -m "autogen(docs): generate and bump docs" || true
+        git commit --allow-empty -a -m "autogen(docs): generate and bump docs" -m "[skip ci]" || true
         git push origin HEAD:master || true
       env:
         DOCKER_TAG: ${{ github.ref_name }}
