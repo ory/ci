@@ -57,20 +57,3 @@ runs:
         path: docs
         fetch-depth: 0
         token: ${{ inputs.token }}
-    - env:
-        GITHUB_TOKEN: ${{ inputs.token }}
-      run: |
-        x=(${GITHUB_REPOSITORY//// })
-        repo="${x[1]}"
-        cd docs
-        git pull -ff || true
-        web_path="docs/$repo/reference"
-        mkdir -p "$web_path"
-        cp "../current-repo/${{ inputs.api-spec-location }}" "$web_path/api.json"
-        cp "../current-repo/${{ inputs.config-spec-location }}" "$web_path/config.schema.json"
-        git add -A
-        git commit -a -m "autogen(docs): generate and bump docs for $repo" || true
-        git pull origin master --rebase || true
-        git push origin HEAD:master || true
-      shell: bash
-
