@@ -57,12 +57,6 @@ runs:
         make .bin/clidoc
         .bin/clidoc ../docs/${{ inputs.output-dir }}
 
-    - uses: ory/ci/prettier@master
-      if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
-      with:
-        dir: docs
-        action: write
-
     - env:
         GITHUB_TOKEN: ${{ inputs.token || github.token }}
       if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
