@@ -76,15 +76,10 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.token || github.token }}
       run: |
-        git fetch origin
-        git stash
-        git checkout -b "changelog-$(date +"%m-%d-%Y")" origin/master
-        git pull -ff
-        git stash pop
-        (
-          git add CHANGELOG.md
-          git commit -m "autogen(docs): regenerate and update changelog" -m "[skip ci]" &&
-          git pull -ff &&
-          git push origin HEAD:master
-        ) || true
+        branch="$(date +%s)"
+        git checkout -b "$branch" || true
+        git add CHANGELOG.md || true
+        git commit -m "autogen(docs): regenerate and update changelog" -m "[skip ci]" || true
+        git pull origin master --rebase || true
+        git push origin HEAD:master || true
       shell: bash
