@@ -22,7 +22,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
+    - uses: ory/ci/checkout@master
     - env:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
       run: |

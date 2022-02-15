@@ -17,7 +17,7 @@ runs:
   using: "composite"
   steps:
     - if: ${{ github.event_name == 'pull_request' }}
-      uses: actions/checkout@v2
+      uses: ory/ci/checkout@master
       with:
         path: current-repo
         fetch-depth: 0
@@ -25,7 +25,7 @@ runs:
         repository: ${{ github.event.pull_request.head.repo.full_name }}
         token: ${{ inputs.token || github.token }}
     - if: ${{ github.event_name != 'pull_request' }}
-      uses: actions/checkout@v2
+      uses: ory/ci/checkout@master
       with:
         token: ${{ inputs.token || github.token }}
         path: current-repo
@@ -40,7 +40,7 @@ runs:
     - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
       shell: bash
 
-    - uses: actions/checkout@v2
+    - uses: ory/ci/checkout@master
       if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       with:
         repository: ory/docs

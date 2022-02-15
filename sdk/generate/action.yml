@@ -14,14 +14,14 @@ runs:
   using: "composite"
   steps:
     - if: ${{ github.event_name == 'pull_request' }}
-      uses: actions/checkout@v2
+      uses: ory/ci/checkout@master
       with:
         path: current-repo
         ref: ${{ github.event.pull_request.head.ref }}
         repository: ${{ github.event.pull_request.head.repo.full_name }}
         token: ${{ inputs.token || github.token }}
     - if: ${{ github.event_name != 'pull_request' }}
-      uses: actions/checkout@v2
+      uses: ory/ci/checkout@master
       with:
         path: current-repo
         token: ${{ inputs.token || github.token }}

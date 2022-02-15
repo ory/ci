@@ -21,7 +21,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
+    - uses: ory/ci/checkout@master
       with:
         token: ${{ inputs.token }}
         fetch-depth: 0
@@ -47,7 +47,7 @@ runs:
 
         echo 'notes='"$(mktemp).md" >> $GITHUB_ENV
       shell: bash
-    - uses: actions/checkout@v2
+    - uses: ory/ci/checkout@master
       with:
         repository: ory/changelog
         path: changelog

@@ -17,7 +17,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
+    - uses: ory/ci/checkout@master
       with:
         path: current-repo
         fetch-depth: 0
@@ -51,7 +51,7 @@ runs:
         echo "::set-output name=msg::$(git log --format=%B -n1)"
       shell: bash
       id: commit-msg
-    - uses: actions/checkout@v2
+    - uses: ory/ci/checkout@master
       with:
         repository: ory/docs
         path: docs

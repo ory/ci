@@ -12,7 +12,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
+    - uses: ory/ci/checkout@master
       with:
         token: ${{ inputs.token }}
         fetch-depth: 0
