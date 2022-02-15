@@ -34,7 +34,7 @@ runs:
         bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
         make sdk
       shell: bash
-    - uses: ory/ci/checkout@master
+    - uses: actions/checkout@v2
       with:
         repository: ory/sdk
         path: sdk

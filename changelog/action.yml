@@ -34,7 +34,7 @@ runs:
           echo "package.json exists and needs not be written"
         fi
       shell: bash
-    - uses: ory/ci/checkout@master
+    - uses: actions/checkout@v2
       with:
         path: changelog
         repository: ory/changelog

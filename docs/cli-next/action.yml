@@ -40,7 +40,7 @@ runs:
     - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
       shell: bash
 
-    - uses: ory/ci/checkout@master
+    - uses: actions/checkout@v2
       if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       with:
         repository: ory/docs

@@ -47,7 +47,7 @@ runs:
 
         echo 'notes='"$(mktemp).md" >> $GITHUB_ENV
       shell: bash
-    - uses: ory/ci/checkout@master
+    - uses: actions/checkout@v2
       with:
         repository: ory/changelog
         path: changelog
