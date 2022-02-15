@@ -47,6 +47,10 @@ runs:
 
         echo 'notes='"$(mktemp).md" >> $GITHUB_ENV
       shell: bash
+    - run: |
+        sudo apt install -y moreutils
+      name: Install moreutils (for sponge)
+      shell: bash
     - uses: actions/checkout@v2
       with:
         repository: ory/changelog
