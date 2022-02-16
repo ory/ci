@@ -137,5 +137,6 @@ runs:
         git commit --allow-empty -a -m "autogen(docs): generate and bump docs" -m "[skip ci]" || true
         git push origin HEAD:master || true
       env:
+        GITHUB_TOKEN: ${{ inputs.token }}
         DOCKER_TAG: ${{ github.ref_name }}
       shell: bash
