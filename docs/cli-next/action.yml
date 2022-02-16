@@ -9,6 +9,10 @@ inputs:
     description: On which ory/docs branch to operate on
     default: 'master'
     required: false
+  arg:
+    description: Optional additional argument to .bin/clidoc (inserted before output-dir)
+    default: ''
+    required: false
   output-dir:
     description: Directory without leading slash in ory/docs to write the CLI docs to
     required: true
@@ -55,7 +59,11 @@ runs:
       run: |
         cd current-repo
         make .bin/clidoc
-        .bin/clidoc ../docs/${{ inputs.output-dir }}
+        if [[ "${{ inputs.arg }}" == "" ]]; then
+          .bin/clidoc ../docs/${{ inputs.output-dir }}
+        else
+          .bin/clidoc ${{ inputs.arg }} ../docs/${{ inputs.output-dir }}
+        fi
 
     - env:
         GITHUB_TOKEN: ${{ inputs.token || github.token }}
