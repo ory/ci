@@ -45,8 +45,6 @@ runs:
           npm i
         )
 
-        git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-
         npx conventional-changelog-cli@2.1.1 --config "changelog/index.js" -r 0 -u -o CHANGELOG.md
         rm -rf changelog/
       shell: bash
