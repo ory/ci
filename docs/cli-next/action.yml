@@ -54,7 +54,6 @@ runs:
         token: ${{ inputs.token }}
 
     - name: Build and push CLI docs
-      if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       shell: bash
       run: |
         cd current-repo
