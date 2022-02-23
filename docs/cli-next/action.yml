@@ -45,13 +45,12 @@ runs:
       shell: bash
 
     - uses: actions/checkout@v2
-      if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       with:
         repository: ory/docs
         path: docs
         ref: ${{ inputs.docs-branch }}
         fetch-depth: 0
-        token: ${{ inputs.token }}
+        token: ${{ inputs.token || github.token  }}
 
     - name: Build and push CLI docs
       shell: bash
