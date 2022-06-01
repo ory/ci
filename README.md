@@ -15,6 +15,7 @@ Inputs:
 - `docker_password`: Docker password
 
 Usage:
+
 ```yaml
 uses: ory/ci/releaser@ref
 ```
@@ -24,7 +25,6 @@ uses: ory/ci/releaser@ref
 Render version schema at a specified path.
 
 Inputs:
-
 - `schema-path`: Path to version schema
 
 Usage:
@@ -57,6 +57,7 @@ Inputs:
 - `action`: Action to perform: 'check' or 'write'
 
 Usage:
+
 ```yaml
 uses: ory/ci/prettier@ref
 ```
@@ -71,6 +72,7 @@ Inputs:
 - `token`: Personal access token
 
 Usage:
+
 ```yaml
 uses: ory/ci/docs/build@ref
 ```
@@ -83,6 +85,7 @@ Inputs:
 - `token`: Personal access token
 
 Usage:
+
 ```yaml
 uses: ory/ci/docs/cli@ref
 ```
@@ -106,6 +109,7 @@ Inputs:
 - `swag-gen-path`: Where to generate the SDK to
 
 Usage:
+
 ```yaml
 uses: ory/ci/sdk/generate@ref
 ```
@@ -124,4 +128,21 @@ Inputs:
 Usage:
 ```yaml
 uses: ory/ci/sdk/generate@ref
+```
+
+## CircleCI
+
+To publish an orb, install the CLI and run:
+
+```
+orb=<name>
+circleci orb validate src/orbs/${orb}.yml
+circleci orb publish increment src/orbs/${orb}.yml ory/${orb} patch
+```
+
+To create a new orb, run:
+
+```
+orb=<name>
+circleci orb create ory/$orb
 ```
