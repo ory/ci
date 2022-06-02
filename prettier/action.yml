@@ -9,6 +9,10 @@ inputs:
     description: Action to perform (check or write)
     default: 'check'
     required: false
+  target:
+    description: Target prettier should check/write
+    default: '.'
+    required: false
 
 runs:
   using: "composite"
@@ -20,14 +24,8 @@ runs:
         npm i -g "prettier@$(jq -r '.devDependencies.prettier' package.json)"
         rm ory-prettier-styles-*.tgz
       shell: bash
-    - if: ${{ inputs.action == 'check' }}
+    - name: Run prettier ${{ inputs.action }}
       run: |
         cd ${{ inputs.dir }}
-        npm run format:check
+        npx prettier --${{ inputs.action }} ${{ inputs.target }}
       shell: bash
-    - if: ${{ inputs.action == 'write' }}
-      run: |
-        cd ${{ inputs.dir }}
-        npm run format
-      shell: bash
-
