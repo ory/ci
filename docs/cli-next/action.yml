@@ -20,23 +20,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - if: ${{ github.event_name == 'pull_request' }}
-      uses: ory/ci/checkout@master
-      with:
-        path: current-repo
-        fetch-depth: 0
-        ref: ${{ github.event.pull_request.head.ref }}
-        repository: ${{ github.event.pull_request.head.repo.full_name }}
-        token: ${{ inputs.token || github.token }}
-    - if: ${{ github.event_name != 'pull_request' }}
-      uses: ory/ci/checkout@master
+    - uses: ory/ci/checkout@master
       with:
         token: ${{ inputs.token || github.token }}
         path: current-repo
         fetch-depth: 0
     - uses: actions/setup-go@v2
       with:
-        go-version: ^1.16
+        go-version: ^1.18
     - run: |
         git config --global user.email "60093411+ory-bot@users.noreply.github.com"
         git config --global user.name "ory-bot"
@@ -57,27 +48,26 @@ runs:
       run: |
         cd current-repo
         make .bin/clidoc
-        if [[ "${{ inputs.arg }}" == "" ]]; then
-          .bin/clidoc ../docs/${{ inputs.output-dir }}
-        else
-          .bin/clidoc ${{ inputs.arg }} ../docs/${{ inputs.output-dir }}
-        fi
+        .bin/clidoc ${{ inputs.arg }} ../docs/${{ inputs.output-dir }}
 
-    - env:
-        GITHUB_TOKEN: ${{ inputs.token || github.token }}
+    - uses: ory/ci/prettier@master
+      with:
+        dir: docs
+        action: write
+        target: ${{ inputs.output-dir }}
+
+    - name: Push docs
       if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       shell: bash
       run: |
         cd docs
+        if [[ -z "$(git status --porcelain)" ]]; then
+          echo "Nothing to commit"
+          exit 0
+        fi
         git add -A
-        git commit -a -m "autogen(docs): generate cli docs" || true
-    - if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
-      env:
-        GITHUB_TOKEN: ${{ inputs.token || github.token }}
-      run: |
-        cd docs
-        git stash || true
-        git pull --rebase origin ${{ inputs.docs-branch }} || true
-        git stash apply || true
-        git push origin HEAD:${{ inputs.docs-branch }} || true
-      shell: bash
+        git stash
+        git pull --rebase origin ${{ inputs.docs-branch }}
+        git stash apply
+        git commit -a -m "autogen(docs): generate cli docs"
+        git push origin ${{ inputs.docs-branch }}
