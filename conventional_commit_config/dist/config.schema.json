@@ -1,0 +1,40 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "additionalProperties": false,
+    "description": "data format of the configuration file for repo-specific conventional commit overrides",
+    "properties": {
+        "addScopes": {
+            "description": "add to the default scopes",
+            "items": {
+                "type": "string"
+            },
+            "type": "array"
+        },
+        "addTypes": {
+            "description": "add to the default types",
+            "items": {
+                "type": "string"
+            },
+            "type": "array"
+        },
+        "requireScope": {
+            "description": "whether to enforce a scope in pull request titles",
+            "type": "boolean"
+        },
+        "scopes": {
+            "description": "override the default scopes",
+            "items": {
+                "type": "string"
+            },
+            "type": "array"
+        },
+        "types": {
+            "description": "override the default types",
+            "items": {
+                "type": "string"
+            },
+            "type": "array"
+        }
+    },
+    "type": "object"
+}

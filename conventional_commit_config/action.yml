@@ -1,0 +1,28 @@
+name: Conventional commits configuration
+description: determines the configuration for conventional commits
+
+inputs:
+  repo_override_path:
+    description: path of the config file
+    required: true
+  default_types:
+    description: the default types to use
+    required: true
+  default_scopes:
+    description: the default scopes to use
+    required: true
+  default_require_scope:
+    description: whether to require scopes by default
+    required: true
+
+outputs:
+  types:
+    description: the types to use
+  scopes:
+    description: the scopes to use
+  requireScope:
+    description: whether to require scopes by default
+
+runs:
+  using: node16
+  main: dist/index.js
