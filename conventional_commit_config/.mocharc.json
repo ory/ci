@@ -1,5 +1,4 @@
 {
-  "extension": ["ts"],
   "spec": "src/**/*.test.ts",
   "ui": "tdd",
   "require": "ts-node/register"
