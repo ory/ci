@@ -55,8 +55,7 @@ export function run(args: {
   if (!validate(config)) {
     const errors = []
     for (const error of validate.errors || []) {
-      const message = `${error.message}: ${util.inspect(error.params)}`
-      errors.push(message)
+      errors.push(`${error.message}: ${util.inspect(error.params)}`)
     }
     throw new Error(errors.join("\n"))
   }
