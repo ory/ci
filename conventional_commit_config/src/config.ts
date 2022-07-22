@@ -1,4 +1,4 @@
-/** data format of the configuration file for repo-specific conventional commit overrides */
+/** data format of the configuration file */
 export interface FileFormat {
   /** link to JSON schema */
   $schema?: string
