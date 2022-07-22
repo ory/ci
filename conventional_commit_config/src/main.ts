@@ -38,8 +38,8 @@ export function run(args: {
 
   // validate config file structure
   try {
-    const fullpath = path.join(__dirname, "..", "dist", "config.schema.json")
-    var schemaText = fs.readFileSync(fullpath, "utf8")
+    const schemapath = path.join(__dirname, "..", "dist", "config.schema.json")
+    var schemaText = fs.readFileSync(schemapath, "utf8")
   } catch (e) {
     args.log(`cannot load JSON Schema: ${util.inspect(e)}`)
     return args.defaults
