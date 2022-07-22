@@ -7,7 +7,7 @@ export function merge(args: {
   replacements?: string
   additions?: string
 }): string {
-  let result = args.replacements ? args.replacements : args.defaults
+  let result = args.replacements ?? args.defaults
   if (args.additions) {
     result = result + "\n" + args.additions
   }
