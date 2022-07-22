@@ -66,20 +66,20 @@ export function run(args: {
     replacements: config.types?.join("\n"),
     additions: config.addTypes?.join("\n"),
   })
-  args.log(`\nusing types:\n${types}`)
+  args.log(`\nRESULTING TYPES\n${types}`)
 
   const scopes = stringList.merge({
     defaults: args.defaults.scopes,
     replacements: config.scopes?.join("\n"),
     additions: config.addScopes?.join("\n"),
   })
-  args.log(`\nusing scopes:\n${scopes}`)
+  args.log(`\nRESULTING SCOPES\n${scopes}`)
 
   const requireScope = bool.merge({
     defaultValue: args.defaults.requireScope,
     override: config.requireScope,
   })
-  args.log(`\nusing requireScope: ${requireScope}`)
+  args.log(`\nRESULTING REQUIRE_SCOPE: ${requireScope}`)
 
   return { types, scopes, requireScope }
 }
