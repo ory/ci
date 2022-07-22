@@ -28,3 +28,10 @@ You never need all options together. Set only the ones you need.
 | _scopes_       | overrides the default scopes                       | `[]`    |
 | _addScopes_    | adds the given scopes to the set of default scopes | `[]`    |
 | _requireScope_ | enforces a scope in pull requests titles           | `false` |
+
+### Development
+
+GitHub Actions don't run `npm install` in production. This GitHub Actions
+therefore bundles external production dependencies into `dist/index.js`. To keep
+this file up to date, please remember to run `npm run build` before committing.
+Otherwise, your changes won't show up in production.
