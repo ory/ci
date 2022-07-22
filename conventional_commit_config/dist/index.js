@@ -67,9 +67,12 @@ function run(args) {
     const ajv = new ajv_1.default();
     const validate = ajv.compile(schema);
     if (!validate(config)) {
+        const errors = [];
         for (const error of validate.errors || []) {
-            throw new Error(`${error.message}: ${util.inspect(error.params)}`);
+            const message = `${error.message}: ${util.inspect(error.params)}`;
+            errors.push(message);
         }
+        throw new Error(errors.join("\n"));
     }
     // determine configuration
     const types = stringList.merge({
@@ -9567,7 +9570,15 @@ const defaults = {
     scopes: core.getInput("default_scopes"),
     requireScope: core.getBooleanInput("default_require_scope"),
 };
-const result = main.run({ configPath, defaults, log: console.log });
+try {
+    var result = main.run({ configPath, defaults, log: console.log });
+}
+catch (e) {
+    if (e instanceof Error) {
+        core.setFailed(e.message);
+    }
+    process.exit(1);
+}
 core.setOutput("types", result.types);
 core.setOutput("scopes", result.scopes);
 core.setOutput("requireScope", result.requireScope.toString());
