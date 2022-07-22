@@ -7,7 +7,14 @@ const defaults: main.Outputs = {
   scopes: core.getInput("default_scopes"),
   requireScope: core.getBooleanInput("default_require_scope"),
 }
-const result = main.run({ configPath, defaults, log: console.log })
+try {
+  var result = main.run({ configPath, defaults, log: console.log })
+} catch (e) {
+  if (e instanceof Error) {
+    core.setFailed(e.message)
+  }
+  process.exit(1)
+}
 core.setOutput("types", result.types)
 core.setOutput("scopes", result.scopes)
 core.setOutput("requireScope", result.requireScope.toString())

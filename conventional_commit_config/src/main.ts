@@ -52,9 +52,12 @@ export function run(args: {
   const ajv = new Ajv()
   const validate = ajv.compile(schema)
   if (!validate(config)) {
+    const errors = []
     for (const error of validate.errors || []) {
-      throw new Error(`${error.message}: ${util.inspect(error.params)}`)
+      const message = `${error.message}: ${util.inspect(error.params)}`
+      errors.push(message)
     }
+    throw new Error(errors.join("\n"))
   }
 
   // determine configuration

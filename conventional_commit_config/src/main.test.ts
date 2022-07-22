@@ -89,16 +89,19 @@ suite("integration tests", function () {
       `,
     )
     const log = new StubLog()
-    const have = main.run({
-      configPath,
-      defaults: createDefaults(),
-      log: log.callable(),
-    })
-    assert.deepEqual(have, createDefaults())
-    assert.deepEqual(log.recordings, [
-      'Looking for config file "test_config.json" ...',
-      "must NOT have additional properties: { additionalProperty: 'foo' }",
-    ])
+    try {
+      main.run({
+        configPath,
+        defaults: createDefaults(),
+        log: log.callable(),
+      })
+    } catch (e) {
+      const error = e as Error
+      assert.equal(
+        error.message,
+        "must NOT have additional properties: { additionalProperty: 'foo' }",
+      )
+    }
   })
 
   teardown(function () {
