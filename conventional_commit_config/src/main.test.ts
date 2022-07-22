@@ -43,8 +43,8 @@ suite("integration tests", function () {
     })
     assert.deepEqual(log.recordings, [
       'Looking for config file "test_config.json" ...',
-      "using types:\ndefaultType1\naddType1\naddType2",
-      "using scopes:\ndefaultScope1\naddScope1\naddScope2",
+      "using types:\ndefaultType1\naddType1\naddType2\n",
+      "using scopes:\ndefaultScope1\naddScope1\naddScope2\n",
       "using requireScope: true",
     ])
     assert.deepEqual(have, want)
