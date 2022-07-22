@@ -1,7 +1,7 @@
 import { strict as assert } from "assert"
 import * as stringList from "./string_list"
 
-suite("string_list", function () {
+suite("string_list helpers", function () {
   suite("merge", function () {
     test("no replacement, no additions", function () {
       const have = stringList.merge({
