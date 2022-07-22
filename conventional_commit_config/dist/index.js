@@ -32,6 +32,7 @@ const ajv_1 = __nccwpck_require__(2426);
 const path = __nccwpck_require__(1017);
 function run(args) {
     var _a, _b, _c, _d;
+    // load config file
     args.log(`Looking for config file "${args.configPath}" ...`);
     try {
         var configText = fs.readFileSync(args.configPath, "utf8");
@@ -47,6 +48,7 @@ function run(args) {
         args.log(`ERROR: invalid JSON in ${args.configPath}: ${util.inspect(e)}`);
         return args.defaults;
     }
+    // validate config file structure
     try {
         const fullpath = __nccwpck_require__.ab + "config.schema.json";
         var schemaText = fs.readFileSync(__nccwpck_require__.ab + "config.schema.json", "utf8");
@@ -66,10 +68,10 @@ function run(args) {
     const validate = ajv.compile(schema);
     if (!validate(config)) {
         for (const error of validate.errors || []) {
-            args.log(`${error.message}: ${util.inspect(error.params)}`);
+            throw new Error(`${error.message}: ${util.inspect(error.params)}`);
         }
-        return args.defaults;
     }
+    // determine configuration
     const types = stringList.merge({
         defaults: args.defaults.types,
         replacements: (_a = config.types) === null || _a === void 0 ? void 0 : _a.join("\n"),
