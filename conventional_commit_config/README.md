@@ -1,18 +1,12 @@
 # Conventional Commits GitHub Action
 
-This [GitHub Action](https://github.com/features/actions) determines
-Ory-specific configuration for
-[amannn/action-semantic-pull-request](https://github.com/amannn/action-semantic-pull-request)
-with an ability for individual repos to customize the allowed titles and scopes.
-
-This action is used in
+This Github Action is only used in
 https://github.com/ory/meta/blob/master/templates/repository/common/.github/workflows/conventional_commits.yml.
+It allows individual repositories to override the default scopes for
+conventional commits via an external config file.
 
-### Config file
-
-Only create a config file if the default set of pull request scopes doesn't work
-for your repo. Create a file `.github/conventional_commits.json` in your
-repository. Here is an example file with all options set.
+The config file is at `.github/conventional_commits.json` in your repository.
+Here is an example content:
 
 ```json
 {
@@ -25,8 +19,7 @@ repository. Here is an example file with all options set.
 }
 ```
 
-Please note that you never need all these options together. Set only the ones
-you need.
+You never need all options together. Set only the ones you need.
 
 | name           | description                                        | default |
 | -------------- | -------------------------------------------------- | ------- |
