@@ -13,6 +13,7 @@ export interface Outputs {
   requireScope: boolean
 }
 
+/** interface of logger instances used here */
 export type Logger = (message: string) => void
 
 export function run(args: {
