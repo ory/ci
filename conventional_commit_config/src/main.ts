@@ -3,6 +3,8 @@ import * as stringList from "./string_list"
 import * as bool from "./bool"
 import * as util from "util"
 import * as config from "./config"
+import Ajv from "ajv"
+import * as path from "path"
 
 /** the outputs of this GitHub action */
 export interface Outputs {
@@ -29,6 +31,27 @@ export function run(args: {
     var config: config.Format = JSON.parse(configText)
   } catch (e) {
     args.log(`ERROR: invalid JSON in ${args.configPath}: ${util.inspect(e)}`)
+    return args.defaults
+  }
+  try {
+    const fullpath = path.join(__dirname, "..", "dist", "config.schema.json")
+    var schemaText = fs.readFileSync(fullpath, "utf8")
+  } catch (e) {
+    args.log(`cannot load JSON Schema: ${util.inspect(e)}`)
+    return args.defaults
+  }
+  try {
+    var schema = JSON.parse(schemaText)
+  } catch (e) {
+    args.log(`cannot parse JSON Schema: ${util.inspect(e)}`)
+    return args.defaults
+  }
+  const ajv = new Ajv()
+  const validate = ajv.compile(schema)
+  if (!validate(config)) {
+    for (const error of validate.errors || []) {
+      args.log(`${error.message}: ${util.inspect(error.params)}`)
+    }
     return args.defaults
   }
 

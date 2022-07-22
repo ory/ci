@@ -50,7 +50,7 @@ suite("integration tests", function () {
     assert.deepEqual(have, want)
   })
 
-  test("config file has invalid content", function () {
+  test("config file has invalid JSON content", function () {
     fs.writeFileSync(
       configPath,
       `
@@ -76,6 +76,29 @@ suite("integration tests", function () {
         "ERROR: invalid JSON in test_config.json: SyntaxError: Unexpected token }",
       ),
     )
+  })
+
+  test("config file has unknown properties", function () {
+    fs.writeFileSync(
+      configPath,
+      `
+      {
+        "addTypes": ["type1"],
+        "foo": "bar"
+      }
+      `,
+    )
+    const log = new StubLog()
+    const have = main.run({
+      configPath,
+      defaults: createDefaults(),
+      log: log.callable(),
+    })
+    assert.deepEqual(have, createDefaults())
+    assert.deepEqual(log.recordings, [
+      'Looking for config file "test_config.json" ...',
+      "must NOT have additional properties: { additionalProperty: 'foo' }",
+    ])
   })
 
   teardown(function () {

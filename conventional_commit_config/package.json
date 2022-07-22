@@ -9,7 +9,8 @@
   },
   "prettier": "ory-prettier-styles",
   "dependencies": {
-    "@actions/core": "^1.9.0"
+    "@actions/core": "^1.9.0",
+    "ajv": "^8.11.0"
   },
   "devDependencies": {
     "@types/mocha": "^9.1.1",
