@@ -20,6 +20,7 @@ export function run(args: {
   defaults: Outputs
   log: Logger
 }): Outputs {
+  // load config file
   args.log(`Looking for config file "${args.configPath}" ...`)
   try {
     var configText = fs.readFileSync(args.configPath, "utf8")
@@ -33,6 +34,8 @@ export function run(args: {
     args.log(`ERROR: invalid JSON in ${args.configPath}: ${util.inspect(e)}`)
     return args.defaults
   }
+
+  // validate config file structure
   try {
     const fullpath = path.join(__dirname, "..", "dist", "config.schema.json")
     var schemaText = fs.readFileSync(fullpath, "utf8")
@@ -55,6 +58,7 @@ export function run(args: {
     return args.defaults
   }
 
+  // determine configuration
   const types = stringList.merge({
     defaults: args.defaults.types,
     replacements: config.types?.join("\n"),
