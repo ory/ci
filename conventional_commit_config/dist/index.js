@@ -52,7 +52,7 @@ function run(args) {
     }
     // validate config file structure
     try {
-        const fullpath = __nccwpck_require__.ab + "config.schema.json";
+        const schemapath = __nccwpck_require__.ab + "config.schema.json";
         var schemaText = fs.readFileSync(__nccwpck_require__.ab + "config.schema.json", "utf8");
     }
     catch (e) {
@@ -71,8 +71,7 @@ function run(args) {
     if (!validate(config)) {
         const errors = [];
         for (const error of validate.errors || []) {
-            const message = `${error.message}: ${util.inspect(error.params)}`;
-            errors.push(message);
+            errors.push(`${error.message}: ${util.inspect(error.params)}`);
         }
         throw new Error(errors.join("\n"));
     }
@@ -106,13 +105,14 @@ exports.run = run;
 
 "use strict";
 
+// This file contains helper methods for handling lists of newline-separated strings,
+// which are used as input and output variables on Github Actions.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.merge = void 0;
+/** merges the given string lists */
 function merge(args) {
-    let result = args.defaults;
-    if (args.replacements) {
-        result = args.replacements;
-    }
+    var _a;
+    let result = (_a = args.replacements) !== null && _a !== void 0 ? _a : args.defaults;
     if (args.additions) {
         result = result + "\n" + args.additions;
     }
