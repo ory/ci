@@ -1,10 +1,10 @@
 import * as fs from "fs"
-import * as stringList from "./string_list"
-import * as bool from "./bool"
-import * as util from "util"
-import * as config from "./config"
-import Ajv from "ajv"
 import * as path from "path"
+import * as util from "util"
+import Ajv from "ajv"
+import * as bool from "./bool"
+import * as config from "./config"
+import * as stringList from "./string_list"
 
 /** the outputs of this GitHub action */
 export interface Outputs {

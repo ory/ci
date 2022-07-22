@@ -1,6 +1,6 @@
-import * as main from "./main"
-import * as fs from "fs"
 import { strict as assert } from "assert"
+import * as fs from "fs"
+import * as main from "./main"
 
 suite("integration tests", function () {
   const configPath = "test_config.json"

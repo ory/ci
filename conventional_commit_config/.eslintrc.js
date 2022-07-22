@@ -14,5 +14,6 @@ module.exports = {
   ],
   rules: {
     "no-var": 0,
+    "import/order": ["error", { alphabetize: { order: "asc" } }],
   },
 }

@@ -1,5 +1,5 @@
-import * as bool from "./bool"
 import { strict as assert } from "assert"
+import * as bool from "./bool"
 
 suite("bool", function () {
   suite("merge", function () {
