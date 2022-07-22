@@ -25,11 +25,11 @@ exports.merge = merge;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const fs = __nccwpck_require__(7147);
-const stringList = __nccwpck_require__(5577);
-const bool = __nccwpck_require__(3365);
+const path = __nccwpck_require__(1017);
 const util = __nccwpck_require__(3837);
 const ajv_1 = __nccwpck_require__(2426);
-const path = __nccwpck_require__(1017);
+const bool = __nccwpck_require__(3365);
+const stringList = __nccwpck_require__(5577);
 function run(args) {
     var _a, _b, _c, _d;
     // load config file

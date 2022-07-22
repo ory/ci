@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc --project tsconfig.build.json && ncc build lib/action.js && typescript-json-schema tsconfig.json Format --noExtraProps -o dist/config.schema.json",
+    "build": "tsc --project tsconfig.build.json && ncc build lib/action.js && typescript-json-schema tsconfig.json FileFormat --noExtraProps -o dist/config.schema.json",
     "format": "prettier --write .",
     "test": "eslint . && mocha"
   },

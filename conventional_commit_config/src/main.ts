@@ -29,7 +29,7 @@ export function run(args: {
     return args.defaults
   }
   try {
-    var config: config.Format = JSON.parse(configText)
+    var config: config.FileFormat = JSON.parse(configText)
   } catch (e) {
     args.log(`ERROR: invalid JSON in ${args.configPath}: ${util.inspect(e)}`)
     return args.defaults
