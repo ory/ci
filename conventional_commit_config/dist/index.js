@@ -9564,7 +9564,7 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __nccwpck_require__(2186);
 const main = __nccwpck_require__(3109);
-const configPath = core.getInput("repo_override_path");
+const configPath = core.getInput("config_path");
 const defaults = {
     types: core.getInput("default_types"),
     scopes: core.getInput("default_scopes"),

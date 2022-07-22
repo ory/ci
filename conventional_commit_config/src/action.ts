@@ -1,7 +1,7 @@
 import * as core from "@actions/core"
 import * as main from "./main"
 
-const configPath = core.getInput("repo_override_path")
+const configPath = core.getInput("config_path")
 const defaults: main.Outputs = {
   types: core.getInput("default_types"),
   scopes: core.getInput("default_scopes"),

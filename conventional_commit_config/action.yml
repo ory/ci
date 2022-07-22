@@ -2,7 +2,7 @@ name: Conventional commits configuration
 description: determines the configuration for conventional commits
 
 inputs:
-  repo_override_path:
+  config_path:
     description: path of the config file
     required: true
   default_types:
