@@ -1,7 +1,7 @@
 import { strict as assert } from "assert"
 import * as bool from "./bool"
 
-suite("bool", function () {
+suite("bool helpers", function () {
   suite("merge", function () {
     test("true, no override", function () {
       const have = bool.merge({ defaultValue: true })

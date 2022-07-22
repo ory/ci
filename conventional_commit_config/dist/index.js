@@ -6,8 +6,10 @@
 
 "use strict";
 
+// This file contains helper methods for handling boolean config settings.
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.merge = void 0;
+/** merges the given override into the given defaultValue */
 function merge(args) {
     var _a;
     return (_a = args.override) !== null && _a !== void 0 ? _a : args.defaultValue;
