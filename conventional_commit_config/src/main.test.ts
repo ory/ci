@@ -121,6 +121,7 @@ function createDefaults(): main.Outputs {
   }
 }
 
+/** stub implementation of console.log */
 class StubLog {
   recordings: string[] = []
 
