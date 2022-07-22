@@ -113,6 +113,7 @@ suite("integration tests", function () {
   })
 })
 
+/** provides default values for testing */
 function createDefaults(): main.Outputs {
   return {
     types: "defaultType1",
