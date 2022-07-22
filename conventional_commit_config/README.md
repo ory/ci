@@ -3,10 +3,10 @@
 This Github Action is only used in
 https://github.com/ory/meta/blob/master/templates/repository/common/.github/workflows/conventional_commits.yml.
 It allows individual repositories to override the default scopes for
-conventional commits via an external config file.
+conventional commits via a config file.
 
-The config file is at `.github/conventional_commits.json` in your repository.
-Here is an example content:
+This config file must be at `.github/conventional_commits.json` in your
+repository and have content that looks like this:
 
 ```json
 {
