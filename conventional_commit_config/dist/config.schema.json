@@ -3,6 +3,10 @@
     "additionalProperties": false,
     "description": "data format of the configuration file for repo-specific conventional commit overrides",
     "properties": {
+        "$schema": {
+            "description": "link to JSON schema",
+            "type": "string"
+        },
         "addScopes": {
             "description": "add to the default scopes",
             "items": {
