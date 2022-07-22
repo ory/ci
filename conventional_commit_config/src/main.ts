@@ -53,9 +53,8 @@ export function run(args: {
   const validate = ajv.compile(schema)
   if (!validate(config)) {
     for (const error of validate.errors || []) {
-      args.log(`${error.message}: ${util.inspect(error.params)}`)
+      throw new Error(`${error.message}: ${util.inspect(error.params)}`)
     }
-    return args.defaults
   }
 
   // determine configuration
