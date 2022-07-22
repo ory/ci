@@ -81,13 +81,13 @@ function run(args) {
         replacements: (_a = config.types) === null || _a === void 0 ? void 0 : _a.join("\n"),
         additions: (_b = config.addTypes) === null || _b === void 0 ? void 0 : _b.join("\n"),
     });
-    args.log(`using types:\n${types}`);
+    args.log(`using types:\n${types}\n`);
     const scopes = stringList.merge({
         defaults: args.defaults.scopes,
         replacements: (_c = config.scopes) === null || _c === void 0 ? void 0 : _c.join("\n"),
         additions: (_d = config.addScopes) === null || _d === void 0 ? void 0 : _d.join("\n"),
     });
-    args.log(`using scopes:\n${scopes}`);
+    args.log(`using scopes:\n${scopes}\n`);
     const requireScope = bool.merge({
         defaultValue: args.defaults.requireScope,
         override: config.requireScope,
