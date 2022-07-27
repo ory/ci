@@ -1,0 +1,32 @@
+{
+  "name": "conventional_commits",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json && ncc build lib/action.js && typescript-json-schema tsconfig.json FileFormat --noExtraProps -o dist/config.schema.json",
+    "format": "prettier --write .",
+    "test": "eslint . && mocha"
+  },
+  "prettier": "ory-prettier-styles",
+  "dependencies": {
+    "@actions/core": "^1.9.0",
+    "ajv": "^8.11.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^16.11.45",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.30.7",
+    "@vercel/ncc": "^0.34.0",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "mocha": "^10.0.0",
+    "ory-prettier-styles": "^1.3.0",
+    "prettier": "^2.7.1",
+    "prettier-plugin-packagejson": "^2.2.18",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4",
+    "typescript-json-schema": "^0.54.0"
+  }
+}
