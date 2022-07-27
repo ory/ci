@@ -19,6 +19,6 @@ jobs:
           key:
             ${{ runner.os }}-cococo-node-${{
             hashFiles('conventional_commit_config/package-lock.json') }}
-      - run: npm ci --legacy-peer-deps
+      - run: cd conventional_commit_config && npm ci --legacy-peer-deps
         if: steps.cache-node.outputs.cache-hit != 'true'
       - run: cd conventional_commit_config && npm run test
