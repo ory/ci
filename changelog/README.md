@@ -10,3 +10,5 @@ to generate changelogs for. Example: https://github.com/ory/hydra. Then run:
 ```sh
 bash <path to create_changelog.sh in this repo>
 ```
+
+Run `make help` to see all available development tasks.
