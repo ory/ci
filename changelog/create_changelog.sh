@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This script updates CHANGELOG.md.
+# It does commit the changes since that doesn't make sense during development.
+# This needs to happen on CI.
+
 echo
 echo "VERIFY THAT THE CHANGELOG IS NOT ALREADY GENERATED ..."
 if [[ "$(git show -s --format=%B | head -n 1)" == "autogen"* ]]; then
