@@ -4,7 +4,7 @@ format: .bin/shfmt node_modules  # formats the source code
 	node_modules/.bin/prettier --write .
 
 help:  # shows all available Make commands
-	cat Makefile | grep '^[^ ]*:' | grep -v '^\.bin/' | grep -v '.SILENT:' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
+	cat Makefile | grep '^[^ ]*:' | grep -v '^\.bin/' | grep -v '^node_modules' | grep -v '.SILENT:' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
 test: .bin/shellcheck .bin/shfmt node_modules  # runs all linters
 	echo running tests ...
@@ -28,6 +28,7 @@ test: .bin/shellcheck .bin/shfmt node_modules  # runs all linters
 	chmod +x .bin/shfmt
 
 node_modules: Makefile
+	echo installing Prettier ...
 	npm i --no-save prettier
 	touch node_modules  # update timestamp so that Make doesn't reinstall it over and over
 
