@@ -1,5 +1,5 @@
-name: 'Changelog'
-description: 'Changelog generation action'
+name: "Changelog"
+description: "Generate and commit CHANGELOG.md"
 inputs:
   token:
     description: Personal access token
@@ -13,64 +13,17 @@ runs:
       with:
         token: ${{ inputs.token }}
         fetch-depth: 0
-    - run: |
-        if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
-          if [[ "$(git show -s --format=%B | head -n 1)" == "autogen"* ]]; then
-            exit 0
-          fi
-        fi
-      shell: bash
-    - run: |
+    - name: set up the Git client
+      run: |
         git config --global user.email "60093411+ory-bot@users.noreply.github.com"
         git config --global user.name "ory-bot"
       shell: bash
-    - run: |
-        npm i -g conventional-changelog-cli@v2.1.1 doctoc@v1.4.0
-
-        if [[ ! -e package.json ]]; then
-          echo '{"private": true, "version": "0.0.0"}' > package.json
-          git add package.json
-        else
-          echo "package.json exists and needs not be written"
-        fi
-      shell: bash
-    - uses: actions/checkout@v2
-      with:
-        path: changelog
-        repository: ory/changelog
-        token: ${{ inputs.token }}
-    - run: |
-        (
-          cd changelog
-          npm i
-        )
-
-        git fetch origin +refs/tags/*:refs/tags/*
-        npx conventional-changelog-cli@2.1.1 --config "changelog/index.js" -r 0 -u -o CHANGELOG.md
-        rm -rf changelog/
-      shell: bash
-    - uses: ory/ci/prettier@master
-      with:
-        action: 'write'
-    - env:
-        GITHUB_TOKEN: ${{ inputs.token }}
+    - name: create the changelog
       run: |
-        npx doctoc CHANGELOG.md
-        sed -i "s/\*\*Table of Contents.*/**Table of Contents**/" CHANGELOG.md
-        sed -i "s/\*This Change Log was.*/This Change Log was automatically generated/" CHANGELOG.md
-
-        if [ -f package.json ]; then
-          npm run format
-        fi
-
-        t=$(mktemp)
-        printf "# Changelog\n\n" | cat - CHANGELOG.md > "$t" && mv "$t" CHANGELOG.md
+        curl -sSfL https://raw.githubusercontent.com/kevgo-ory/ci/kg-create-changelog/changelog/create_changelog.sh | bash
       shell: bash
-    - run: |
-        echo "::set-output name=msg::$(git log --format=%B -n1)"
-      shell: bash
-      id: commit-msg
-    - if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
+    - name: commit the changes
+      if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       env:
         GITHUB_TOKEN: ${{ inputs.token || github.token }}
       run: |
