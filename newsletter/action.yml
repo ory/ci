@@ -41,7 +41,7 @@ runs:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
       run: |
         git fetch origin +refs/tags/*:refs/tags/*
-        bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b . ory v0.1.38
+        bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b . ory 
         if [[ "${{ inputs.draft }}" == "false" ]]; then
           # production run
           ./ory dev release notify send "${MAILCHIMP_LIST_ID}"
