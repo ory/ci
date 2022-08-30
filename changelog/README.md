@@ -4,11 +4,11 @@ This GitHub Action generates, formats, and commits CHANGELOG.md files.
 
 ### Development
 
-Run the business logic on your machine, `cd` into the repository that you want
-to generate changelogs for. Example: https://github.com/ory/hydra. Then run:
+To generate the changelog for a repository on your dev machine:
 
-```sh
-bash <path to create_changelog.sh in this repo>
-```
+- clone the repository
+- `cd` into its repository
+- run `bash create_changelog.sh` (adjust the path to point to the
+  `create_changelog.sh` file in this repo)
 
-Run `make` to see all available development tasks.
+Run `make` to see all available housekeeping tasks.

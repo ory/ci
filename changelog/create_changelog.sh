@@ -2,7 +2,7 @@
 
 # This script updates CHANGELOG.md.
 # It does commit the changes since that doesn't make sense during development.
-# This needs to happen on CI.
+# This needs to happen separately on CI.
 
 echo
 echo "VERIFY THAT THE CHANGELOG IS NOT ALREADY GENERATED ..."
