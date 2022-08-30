@@ -1,17 +1,17 @@
 format: .bin/shfmt node_modules  # formats the source code
 	echo formatting source code ...
 	.bin/shfmt --write create_changelog.sh
-	node_modules/.bin/prettier --write .
+	npm exec -- prettier --write .
 
 help:  # shows all available Make commands
 	cat Makefile | grep '^[^ ]*:' | grep -v '^\.bin/' | grep -v '^node_modules' | grep -v '.SILENT:' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
-test: .bin/shellcheck .bin/shfmt node_modules  # runs all linters
+test: .bin/shellcheck .bin/shfmt node_modules  # runs all automated tests
 	echo running tests ...
 	.bin/shellcheck create_changelog.sh
 	echo verifying formatting ...
 	.bin/shfmt --list create_changelog.sh
-	node_modules/.bin/prettier --check .
+	npm exec -- prettier --check .
 
 .bin/shellcheck: Makefile
 	echo installing Shellcheck ...
@@ -19,7 +19,7 @@ test: .bin/shellcheck .bin/shfmt node_modules  # runs all linters
 	mkdir -p .bin
 	mv shellcheck-stable/shellcheck .bin
 	rm -rf shellcheck-stable
-	touch .bin/shellcheck   # update the timestamp so that Make doesn't re-install the file over and over again
+	touch .bin/shellcheck   # update the timestamp so that Make doesn't re-install Shellcheck each time it runs
 
 .bin/shfmt: Makefile
 	echo installing Shellfmt ...
@@ -30,7 +30,7 @@ test: .bin/shellcheck .bin/shfmt node_modules  # runs all linters
 node_modules: Makefile
 	echo installing Prettier ...
 	npm i --no-save prettier
-	touch node_modules  # update timestamp so that Make doesn't reinstall it over and over
+	touch node_modules  # update timestamp so that Make doesn't reinstall Prettier each time it runs
 
 
 .SILENT:
