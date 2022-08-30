@@ -8,7 +8,7 @@ help:  # shows all available Make commands
 
 test: .bin/shellcheck .bin/shfmt node_modules  # runs all linters
 	echo running tests ...
-	 .bin/shellcheck create_changelog.sh
+	.bin/shellcheck create_changelog.sh
 	echo Verifying formatting ...
 	.bin/shfmt --list create_changelog.sh
 	node_modules/.bin/prettier --check .
