@@ -15,4 +15,6 @@ if [ -n "$unknown" ]; then
   echo "Unknown licenses found!"
   echo "$unknown"
   exit 1
+else
+  echo "Licenses are okay."
 fi
