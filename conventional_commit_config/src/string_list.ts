@@ -3,9 +3,9 @@
 
 /** merges the given string lists */
 export function merge(args: {
+  additions?: string
   defaults: string
   replacements?: string
-  additions?: string
 }): string {
   let result = args.replacements ?? args.defaults
   if (args.additions) {

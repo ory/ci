@@ -8,9 +8,9 @@ import * as stringList from "./string_list"
 
 /** the outputs of this GitHub action */
 export interface Outputs {
-  types: string
-  scopes: string
   requireScope: boolean
+  scopes: string
+  types: string
 }
 
 /** interface of logger instances used here */
