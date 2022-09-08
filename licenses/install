@@ -1,0 +1,4 @@
+#!/usr/bin/sh
+
+curl https://raw.githubusercontent.com/ory/ci/kg-licenses/licenses/check-licenses -o .bin/check-licenses
+curl https://raw.githubusercontent.com/ory/ci/kg-licenses/licenses/check-license-template.tpl -o .bin/check-license-template.tpl
