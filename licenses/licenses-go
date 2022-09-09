@@ -14,4 +14,4 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-.bin/go-licenses report "$1" --template .bin/check-license-template.tpl 2> /dev/null | .bin/check-licenses
+.bin/go-licenses report "$1" --template .bin/license-template-go.tpl 2> /dev/null | .bin/check-licenses
