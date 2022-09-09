@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 
 help() {
   echo "This script checks that all Go dependencies use approved permissive licenses."

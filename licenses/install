@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 
 GOBIN=$(pwd)/.bin go install github.com/google/go-licenses@latest
 curl https://raw.githubusercontent.com/ory/ci/master/licenses/check-licenses -o .bin/check-licenses

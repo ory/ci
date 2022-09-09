@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 
 # This script detects non-compliant licenses in the output of language-specific license checkers.
 
