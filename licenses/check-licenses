@@ -1,5 +1,7 @@
 #!/usr/bin/sh
 
+# This script detects non-compliant licenses in the output of language-specific license checkers.
+
 print_green() {
   tput setaf 2
   tput bold
