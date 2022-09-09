@@ -1,5 +1,6 @@
 #!/usr/bin/sh
 
+GOBIN=$(pwd)/.bin go install github.com/google/go-licenses@latest
 curl https://raw.githubusercontent.com/ory/ci/kg-licenses/licenses/check-licenses -o .bin/check-licenses
 chmod +x .bin/check-licenses
 curl https://raw.githubusercontent.com/ory/ci/kg-licenses/licenses/license-template-go.tpl -o .bin/license-template-go.tpl
