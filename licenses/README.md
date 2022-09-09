@@ -1,4 +1,4 @@
-# filter-permissive-licenses
+# License checkers
 
 The scripts in this folder ensure that your source code uses dependencies with
 an appropriately permissive license. When finding non-compliant licenses, they
