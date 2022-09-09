@@ -3,9 +3,10 @@
 help() {
   echo "This script checks that all Go dependencies use approved permissive licenses."
   echo
-  echo "Usage: $0 <go module url of the current codebase>"
+  echo "Usage: $0 <go module name>"
   echo
-  echo "As an example, if you are in the Ory CLI folder, you would run this:"
+  echo "As an example, if you are in a directory containing the Ory CLI source code,"
+  echo "you would run:"
   echo "$0 github.com/ory/cli"
 }
 

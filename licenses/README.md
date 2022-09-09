@@ -1,6 +1,8 @@
 # filter-permissive-licenses
 
-This program filters known permissive licenses out of lists of used licenses.
+The scripts in this folder ensure that your source code uses dependencies with
+an appropriately permissive license. When finding non-compliant licenses, they
+print the offending licenses and exit with error code 1.
 
 ### Installation
 
@@ -8,17 +10,25 @@ This program filters known permissive licenses out of lists of used licenses.
 curl https://raw.githubusercontent.com/ory/ci/master/licenses/install | sh
 ```
 
-### Usage
+### Checking Go licenses
 
-To check Go licenses:
-
-```
-go-licenses report <module name> --template .bin/check-license-template.tpl 2> /dev/null | .bin/check-licenses
-```
-
-For example when you are checking licenses for the https://github.com/ory/cli
-repo and are in the `cli` folder:
+To check licenses of Go dependencies, run this in your repo:
 
 ```
-go-licenses report github.com/ory/cli --template .bin/check-license-template.tpl 2> /dev/null | .bin/check-licenses
+.bin/licenses-go <go module name>
+```
+
+For example, when you are checking licenses for the https://github.com/ory/cli
+repo and are in the folder containing its source code:
+
+```
+.bin/licenses-go github.com/ory/cli
+```
+
+### Checking Node licenses
+
+To check licenses of Node.js dependencies:
+
+```
+.bin/licenses-node
 ```
