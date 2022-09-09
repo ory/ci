@@ -2,7 +2,7 @@
 
 The scripts in this folder ensure that your source code uses dependencies with
 an appropriately permissive license. When finding non-compliant licenses, they
-print the offending licenses and exit with error code 1.
+print the affected libraries and licenses and exit with error code 1.
 
 ### Installation
 
