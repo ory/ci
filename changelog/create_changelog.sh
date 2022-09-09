@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # This script updates CHANGELOG.md.
 # It does commit the changes since that doesn't make sense during development.
@@ -16,12 +17,13 @@ git fetch origin +refs/tags/*:refs/tags/*
 
 echo
 echo "INSTALL TOOLS ..."
+rm -rf changelog
 git clone https://github.com/ory/changelog.git
 (cd changelog && npm ci)
 
 echo
 echo "GENERATE THE CHANGELOG ..."
-npx --yes conventional-changelog@2.1.1 --config "changelog/index.js" -r 0 -u -o CHANGELOG.md
+npx --yes conventional-changelog-cli@2.1.1 --config "changelog/index.js" -r 0 -u -o CHANGELOG.md
 npx --yes doctoc@1.4.0 CHANGELOG.md
 sed -i "s/\*\*Table of Contents.*/**Table of Contents**/" CHANGELOG.md
 sed -i "s/\*This Change Log was.*/This Change Log was automatically generated/" CHANGELOG.md
@@ -29,7 +31,7 @@ t=$(mktemp)
 printf "# Changelog\n\n" | cat - CHANGELOG.md >"$t" && mv "$t" CHANGELOG.md
 
 echo
-echo "FORMAT ..."
+echo "FORMAT THE CHANGELOG ..."
 # NOTE: need to format twice because of https://github.com/prettier/prettier/issues/13213
 npx --yes prettier@2.7.1 --write CHANGELOG.md
 npx --yes prettier@2.7.1 --write CHANGELOG.md
