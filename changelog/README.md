@@ -10,5 +10,3 @@ To generate the changelog for a repository on your dev machine:
 - `cd` into its repository
 - run `bash create_changelog.sh` (adjust the path to point to the
   `create_changelog.sh` file in this repo)
-
-Run `make` to see all available housekeeping tasks.
