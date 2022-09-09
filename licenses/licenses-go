@@ -1,0 +1,17 @@
+#!/usr/bin/sh
+
+help() {
+  echo "This script checks that all Go dependencies use approved permissive licenses."
+  echo
+  echo "Usage: $0 <go module url of the current codebase>"
+  echo
+  echo "As an example, if you are in the Ory CLI folder, you would run this:"
+  echo "$0 github.com/ory/cli"
+}
+
+if [ -z "$1" ]; then
+  help
+  exit 1
+fi
+
+.bin/go-licenses report "$1" --template .bin/check-license-template.tpl 2> /dev/null | .bin/check-licenses

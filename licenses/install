@@ -2,4 +2,5 @@
 
 curl https://raw.githubusercontent.com/ory/ci/kg-licenses/licenses/check-licenses -o .bin/check-licenses
 chmod +x .bin/check-licenses
-curl https://raw.githubusercontent.com/ory/ci/kg-licenses/licenses/check-license-template.tpl -o .bin/check-license-template.tpl
+curl https://raw.githubusercontent.com/ory/ci/kg-licenses/licenses/license-template-go.tpl -o .bin/license-template-go.tpl
+curl https://raw.githubusercontent.com/ory/ci/kg-licenses/licenses/license-template-node.json -o .bin/license-template-node.json
