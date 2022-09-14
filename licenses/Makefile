@@ -1,5 +1,5 @@
 # all files that contain shell code
-SHELL_FILES := $(shell grep -l '^#!/' *)
+SHELL_FILES := $(shell grep -l '^#!/' * )
 
 format: .bin/shfmt  # formats the source code
 	echo formatting source code ...
