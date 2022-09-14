@@ -10,7 +10,7 @@ test: .bin/shellcheck .bin/shfmt  # runs all automated tests
 	grep -l '^\#!/' * | xargs .bin/shellcheck
 	.bin/shfmt --diff .
 
-ps: format test  # performs all automated assistance functions during active development ("pitstop")
+ps: format test  # performs all automated assistance functions during development ("pitstop")
 
 .bin/shellcheck: Makefile
 	echo installing Shellcheck ...
