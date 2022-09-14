@@ -3,7 +3,7 @@ format: .bin/shfmt  # formats the source code
 	.bin/shfmt --write --simplify .
 
 help:  # shows all available Make commands
-	cat Makefile | grep '^[^ ]*:' | grep -v '^\.bin/' | grep -v '^node_modules' | grep -v '.SILENT:' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
+	cat Makefile | grep '^[^ ]*:' | grep -v '^\.bin/' | grep -v '.SILENT:' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
 test: .bin/shellcheck .bin/shfmt  # runs all automated tests
 	echo running tests ...
