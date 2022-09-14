@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ -f go.mod ]; then
-	{ echo "Installing Go license checker ..."; } 2>/dev/null
+	{ echo ; echo "Installing Go license checker ..."; echo; } 2>/dev/null
 	GOBIN=$(pwd)/.bin go install github.com/google/go-licenses@latest
 	curl https://raw.githubusercontent.com/ory/ci/master/licenses/licenses-go -o .bin/licenses-go
 	chmod +x .bin/licenses-go
@@ -9,12 +9,12 @@ if [ -f go.mod ]; then
 fi
 
 if [ -f package.json ]; then
-	{ echo "Installing Node license checker ..."; } 2>/dev/null
+	{ echo ; echo "Installing Node license checker ..."; echo; } 2>/dev/null
 	curl https://raw.githubusercontent.com/ory/ci/master/licenses/licenses-node -o .bin/licenses-node
 	chmod +x .bin/licenses-node
 	curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-node.json -o .bin/license-template-node.json
 fi
 
-{ echo "Installing license checker helpers ..."; } 2>/dev/null
+{ echo ; echo "Installing license checker helpers ..."; echo; } 2>/dev/null
 curl https://raw.githubusercontent.com/ory/ci/master/licenses/check-licenses -o .bin/check-licenses
 chmod +x .bin/check-licenses
