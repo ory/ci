@@ -20,7 +20,7 @@ runs:
       shell: bash
     - name: create the changelog
       run: |
-        curl -sSfL https://raw.githubusercontent.com/kevgo-ory/ci/master/changelog/create_changelog.sh | bash
+        curl -sSfL https://raw.githubusercontent.com/ory/ci/master/changelog/create_changelog.sh | bash
       shell: bash
     - name: commit the changes
       if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
