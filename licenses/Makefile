@@ -1,6 +1,3 @@
-# all files that contain shell code
-SHELL_FILES := $(shell grep -l '^\#!/' *)
-
 format: .bin/shfmt  # formats the source code
 	echo formatting source code ...
 	.bin/shfmt --write --simplify .
@@ -10,7 +7,7 @@ help:  # shows all available Make commands
 
 test: .bin/shellcheck .bin/shfmt  # runs all automated tests
 	echo running tests ...
-	.bin/shellcheck $(SHELL_FILES)
+	grep -l '^\#!/' * | xargs .bin/shellcheck
 	.bin/shfmt --diff .
 
 ps: format test  # "pitstop", performs all automated assistance functions during active development
