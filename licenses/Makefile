@@ -3,7 +3,7 @@ SHELL_FILES := $(shell grep -l '^\#!/' *)
 
 format: .bin/shfmt  # formats the source code
 	echo formatting source code ...
-	.bin/shfmt --write .
+	.bin/shfmt --write --simplify .
 
 help:  # shows all available Make commands
 	cat Makefile | grep '^[^ ]*:' | grep -v '^\.bin/' | grep -v '^node_modules' | grep -v '.SILENT:' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
