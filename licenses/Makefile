@@ -14,8 +14,8 @@ help:  # shows all available Make commands
 
 node_modules: Makefile
 	echo installing Prettier ...
-	npm i --no-save prettier
-	touch node_modules  # update timestamp so that Make doesn't reinstall Prettier each time it runs
+	npm ci
+	touch node_modules
 
 
 .SILENT:
