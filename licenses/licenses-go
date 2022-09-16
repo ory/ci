@@ -1,18 +1,18 @@
 #!/bin/sh
 
 help() {
-  echo "This script checks that all Go dependencies use approved permissive licenses."
-  echo
-  echo "Usage: $0 <go module name>"
-  echo
-  echo "As an example, if you are in a directory containing the Ory CLI source code,"
-  echo "you would run:"
-  echo "$0 github.com/ory/cli"
+	echo "This script checks that all Go dependencies use approved permissive licenses."
+	echo
+	echo "Usage: $0 <go module name>"
+	echo
+	echo "As an example, if you are in a directory containing the Ory CLI source code,"
+	echo "you would run:"
+	echo "$0 github.com/ory/cli"
 }
 
 if [ -z "$1" ]; then
-  help
-  exit 1
+	help
+	exit 1
 fi
 
-.bin/go-licenses report "$1" --template .bin/license-template-go.tpl 2> /dev/null | .bin/check-licenses
+.bin/go-licenses report "$1" --template .bin/license-template-go.tpl 2>/dev/null | .bin/check-licenses
