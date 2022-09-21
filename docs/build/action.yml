@@ -46,7 +46,7 @@ runs:
           npm i
           npm run gen
           npm run build
-          npm run format
+          make format
         )
       shell: bash
       env:

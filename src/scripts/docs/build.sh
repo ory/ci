@@ -23,9 +23,9 @@ make sdk
 
 export TERSER_PARALLEL=false
 
-(cd docs; \
-  npm run build &&
-  npm run format
+(
+  cd docs
+  npm run build && make format
 )
 
 if [ -n "${CIRCLE_TAG+x}" ]; then
