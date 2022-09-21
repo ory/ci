@@ -31,12 +31,5 @@ t=$(mktemp)
 printf "# Changelog\n\n" | cat - CHANGELOG.md >"$t" && mv "$t" CHANGELOG.md
 
 echo
-echo "FORMAT THE CHANGELOG ..."
-# NOTE: need to format twice because of https://github.com/prettier/prettier/issues/13213
-npx --yes prettier@2.7.1 --write CHANGELOG.md
-npx --yes prettier@2.7.1 --write CHANGELOG.md
-npx --yes prettier@2.7.1 --check CHANGELOG.md
-
-echo
 echo "CLEANUP ..."
 rm -rf changelog/
