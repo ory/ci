@@ -27,7 +27,7 @@ runs:
         token: ${{ inputs.token || github.token }}
     - uses: actions/setup-go@v2
       with:
-        go-version: 1.18
+        go-version: 1.19
     - run: |
         git config --global user.email "60093411+ory-bot@users.noreply.github.com"
         git config --global user.name "ory-bot"
@@ -66,6 +66,7 @@ runs:
       if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       run: |
         cd current-repo
+        make format
         git add -A
         git commit -a -m "autogen(openapi): regenerate swagger spec and internal client" -m "[skip ci]" || true
       shell: bash
