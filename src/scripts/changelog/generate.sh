@@ -48,7 +48,9 @@ npx doctoc CHANGELOG.md
 sed -i "s/\*\*Table of Contents.*/**Table of Contents**/" CHANGELOG.md
 sed -i "s/\*This Change Log was.*/This Change Log was automatically generated/" CHANGELOG.md
 
-make format
+if [ -f Makefile ]; then
+  make format
+fi
 
 git add CHANGELOG.md
 
