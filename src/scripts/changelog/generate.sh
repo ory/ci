@@ -37,7 +37,7 @@ bash <(curl -s https://raw.githubusercontent.com/ory/ci/master/src/scripts/insta
 #EOT
 #  cat CHANGELOG.md >> docs/docs/CHANGELOG.md
 #  git add docs/docs/CHANGELOG.md
-#  (cd docs; npm run format)
+#  (cd docs; make format)
 #  rm docs/docs/CHANGELOG.md
 #fi
 
@@ -48,8 +48,8 @@ npx doctoc CHANGELOG.md
 sed -i "s/\*\*Table of Contents.*/**Table of Contents**/" CHANGELOG.md
 sed -i "s/\*This Change Log was.*/This Change Log was automatically generated/" CHANGELOG.md
 
-if [ -f package.json ]; then
-  npm run format
+if [ -f Makefile ]; then
+  make format
 fi
 
 git add CHANGELOG.md
