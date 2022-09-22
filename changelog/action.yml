@@ -22,26 +22,6 @@ runs:
       run: |
         curl -sSfL https://raw.githubusercontent.com/ory/ci/master/changelog/create_changelog.sh | bash
       shell: bash
-    - name: format the changelog
-      uses: ory/ci/prettier@master
-      with:
-        dir: .
-        action: write
-        target: CHANGELOG.md
-    # NOTE: need to format twice because of https://github.com/prettier/prettier/issues/13213
-    - name: format the changelog 2
-      uses: ory/ci/prettier@master
-      with:
-        dir: .
-        action: write
-        target: CHANGELOG.md
-    # NOTE: we add a safety check because of https://github.com/prettier/prettier/issues/13213
-    - name: check the changelog format
-      uses: ory/ci/prettier@master
-      with:
-        dir: .
-        action: check
-        target: CHANGELOG.md
     - name: commit the changes
       if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
       env:
