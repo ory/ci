@@ -4,7 +4,7 @@ set +x
 # check Node licenses
 if [ -f package.json ]; then
 	{ echo "Checking Node licenses ..."; } 2>/dev/null
-	npx --yes -- license-checker --csv --production --customPath .bin/license-template-node.json | .bin/check-licenses
+	npx --yes license-checker -- --csv --production --customPath .bin/license-template-node.json | .bin/check-licenses
 	{ echo; } 2>/dev/null
 fi
 
