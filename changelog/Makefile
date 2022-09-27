@@ -6,12 +6,11 @@ format: .bin/shfmt node_modules  # formats the source code
 help:  # shows all available Make commands
 	cat Makefile | grep '^[^ ]*:' | grep -v '^\.bin/' | grep -v '^node_modules' | grep -v '.SILENT:' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
-test: .bin/shellcheck .bin/shfmt node_modules  # runs all automated tests
+test: .bin/shellcheck .bin/shfmt  # runs all automated tests
 	echo running tests ...
 	.bin/shellcheck create_changelog.sh
 	echo verifying formatting ...
 	.bin/shfmt --list create_changelog.sh
-	npm exec -- prettier --check .
 
 .bin/shellcheck: Makefile
 	echo installing Shellcheck ...
@@ -27,9 +26,9 @@ test: .bin/shellcheck .bin/shfmt node_modules  # runs all automated tests
 	curl -sSL https://github.com/mvdan/sh/releases/download/v3.5.1/shfmt_v3.5.1_linux_amd64 -o .bin/shfmt
 	chmod +x .bin/shfmt
 
-node_modules: Makefile
+node_modules: package-lock.json
 	echo installing Prettier ...
-	npm i --no-save prettier
+	npm ci
 	touch node_modules  # update timestamp so that Make doesn't reinstall Prettier each time it runs
 
 

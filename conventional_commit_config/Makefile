@@ -23,6 +23,10 @@ test: node_modules  # runs all automated tests
 	echo running unit tests ...
 	npm exec -- mocha
 
+node_modules: package-lock.json
+	echo installing Node dependencies ...
+	npm ci
+	touch node_modules  # update timestamp so that Make doesn't reinstall Prettier each time it runs
 
 .SILENT:
 .DEFAULT_GOAL := help
