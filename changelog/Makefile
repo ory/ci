@@ -1,5 +1,6 @@
-format: .bin/shfmt node_modules  # formats the source code
+format: .bin/shfmt .bin/ory node_modules  # formats the source code
 	echo formatting source code ...
+	.bin/ory dev headers license
 	.bin/shfmt --write create_changelog.sh
 	npm exec -- prettier --write .
 
@@ -11,6 +12,10 @@ test: .bin/shellcheck .bin/shfmt  # runs all automated tests
 	.bin/shellcheck create_changelog.sh
 	echo verifying formatting ...
 	.bin/shfmt --list create_changelog.sh
+
+.bin/ory: Makefile
+	curl https://raw.githubusercontent.com/ory/meta/master/install.sh | bash -s -- -b .bin ory v0.1.36
+	touch .bin/ory
 
 .bin/shellcheck: Makefile
 	echo installing Shellcheck ...
