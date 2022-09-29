@@ -34,13 +34,14 @@ runs:
 
         bash <(curl https://raw.githubusercontent.com/ory/meta/master/install.sh) -b $GOPATH/bin ory
         ory dev schema render-version $repo ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME} ${{ inputs.schema-path }}
+        make format
 
         branch="$(date +%s)"
         git fetch origin
         git stash || true
         git checkout -b "$branch"
         git stash pop || true
-        git add .schema/version.schema.json
+        git add ${{ inputs.schema-path }}
         git commit -a -m "autogen: add $GITHUB_REF_NAME to version.schema.json" -m "[skip ci]" || true
         git pull origin master --rebase || true
         git push origin HEAD:master || true
