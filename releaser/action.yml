@@ -68,6 +68,7 @@ runs:
         )
 
         git fetch origin +refs/tags/*:refs/tags/*
+        git fetch --unshallow
 
         npx conventional-changelog-cli@v2.1.1 --config "changelog/index.js" -r 2 -o "$notes"
 
