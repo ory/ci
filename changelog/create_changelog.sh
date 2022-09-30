@@ -14,6 +14,7 @@ fi
 echo
 echo "FETCH GIT METADATA ..."
 git fetch origin +refs/tags/*:refs/tags/*
+git fetch --unshallow
 
 echo
 echo "INSTALL TOOLS ..."
