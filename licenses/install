@@ -1,11 +1,32 @@
 #!/bin/sh
 
-GOBIN=$(pwd)/.bin go install github.com/google/go-licenses@latest
+if [ -f go.mod ]; then
+	{
+		echo
+		echo "Installing Go license checker ..."
+		echo
+	} 2>/dev/null
+	GOBIN=$(pwd)/.bin go install github.com/google/go-licenses@latest
+	curl https://raw.githubusercontent.com/ory/ci/master/licenses/licenses-go -o .bin/licenses-go
+	chmod +x .bin/licenses-go
+	curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-go.tpl -o .bin/license-template-go.tpl
+fi
+
+if [ -f package.json ]; then
+	{
+		echo
+		echo "Installing Node license checker ..."
+		echo
+	} 2>/dev/null
+	curl https://raw.githubusercontent.com/ory/ci/master/licenses/licenses-node -o .bin/licenses-node
+	chmod +x .bin/licenses-node
+	curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-node.json -o .bin/license-template-node.json
+fi
+
+{
+	echo
+	echo "Installing license checker helpers ..."
+	echo
+} 2>/dev/null
 curl https://raw.githubusercontent.com/ory/ci/master/licenses/check-licenses -o .bin/check-licenses
 chmod +x .bin/check-licenses
-curl https://raw.githubusercontent.com/ory/ci/master/licenses/licenses-go -o .bin/licenses-go
-chmod +x .bin/licenses-go
-curl https://raw.githubusercontent.com/ory/ci/master/licenses/licenses-node -o .bin/licenses-node
-chmod +x .bin/licenses-node
-curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-go.tpl -o .bin/license-template-go.tpl
-curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-node.json -o .bin/license-template-node.json

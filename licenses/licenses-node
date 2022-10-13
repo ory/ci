@@ -1,3 +1,0 @@
-#!/bin/sh
-
-npx --yes -- license-checker --csv --production --customPath .bin/license-template-node.json | .bin/check-licenses
