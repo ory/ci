@@ -1,10 +1,9 @@
 #!/bin/sh
-set +x
 
 # check Node licenses
 if [ -f package.json ]; then
 	{ echo "Checking Node licenses ..."; } 2>/dev/null
-	npx --yes license-checker -- --csv --production --customPath .bin/license-template-node.json | .bin/check-licenses
+	license-checker --csv --production --customPath .bin/license-template-node.json | .bin/license-engine.sh
 	{ echo; } 2>/dev/null
 fi
 
@@ -16,6 +15,6 @@ if [ -f go.mod ]; then
 		echo "Cannot determine the Go module name"
 		exit 1
 	fi
-	.bin/go-licenses report "$module_name" --template .bin/license-template-go.tpl 2>/dev/null | .bin/check-licenses
+	.bin/go-licenses report "$module_name" --template .bin/license-template-go.tpl 2>/dev/null | .bin/license-engine.sh
 	{ echo; } 2>/dev/null
 fi
