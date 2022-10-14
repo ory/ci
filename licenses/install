@@ -5,7 +5,7 @@
 	echo "Installing license checker engine ..."
 	echo
 } 2>/dev/null
-curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-engine -o .bin/license-engine
+curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-engine.sh -o .bin/license-engine.sh
 chmod +x .bin/license-engine
 curl https://raw.githubusercontent.com/ory/ci/master/licenses/licenses -o .bin/licenses
 chmod +x .bin/licenses
