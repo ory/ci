@@ -1,9 +1,10 @@
 #!/bin/sh
+set -e
 
 # check Node licenses
 if [ -f package.json ]; then
 	{ echo "Checking Node licenses ..."; } 2>/dev/null
-	license-checker --csv --production --customPath .bin/license-template-node.json | .bin/license-engine.sh
+	npm exec -- license-checker --csv --production --customPath .bin/license-template-node.json | .bin/license-engine.sh
 	{ echo; } 2>/dev/null
 fi
 
