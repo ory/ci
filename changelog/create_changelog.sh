@@ -24,7 +24,7 @@ git clone https://github.com/ory/changelog.git
 
 echo
 echo "GENERATE THE CHANGELOG ..."
-npm exec -- conventional-changelog --config "changelog/index.js" -r 0 -u -o CHANGELOG.md
+npm exec -- conventional-changelog-cli --config "changelog/index.js" -r 0 -u -o CHANGELOG.md
 npm exec -- doctoc CHANGELOG.md
 sed -i "s/\*\*Table of Contents.*/**Table of Contents**/" CHANGELOG.md
 sed -i "s/\*This Change Log was.*/This Change Log was automatically generated/" CHANGELOG.md

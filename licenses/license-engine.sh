@@ -3,17 +3,11 @@
 # This script detects non-compliant licenses in the output of language-specific license checkers.
 
 print_green() {
-	tput setaf 2
-	tput bold
-	echo "$@"
-	tput sgr0
+	echo "\033[1;92m$*\033[0m"
 }
 
 print_red() {
-	tput setaf 1
-	tput bold
-	echo "$@"
-	tput sgr0
+	echo "\033[0;91m$*\033[0m"
 }
 
 unknown=$(
