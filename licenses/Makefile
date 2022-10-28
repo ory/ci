@@ -10,7 +10,7 @@ ps: format test  # performs all automated assistance functions during developmen
 
 test: .bin/shellcheck .bin/shfmt  # runs all automated tests
 	echo running tests ...
-	grep -l '^\#!/' * | xargs .bin/shellcheck
+	find . -type f | grep -v node_modules | grep -v '^\.\/\.bin\/' | grep -v '\.json$$' | xargs grep -l '^\#!\/' | xargs .bin/shellcheck
 	.bin/shfmt --diff .
 
 .bin/shellcheck: Makefile
