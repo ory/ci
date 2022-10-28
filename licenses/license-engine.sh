@@ -80,12 +80,12 @@ unknown=$(cat - | tail -n +$SKIP)
 
 # filter allowed licenses
 for allowed in "${ALLOWED_LICENSES[@]}"; do
-	unknown=$(echo "$unknown" | grep -v "$allowed")
+	unknown=$(echo "$unknown" | grep -v "\b${allowed}\b")
 done
 
 # filter approved modules
 for approved in "${APPROVED_MODULES[@]}"; do
-	unknown=$(echo "$unknown" | grep -v "$approved")
+	unknown=$(echo "$unknown" | grep -v "\b${approved}\b")
 done
 
 # print outcome
