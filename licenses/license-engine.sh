@@ -7,6 +7,7 @@
 ALLOWED_LICENSES=(
 	'0BSD'
 	'AFLv2.1'
+	'AFLv2.1,BSD'
 	'(AFL-2.1 OR BSD-3-Clause)'
 	'Apache 2.0'
 	'Apache-2.0'
@@ -29,6 +30,7 @@ ALLOWED_LICENSES=(
 	'(MIT AND Zlib)'
 	'(MIT OR Apache-2.0)'
 	'(MIT OR CC0-1.0)'
+	'(MIT OR GPL-2.0)'
 	'MPL-2.0'
 	'(MPL-2.0 OR Apache-2.0)'
 	'Public Domain'
