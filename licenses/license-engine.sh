@@ -16,6 +16,7 @@ ALLOWED_LICENSES=(
 	'BSD-3-Clause'
 	'(BSD-3-Clause OR GPL-2.0)'
 	'CC0-1.0'
+	'CC-BY-3.0'
 	'CC-BY-4.0'
 	'(CC-BY-4.0 AND MIT)'
 	'ISC'
