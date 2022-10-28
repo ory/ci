@@ -26,7 +26,7 @@ APPROVED_MODULES=(
 	'buffers@0.1.1'                                 # MIT: original source at http://github.com/substack/node-bufferlist is deleted, but a fork at https://github.com/pkrumins/node-bufferlist/blob/master/LICENSE contains the original license by the original author (James Halliday)
 )
 
-# These lines in the output should be ignore (regex format).
+# These lines in the output should be ignored (regex format).
 IGNORE_LINES=(
 	'"module name","licenses"' # header of license output for Node.js
 )
