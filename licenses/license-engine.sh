@@ -54,7 +54,7 @@ done
 
 # remove pre-approved modules
 for approved in "${APPROVED_MODULES[@]}"; do
-	input=$(echo "$input" | grep -v "\b${approved}\b")
+	input=$(echo "$input" | grep -v "\"${approved}\"")
 done
 
 # print outcome
