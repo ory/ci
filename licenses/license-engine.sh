@@ -2,7 +2,8 @@
 
 # This script detects non-compliant licenses in the output of language-specific license checkers.
 
-# These licenses are allowed (complete license string for legal certainty, in regex format)
+# These licenses are allowed.
+# These are the exact and complete license strings for 100% legal certainty, no regexes.
 ALLOWED_LICENSES=(
 	'0BSD'
 	'AFLv2.1'
@@ -15,6 +16,7 @@ ALLOWED_LICENSES=(
 	'CC-BY-4.0'
 	'(CC-BY-4.0 AND MIT)'
 	'ISC'
+	'LGPL-2.1' # LGPL allows commercial use, requires only that modifications to LGPL-protected libraries are published under a GPL-compatible license
 	'MIT'
 	'MIT*'
 	'(MIT OR Apache-2.0)'
@@ -24,16 +26,18 @@ ALLOWED_LICENSES=(
 )
 
 # These modules don't work with the current license checkers
-# and have been manually verified to have a compatible license.
+# and have been manually verified to have a compatible license (regex format).
 APPROVED_MODULES=(
 	'github.com/ory/kratos-client-go'                   # Apache-2.0
 	'github.com/ory/hydra-client-go'                    # Apache-2.0
 	'github.com/gobuffalo/github_flavored_markdown'     # MIT
-	'buffers@0.1.1'                                     # MIT: original source at http://github.com/substack/node-bufferlist is deleted, but a fork at https://github.com/pkrumins/node-bufferlist/blob/master/LICENSE contains the original license by the original author (James Halliday)
-	'https://github.com/iconify/iconify/packages/react' # MIT, license is in root of monorepo at https://github.com/iconify/iconify/blob/main/license.txt
+	'buffers@0.1.1'                                     # MIT: original source at http://github.com/substack/node-bufferlist is deleted but a fork at https://github.com/pkrumins/node-bufferlist/blob/master/LICENSE contains the original license by the original author (James Halliday)
+	'https://github.com/iconify/iconify/packages/react' # MIT: license is in root of monorepo at https://github.com/iconify/iconify/blob/main/license.txt
+	'github.com/gobuffalo/.*'                           # MIT: license is in root of monorepo at https://github.com/gobuffalo/github_flavored_markdown/blob/main/LICENSE
+	'github.com/ory-corp/cloud/.*'                      # Ory IP
 )
 
-# These lines in the output should be ignored (regex format).
+# These lines in the output should be ignored (plain text, no regex).
 IGNORE_LINES=(
 	'"module name","licenses"' # header of license output for Node.js
 )
@@ -54,16 +58,18 @@ for ignored in "${IGNORE_LINES[@]}"; do
 	input=$(echo "$input" | grep -vF "$ignored")
 done
 
+# remove pre-approved modules
+for approved in "${APPROVED_MODULES[@]}"; do
+	input=$(echo "$input" | grep -v "\"${approved}\"")
+	input=$(echo "$input" | grep -v "\"Custom: ${approved}\"")
+done
+
 # remove allowed licenses
 for allowed in "${ALLOWED_LICENSES[@]}"; do
 	input=$(echo "$input" | grep -vF "\"${allowed}\"")
 done
 
-# remove pre-approved modules
-for approved in "${APPROVED_MODULES[@]}"; do
-	input=$(echo "$input" | grep -vF "\"${approved}\"")
-	input=$(echo "$input" | grep -vF "\"Custom: ${approved}\"")
-done
+# anything left in the input at this point is a module with an invalid license
 
 # print outcome
 if [ -z "$input" ]; then
