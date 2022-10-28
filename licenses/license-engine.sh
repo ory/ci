@@ -10,8 +10,11 @@ ALLOWED_LICENSES=(
 	'(AFL-2.1 OR BSD-3-Clause)'
 	'Apache-2.0'
 	'Apache*'
+	'BSD*'
 	'BSD-2-Clause'
+	'(BSD-2-Clause OR MIT OR Apache-2.0)'
 	'BSD-3-Clause'
+	'(BSD-3-Clause OR GPL-2.0)'
 	'CC0-1.0'
 	'CC-BY-4.0'
 	'(CC-BY-4.0 AND MIT)'
@@ -19,9 +22,13 @@ ALLOWED_LICENSES=(
 	'LGPL-2.1' # LGPL allows commercial use, requires only that modifications to LGPL-protected libraries are published under a GPL-compatible license
 	'MIT'
 	'MIT*'
+	'(MIT AND BSD-3-Clause)'
+	'(MIT AND Zlib)'
 	'(MIT OR Apache-2.0)'
 	'(MIT OR CC0-1.0)'
 	'MPL-2.0'
+	'(MPL-2.0 OR Apache-2.0)'
+	'Python-2.0' # the Python-2.0 is a permissive license, see https://en.wikipedia.org/wiki/Python_License
 	'Unlicense'
 	'(WTFPL OR MIT)'
 )
