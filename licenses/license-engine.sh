@@ -8,7 +8,9 @@ ALLOWED_LICENSES=(
 	'0BSD'
 	'AFLv2.1'
 	'(AFL-2.1 OR BSD-3-Clause)'
+	'Apache 2.0'
 	'Apache-2.0'
+	'Apache License, Version 2.0'
 	'Apache*'
 	'BSD*'
 	'BSD-2-Clause'
@@ -29,8 +31,10 @@ ALLOWED_LICENSES=(
 	'(MIT OR CC0-1.0)'
 	'MPL-2.0'
 	'(MPL-2.0 OR Apache-2.0)'
+	'Public Domain'
 	'Python-2.0' # the Python-2.0 is a permissive license, see https://en.wikipedia.org/wiki/Python_License
 	'Unlicense'
+	'WTFPL'
 	'(WTFPL OR MIT)'
 )
 
