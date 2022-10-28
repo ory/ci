@@ -40,7 +40,7 @@ echo_help() {
 	echo "EXAMPLES:"
 	echo "$0 --stack go"
 	echo "$0 --stack node"
-	echo "$0 --stack go --ignore github.com/ory/hydra-client-go"
+	echo "$0 --stack go --ignore github.com/ory/hydra-client-go --ignore github.com/ory/kratos-client-go"
 }
 
 # parse CLI args
