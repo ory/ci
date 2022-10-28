@@ -14,12 +14,12 @@ ALLOWED_LICENSES=(
 	'Unlicense'
 )
 
-# these modules have been manually verified to have the correct license
+# These modules don't work with the current license checkers
+# and have been manually verified to have a compatible license.
 APPROVED_MODULES=(
-	'github.com/ory/kratos-client-go'
-	'github.com/ory/hydra-client-go'
-	'github.com/gobuffalo/github_flavored_markdown'
-	'http://github.com/substack/node-bufferlist'
+	'github.com/ory/kratos-client-go'               # Apache-2.0
+	'github.com/ory/hydra-client-go'                # Apache-2.0
+	'github.com/gobuffalo/github_flavored_markdown' # MIT
 )
 
 echo_green() {
