@@ -49,7 +49,7 @@ done
 
 # remove allowed licenses
 for allowed in "${ALLOWED_LICENSES[@]}"; do
-	input=$(echo "$input" | grep -v "\b${allowed}[\b\"\)]")
+	input=$(echo "$input" | grep -v "\"${allowed}\"")
 done
 
 # remove pre-approved modules
