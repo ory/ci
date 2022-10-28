@@ -36,6 +36,7 @@ ALLOWED_LICENSES=(
 # These modules don't work with the current license checkers
 # and have been manually verified to have a compatible license (regex format).
 APPROVED_MODULES=(
+	'https://github.com/ory-corp/cloud/'                # Ory IP
 	'github.com/ory/kratos-client-go'                   # Apache-2.0
 	'github.com/ory/hydra-client-go'                    # Apache-2.0
 	'github.com/gobuffalo/github_flavored_markdown'     # MIT
