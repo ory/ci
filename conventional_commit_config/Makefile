@@ -18,5 +18,9 @@ test: node_modules  # runs all automated tests
 	echo running unit tests ...
 	npm exec -- mocha
 
+node_modules: package-lock.json
+	npm ci
+	touch node_modules
+
 .SILENT:
 .DEFAULT_GOAL := help
