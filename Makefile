@@ -6,5 +6,7 @@ format:  # formats all code bases
 help:
 	@cat Makefile | grep '^[^ ]*:' | grep -v '^\.bin/' | grep -v '.SILENT:' | grep -v '^node_modules:' | grep -v help | sed 's/:.*#/#/' | column -s "#" -t
 
+licenses:
+	@echo No license checks necessary in this repo.
 
 .DEFAULT_GOAL := help
