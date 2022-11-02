@@ -14,7 +14,7 @@ test: .bin/shellcheck .bin/shfmt  # runs all automated tests
 	.bin/shfmt --list create_changelog.sh
 
 .bin/ory: Makefile
-	curl https://raw.githubusercontent.com/ory/meta/master/install.sh | bash -s -- -b .bin ory v0.1.44
+	curl https://raw.githubusercontent.com/ory/meta/master/install.sh | bash -s -- -b .bin ory v0.1.45
 	touch .bin/ory
 
 .bin/shellcheck: Makefile
