@@ -13,11 +13,13 @@ ALLOWED_LICENSES=(
 	'Apache-2.0'
 	'Apache License, Version 2.0'
 	'Apache*'
+	'BSD'
 	'BSD*'
 	'BSD-2-Clause'
 	'(BSD-2-Clause OR MIT OR Apache-2.0)'
 	'BSD-3-Clause'
 	'(BSD-3-Clause OR GPL-2.0)'
+	'BSD-3-Clause OR MIT'
 	'CC0-1.0'
 	'CC-BY-3.0'
 	'CC-BY-4.0'
@@ -37,6 +39,7 @@ ALLOWED_LICENSES=(
 	'Python-2.0' # the Python-2.0 is a permissive license, see https://en.wikipedia.org/wiki/Python_License
 	'Unlicense'
 	'WTFPL'
+	'WTFPL OR ISC'
 	'(WTFPL OR MIT)'
 )
 
