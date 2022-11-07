@@ -46,6 +46,7 @@ ALLOWED_LICENSES=(
 # These modules don't work with the current license checkers
 # and have been manually verified to have a compatible license (regex format).
 APPROVED_MODULES=(
+	'@ffmpeg-installer/linux-x64@4.1.0'             # this is GPL3, but this tool just installs dependencies and isn't a part of the Ory product.
 	'https://github.com/ory-corp/cloud/'            # Ory IP
 	'github.com/ory/kratos-client-go'               # Apache-2.0
 	'github.com/ory/hydra-client-go'                # Apache-2.0
