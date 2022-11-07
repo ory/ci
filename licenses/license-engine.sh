@@ -94,7 +94,6 @@ if [ -z "$input" ]; then
 	echo_green "Licenses are okay."
 else
 	echo_red "Unknown licenses found!"
-	echo
 	echo "$input"
 	exit 1
 fi
