@@ -11,7 +11,7 @@
 filename=AUTHORS
 
 # entries to ignore
-ignores=()
+ignores=("ory-bot" "dependabot[bot]")
 
 # IMPLEMENTATION
 
