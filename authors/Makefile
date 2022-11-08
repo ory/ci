@@ -20,3 +20,5 @@ test: .bin/shellcheck .bin/shfmt  # runs all automated tests
 	mkdir -p .bin
 	curl -sSL https://github.com/mvdan/sh/releases/download/v3.5.1/shfmt_v3.5.1_linux_amd64 -o .bin/shfmt
 	chmod +x .bin/shfmt
+
+.SILENT:
