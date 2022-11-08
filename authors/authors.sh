@@ -12,7 +12,7 @@
 filename=AUTHORS
 
 # entries to ignore
-ignores=(ory-bot dependabot kevin.goslar@originate.com)
+ignores=(ory-bot dependabot circleci@ory.am kevin.goslar@originate.com)
 
 ##############################
 # IMPLEMENTATION
