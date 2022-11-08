@@ -19,6 +19,7 @@ jobs:
           key:
             ${{ runner.os }}-cococo-node-${{
             hashFiles('conventional_commit_config/package-lock.json') }}
+      - run: cd authors && make test
       - run: cd conventional_commit_config && make test
       - run: cd changelog && make test
       - run: cd licenses && make test
