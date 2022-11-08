@@ -3,7 +3,7 @@
 # This script creates an AUTHORS file similar to https://github.com/google/go-github/blob/master/AUTHORS
 # listing the authors of the product in the current directory. Call it like this:
 #
-#   env PRODUCT=<product name> curl https://raw.githubusercontent.com/ory/ci/master/authors/authors.sh | bash
+# 	curl https://raw.githubusercontent.com/ory/ci/master/authors/authors.sh | env PRODUCT=<product name> bash
 
 ##############################
 # CONFIGURATION
