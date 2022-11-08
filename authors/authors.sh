@@ -3,7 +3,7 @@
 # This script creates an AUTHORS file similar to https://github.com/google/go-github/blob/master/AUTHORS
 # listing the authors of the product in the current directory. Call it like this:
 #
-#   curl https://raw.githubusercontent.com/ory/ci/master/authors/authors.sh | bash
+#   env PRODUCT=<product name> curl https://raw.githubusercontent.com/ory/ci/master/authors/authors.sh | bash
 
 # CONFIGURATION
 
@@ -11,14 +11,13 @@
 filename=AUTHORS
 
 # entries to ignore
-ignores=("ory-bot" "dependabot[bot]")
+ignores=(ory-bot dependabot)
 
 # IMPLEMENTATION
 
 # parse and verify arguments
-product=$1
-if [ -z "$product" ]; then
-  echo "Usage: $0 <product name>"
+if [ -z "$PRODUCT" ]; then
+  echo "Usage: env PRODUCT=<product name>" "$0"
   exit 1
 fi
 
@@ -30,9 +29,13 @@ for ignore in "${ignores[@]}"; do
   authors=$(echo "$authors" | grep -v "$ignore")
 done
 
+# gather statistics
+count=$(echo "$authors" | wc -l)
+
 # write file
-echo "# This is the official list of $product authors." >$filename
-echo "#" >>$filename
+echo "# This is the official list of $PRODUCT authors." >$filename
 echo "# If you don't want to be on this list, please contact Ory." >>$filename
 echo "" >>$filename
 echo "$authors" >>$filename
+
+echo "Identified $count contributors."
