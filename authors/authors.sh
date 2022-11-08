@@ -31,10 +31,8 @@ for ignore in "${ignores[@]}"; do
 done
 
 # write file
-{
-  echo "# This is the official list of $product authors."
-  echo "#"
-  echo "# If you don't want to be on this list, please contact Ory."
-  echo ""
-  echo "$authors"
-} >$filename
+echo "# This is the official list of $product authors." >$filename
+echo "#" >>$filename
+echo "# If you don't want to be on this list, please contact Ory." >>$filename
+echo "" >>$filename
+echo "$authors" >>$filename
