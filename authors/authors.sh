@@ -5,6 +5,7 @@
 #
 #   env PRODUCT=<product name> curl https://raw.githubusercontent.com/ory/ci/master/authors/authors.sh | bash
 
+##############################
 # CONFIGURATION
 
 # name of the file to create
@@ -13,31 +14,31 @@ filename=AUTHORS
 # entries to ignore
 ignores=(ory-bot dependabot)
 
+##############################
 # IMPLEMENTATION
 
-# parse and verify arguments
+# verify arguments
 if [ -z "$PRODUCT" ]; then
-	echo "Usage: env PRODUCT=<product name>" "$0"
-	exit 1
+  echo "Usage: env PRODUCT=<product name>" "$0"
+  exit 1
 fi
 
-# determine authors from Git history
+# determine all authors from the Git history
 authors=$(git log --pretty=format:"%an <%ae>" | sort | uniq)
 
-# filter authors who don't want to be listed
+# filter entries to ignore
 for ignore in "${ignores[@]}"; do
-	authors=$(echo "$authors" | grep -v "$ignore")
+  authors=$(echo "$authors" | grep -v "$ignore")
 done
-
-# gather statistics
-count=$(echo "$authors" | wc -l)
 
 # write file
 {
-	echo "# This is the official list of $PRODUCT authors."
-	echo "# If you don't want to be on this list, please contact Ory."
-	echo ""
-	echo "$authors"
+  echo "# This is the official list of $PRODUCT authors."
+  echo "# If you don't want to be on this list, please contact Ory."
+  echo ""
+  echo "$authors"
 } >$filename
 
+# print success message
+count=$(echo "$authors" | wc -l)
 echo "Identified $count contributors."
