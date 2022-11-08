@@ -13,11 +13,13 @@ ALLOWED_LICENSES=(
 	'Apache-2.0'
 	'Apache License, Version 2.0'
 	'Apache*'
+	'BSD'
 	'BSD*'
 	'BSD-2-Clause'
 	'(BSD-2-Clause OR MIT OR Apache-2.0)'
 	'BSD-3-Clause'
 	'(BSD-3-Clause OR GPL-2.0)'
+	'BSD-3-Clause OR MIT'
 	'CC0-1.0'
 	'CC-BY-3.0'
 	'CC-BY-4.0'
@@ -37,6 +39,7 @@ ALLOWED_LICENSES=(
 	'Python-2.0' # the Python-2.0 is a permissive license, see https://en.wikipedia.org/wiki/Python_License
 	'Unlicense'
 	'WTFPL'
+	'WTFPL OR ISC'
 	'(WTFPL OR MIT)'
 )
 
@@ -44,8 +47,10 @@ ALLOWED_LICENSES=(
 # and have been manually verified to have a compatible license (regex format).
 APPROVED_MODULES=(
 	'https://github.com/ory-corp/cloud/'            # Ory IP
-	'github.com/ory/kratos-client-go'               # Apache-2.0
 	'github.com/ory/hydra-client-go'                # Apache-2.0
+	'github.com/ory/hydra-client-go/v2'             # Apache-2.0
+	'github.com/ory/kratos-client-go'               # Apache-2.0
+	'https://ory.sh/keto'                           # no license but owned by Ory
 	'github.com/gobuffalo/github_flavored_markdown' # MIT
 	'github.com/ory/keto/.*'
 	'buffers@0.1.1'                                     # MIT: original source at http://github.com/substack/node-bufferlist is deleted but a fork at https://github.com/pkrumins/node-bufferlist/blob/master/LICENSE contains the original license by the original author (James Halliday)
@@ -93,7 +98,6 @@ if [ -z "$input" ]; then
 	echo_green "Licenses are okay."
 else
 	echo_red "Unknown licenses found!"
-	echo
 	echo "$input"
 	exit 1
 fi
