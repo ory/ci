@@ -17,8 +17,8 @@ ignores=(ory-bot dependabot)
 
 # parse and verify arguments
 if [ -z "$PRODUCT" ]; then
-  echo "Usage: env PRODUCT=<product name>" "$0"
-  exit 1
+	echo "Usage: env PRODUCT=<product name>" "$0"
+	exit 1
 fi
 
 # determine authors from Git history
@@ -26,16 +26,18 @@ authors=$(git log --pretty=format:"%an <%ae>" | sort | uniq)
 
 # filter authors who don't want to be listed
 for ignore in "${ignores[@]}"; do
-  authors=$(echo "$authors" | grep -v "$ignore")
+	authors=$(echo "$authors" | grep -v "$ignore")
 done
 
 # gather statistics
 count=$(echo "$authors" | wc -l)
 
 # write file
-echo "# This is the official list of $PRODUCT authors." >$filename
-echo "# If you don't want to be on this list, please contact Ory." >>$filename
-echo "" >>$filename
-echo "$authors" >>$filename
+{
+	echo "# This is the official list of $PRODUCT authors."
+	echo "# If you don't want to be on this list, please contact Ory."
+	echo ""
+	echo "$authors"
+} >$filename
 
 echo "Identified $count contributors."
