@@ -14,6 +14,8 @@ filename=AUTHORS
 # entries to ignore
 ignores=(ory-bot dependabot circleci@ory.am kevin.goslar@originate.com)
 
+# configure aliases in a .mailmap file, see https://git-scm.com/docs/gitmailmap for details
+
 ##############################
 # IMPLEMENTATION
 
@@ -24,7 +26,7 @@ if [ -z "$PRODUCT" ]; then
 fi
 
 # determine all authors from the Git history
-authors=$(git log --pretty=format:"%an <%ae>" | sort | uniq)
+authors=$(git log --pretty=format:"%aN <%aE>" | sort | uniq)
 
 # filter entries to ignore
 for ignore in "${ignores[@]}"; do
