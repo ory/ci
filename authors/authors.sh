@@ -26,7 +26,7 @@ if [ -z "$PRODUCT" ]; then
 fi
 
 # verify complete Git history
-if [ "$(git rev-parse --is-shallow-repository)" = "false" ]; then
+if [ "$(git rev-parse --is-shallow-repository)" != "false" ]; then
 	echo "I need the full Git history in this repo"
 	exit 1
 fi
