@@ -23,6 +23,12 @@ if [ -z "$PRODUCT" ]; then
 	exit 1
 fi
 
+# verify complete Git history
+if [ "$(git rev-parse --is-shallow-repository)" = "false" ]; then
+	echo "I need the full Git history in this repo"
+	exit 1
+fi
+
 # determine all authors from the Git history
 authors=$(git log --pretty=format:"%an <%ae>" | sort | uniq)
 
