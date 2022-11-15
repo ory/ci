@@ -12,7 +12,7 @@
 filename=AUTHORS
 
 # entries to ignore
-ignores=(ory-bot dependabot circleci@ory.am kevin.goslar@originate.com)
+ignores=(ory-bot dependabot circleci@ory.am)
 
 # configure aliases in a .mailmap file, see https://git-scm.com/docs/gitmailmap for details
 
