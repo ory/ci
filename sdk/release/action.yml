@@ -1,5 +1,5 @@
-name: 'SDK Release'
-description: 'SDK release automation'
+name: "SDK Release"
+description: "SDK release automation"
 inputs:
   token:
     description: Personal access token
@@ -47,6 +47,7 @@ runs:
         repo="${x[1]}"
 
         cp current-repo/${{ inputs.swag-spec-location }} "sdk/spec/$repo/$GITHUB_REF_NAME.json"
+        echo "$GITHUB_REF_NAME" > "sdk/spec/$repo/latest"
         cd sdk
 
         git add -A
