@@ -1,5 +1,5 @@
-name: 'Docs CLI (Next Generation)'
-description: 'Build CLI docs and commit to ory/docs'
+name: "Docs CLI (Next Generation)"
+description: "Build CLI docs and commit to ory/docs"
 inputs:
   token:
     description: Personal access token
@@ -7,11 +7,11 @@ inputs:
     required: false
   docs-branch:
     description: On which ory/docs branch to operate on
-    default: 'master'
+    default: "master"
     required: false
   arg:
     description: Optional additional argument to .bin/clidoc (inserted before output-dir)
-    default: ''
+    default: ""
     required: false
   output-dir:
     description: Directory without leading slash in ory/docs to write the CLI docs to
@@ -27,7 +27,7 @@ runs:
         fetch-depth: 0
     - uses: actions/setup-go@v2
       with:
-        go-version: "1.20"
+        go-version: "1.21"
     - run: |
         git config --global user.email "60093411+ory-bot@users.noreply.github.com"
         git config --global user.name "ory-bot"
