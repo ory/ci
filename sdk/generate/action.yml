@@ -1,5 +1,5 @@
-name: 'SDK Generate'
-description: 'SDK generation automation'
+name: "SDK Generate"
+description: "SDK generation automation"
 inputs:
   token:
     description: Personal access token
@@ -27,7 +27,7 @@ runs:
         token: ${{ inputs.token || github.token }}
     - uses: actions/setup-go@v2
       with:
-        go-version: "1.20"
+        go-version: "1.21"
     - run: |
         git config --global user.email "60093411+ory-bot@users.noreply.github.com"
         git config --global user.name "ory-bot"

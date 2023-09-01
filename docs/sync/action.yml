@@ -1,5 +1,5 @@
-name: 'Synchronize with Docs'
-description: 'Synchronizes files such as OpenAPI and Config Schema with the docs'
+name: "Synchronize with Docs"
+description: "Synchronizes files such as OpenAPI and Config Schema with the docs"
 inputs:
   api-spec-location:
     description: Location where the OpenAPI Schema is available at
@@ -24,7 +24,7 @@ runs:
         token: ${{ inputs.token }}
     - uses: actions/setup-go@v2
       with:
-        go-version: "1.20"
+        go-version: "1.21"
     - run: |
         git config --global user.email "60093411+ory-bot@users.noreply.github.com"
         git config --global user.name "ory-bot"

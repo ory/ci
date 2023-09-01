@@ -1,5 +1,5 @@
-name: 'Docs Build'
-description: 'Build and publish docs'
+name: "Docs Build"
+description: "Build and publish docs"
 inputs:
   swag-spec-location:
     description: Location where the Swagger spec should be saved to
@@ -24,7 +24,7 @@ runs:
         token: ${{ inputs.token }}
     - uses: actions/setup-go@v2
       with:
-        go-version: "1.20"
+        go-version: "1.21"
     - run: |
         git config --global user.email "60093411+ory-bot@users.noreply.github.com"
         git config --global user.name "ory-bot"
@@ -93,4 +93,3 @@ runs:
         git pull origin master --rebase || true
         git push origin HEAD:master || true
       shell: bash
-
