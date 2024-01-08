@@ -41,6 +41,7 @@ ALLOWED_LICENSES=(
 	'WTFPL'
 	'WTFPL OR ISC'
 	'(WTFPL OR MIT)'
+	"(MIT OR WTFPL)"
 )
 
 # These modules don't work with the current license checkers
