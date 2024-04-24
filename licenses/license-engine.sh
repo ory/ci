@@ -42,7 +42,8 @@ ALLOWED_LICENSES=(
 	'WTFPL OR ISC'
 	'(WTFPL OR MIT)'
 	'(MIT OR WTFPL)'
-	'LGPL-3.0-or-later' # Requires only that modifications to LGPL-protected libraries are published under a GPL-compatible license which is not the case at Ory
+	'LGPL-3.0-or-later' # Requires only that modifications to LGPL-protected libraries are published under a GPL-compatible license which is not the case at Ory,
+ 	'EPL-2.0'
 )
 
 # These modules don't work with the current license checkers
