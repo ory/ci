@@ -13,6 +13,7 @@ ALLOWED_LICENSES=(
 	'Apache-2.0'
 	'Apache License, Version 2.0'
 	'Apache*'
+	'BlueOak-1.0.0'
 	'BSD'
 	'BSD*'
 	'BSD-2-Clause'
