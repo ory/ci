@@ -9,9 +9,9 @@ set -e
 if [ ! -d .bin ]; then
 	mkdir .bin
 fi
-curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-engine.sh -o .bin/license-engine.sh
+curl https://raw.githubusercontent.com/ory/ci/update-licenses/licenses/license-engine.sh -o .bin/license-engine.sh
 chmod +x .bin/license-engine.sh
-curl https://raw.githubusercontent.com/ory/ci/master/licenses/licenses -o .bin/licenses
+curl https://raw.githubusercontent.com/ory/ci/update-licenses/licenses/licenses -o .bin/licenses
 chmod +x .bin/licenses
 
 if [ -f go.mod ]; then
@@ -21,7 +21,7 @@ if [ -f go.mod ]; then
 		echo
 	} 2>/dev/null
 	GOBIN=$(pwd)/.bin go install github.com/google/go-licenses@latest
-	curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-go.tpl -o .bin/license-template-go.tpl
+	curl https://raw.githubusercontent.com/ory/ci/update-licenses/licenses/license-template-go.tpl -o .bin/license-template-go.tpl
 fi
 
 if [ -f package.json ]; then
@@ -30,5 +30,5 @@ if [ -f package.json ]; then
 		echo "Installing the Node license checker ..."
 		echo
 	} 2>/dev/null
-	curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-node.json -o .bin/license-template-node.json
+	curl https://raw.githubusercontent.com/ory/ci/update-licenses/licenses/license-template-node.json -o .bin/license-template-node.json
 fi
