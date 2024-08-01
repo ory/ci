@@ -27,10 +27,12 @@ ALLOWED_LICENSES=(
 	'CC-BY-4.0'
 	'(CC-BY-4.0 AND MIT)'
 	'ISC'
+	'ISC*'
 	'LGPL-2.1' # LGPL allows commercial use, requires only that modifications to LGPL-protected libraries are published under a GPL-compatible license
 	'MIT'
 	'MIT*'
 	'MIT-0'
+	'MIT AND ISC'
 	'(MIT AND BSD-3-Clause)'
 	'(MIT AND Zlib)'
 	'(MIT OR Apache-2.0)'
