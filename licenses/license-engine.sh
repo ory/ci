@@ -13,6 +13,7 @@ ALLOWED_LICENSES=(
 	'Apache-2.0'
 	'Apache License, Version 2.0'
 	'Apache*'
+	'Artistic-2.0'
 	'BlueOak-1.0.0'
 	'BSD'
 	'BSD*'
@@ -29,6 +30,7 @@ ALLOWED_LICENSES=(
 	'LGPL-2.1' # LGPL allows commercial use, requires only that modifications to LGPL-protected libraries are published under a GPL-compatible license
 	'MIT'
 	'MIT*'
+	'MIT-0'
 	'(MIT AND BSD-3-Clause)'
 	'(MIT AND Zlib)'
 	'(MIT OR Apache-2.0)'
