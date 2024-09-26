@@ -142,7 +142,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run: goreleaser --snapshot --skip-publish --rm-dist
+      - run: goreleaser --snapshot --skip publish --clean
 
   render-version-schema:
     parameters:
