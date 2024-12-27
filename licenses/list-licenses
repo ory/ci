@@ -11,7 +11,7 @@ fi
 if [ -f go.mod ]; then
 	module_name=$(grep "^module" go.mod | awk '{print $2}')
 	if [ -z "$module_name" ]; then
-		>&2 echo "Cannot determine the Go module name"
+		echo "Cannot determine the Go module name" >&2
 		exit 1
 	fi
 	.bin/go-licenses report "$module_name" --template .bin/license-template-go.tpl 2>/dev/null
