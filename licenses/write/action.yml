@@ -2,7 +2,7 @@ name: 'Generate license overview'
 description: 'List and check licenses'
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: List and write licenses
       run: |
@@ -14,9 +14,9 @@ runs:
       if: ${{ inputs.write_if_match }}
       uses: EndBug/add-and-commit@v9.1.4
       with:
-        message: "autogen(docs): update milestone document"
+        message: 'autogen(docs): update milestone document'
         author_name: ory-bot
-        author_email: "60093411+ory-bot@users.noreply.github.com"
+        author_email: '60093411+ory-bot@users.noreply.github.com'
     - name: Check licenses
       run: .bin/licenses
       shell: bash
