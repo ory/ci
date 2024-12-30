@@ -14,5 +14,6 @@ runs:
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add .
-        (git commit -m "autogen: update license overview" && git push) || true
+        git commit -m "autogen: update license overview" || true
+        git push
       shell: bash
