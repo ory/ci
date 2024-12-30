@@ -55,17 +55,17 @@ ALLOWED_LICENSES=(
 # These modules don't work with the current license checkers
 # and have been manually verified to have a compatible license (regex format).
 APPROVED_MODULES=(
-	'https://github.com/ory-corp/cloud/'            # Ory IP
-	'github.com/ory/hydra-client-go'                # Apache-2.0
-	'github.com/ory/hydra-client-go/v2'             # Apache-2.0
-	'github.com/ory/kratos-client-go'               # Apache-2.0
-	'https://ory.sh/keto'                           # no license but owned by Ory
-	'github.com/gobuffalo/github_flavored_markdown' # MIT
-	'github.com/ory/keto/.*'
-	'buffers@0.1.1'                                     # MIT: original source at http://github.com/substack/node-bufferlist is deleted but a fork at https://github.com/pkrumins/node-bufferlist/blob/master/LICENSE contains the original license by the original author (James Halliday)
-	'https://github.com/iconify/iconify/packages/react' # MIT: license is in root of monorepo at https://github.com/iconify/iconify/blob/main/license.txt
-	'github.com/gobuffalo/.*'                           # MIT: license is in root of monorepo at https://github.com/gobuffalo/github_flavored_markdown/blob/main/LICENSE
-	'github.com/ory-corp/cloud/.*'                      # Ory IP
+	'https://github.com/ory-corp/cloud/'                                                  # Ory IP
+	'github.com/ory/hydra-client-go'                                                      # Apache-2.0
+	'github.com/ory/hydra-client-go/v2'                                                   # Apache-2.0
+	'github.com/ory/kratos-client-go'                                                     # Apache-2.0
+	'github.com/gobuffalo/github_flavored_markdown'                                       # MIT
+	'buffers@0.1.1'                                                                       # MIT: original source at http://github.com/substack/node-bufferlist is deleted but a fork at https://github.com/pkrumins/node-bufferlist/blob/master/LICENSE contains the original license by the original author (James Halliday)
+	'https://github.com/iconify/iconify/packages/react'                                   # MIT: license is in root of monorepo at https://github.com/iconify/iconify/blob/main/license.txt
+	'github.com/gobuffalo/.*'                                                             # MIT: license is in root of monorepo at https://github.com/gobuffalo/github_flavored_markdown/blob/main/LICENSE
+	'github.com/ory-corp/cloud/.*'                                                        # Ory IP
+	'github.com/golang/freetype/.*'                                                       # FreeType license: https://freetype.sourceforge.net/FTL.TXT
+	'go.opentelemetry.io/otel/exporters/jaeger/internal/third_party/thrift/lib/go/thrift' # Incorrect detection, actually Apache-2.0: https://github.com/open-telemetry/opentelemetry-go/blob/exporters/jaeger/v1.17.0/exporters/jaeger/internal/third_party/thrift/LICENSE
 )
 
 # These lines in the output should be ignored (plain text, no regex).
