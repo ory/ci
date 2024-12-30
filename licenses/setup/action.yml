@@ -1,5 +1,5 @@
 name: "Setup license checker"
-input:
+inputs:
   token:
     description: Personal access token
     required: false
