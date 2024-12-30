@@ -9,9 +9,7 @@ runs:
         mkdir -p .reports
         .bin/list-licenses > .reports/dep-licenses.csv
       shell: bash
-      if: ${{ inputs.write_if_match }}
     - name: Commit Milestone Documentation
-      if: ${{ inputs.write_if_match }}
       uses: EndBug/add-and-commit@v9.1.4
       with:
         message: "autogen(docs): update milestone document"
