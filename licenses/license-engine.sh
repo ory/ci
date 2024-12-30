@@ -40,7 +40,7 @@ ALLOWED_LICENSES=(
 	'(MIT OR Apache-2.0)'
 	'(MIT OR CC0-1.0)'
 	'(MIT OR GPL-2.0)'
-	'(MIT AND CC-BY-3.0)
+	'(MIT AND CC-BY-3.0)'
 	'MPL-2.0'
 	'(MPL-2.0 OR Apache-2.0)'
 	'Public Domain'
