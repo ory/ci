@@ -1,4 +1,4 @@
-format:  # formats all code bases
+format:
 	(cd authors && make --no-print-dir format)
 	(cd changelog && make --no-print-dir format)
 	(cd conventional_commit_config && make --no-print-dir format)

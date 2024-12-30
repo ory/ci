@@ -66,6 +66,7 @@ APPROVED_MODULES=(
 	'github.com/ory-corp/cloud/.*'                                                        # Ory IP
 	'github.com/golang/freetype/.*'                                                       # FreeType license: https://freetype.sourceforge.net/FTL.TXT
 	'go.opentelemetry.io/otel/exporters/jaeger/internal/third_party/thrift/lib/go/thrift' # Incorrect detection, actually Apache-2.0: https://github.com/open-telemetry/opentelemetry-go/blob/exporters/jaeger/v1.17.0/exporters/jaeger/internal/third_party/thrift/LICENSE
+	'go.uber.org/zap/exp/.*'                                                              # MIT license is in root of exp folder in monorepo at https://github.com/uber-go/zap/blob/master/exp/LICENSE
 	'github.com/ory/client-go'                                                            # Apache-2.0
 	'github.com/ian-kent/linkio'                                                          # BSD - https://github.com/ian-kent/linkio/blob/97566b8728870dac1c9863ba5b0f237c39166879/linkio.go#L1-L3
 	'github.com/t-k/fluent-logger-golang/*'                                               # Apache-2.0 https://github.com/t-k/fluent-logger-golang/blob/master/LICENSE

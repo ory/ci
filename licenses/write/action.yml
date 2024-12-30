@@ -1,8 +1,8 @@
-name: 'Generate license overview'
-description: 'List and check licenses'
+name: "Generate license overview"
+description: "List and check licenses"
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: List and write licenses
       run: |

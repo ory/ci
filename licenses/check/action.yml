@@ -1,6 +1,6 @@
-name: 'Check license compliance'
+name: "Check license compliance"
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Install license scanner
       run:
