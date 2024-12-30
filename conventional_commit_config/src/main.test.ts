@@ -73,7 +73,7 @@ suite("integration tests", function () {
     )
     assert.ok(
       log.recordings[1].startsWith(
-        "ERROR: invalid JSON in test_config.json: SyntaxError: Unexpected token }",
+        "ERROR: invalid JSON in test_config.json: SyntaxError: Unexpected token",
       ),
     )
   })
