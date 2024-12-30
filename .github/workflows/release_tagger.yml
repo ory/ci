@@ -1,0 +1,18 @@
+# AUTO-GENERATED, DO NOT EDIT!
+# Please edit the original at https://github.com/ory/meta/blob/master/templates/repository/action/.github/workflows/release_tagger.yml
+
+name: Tag latest and major release
+
+on:
+  release:
+    types: [published, edited]
+
+jobs:
+  actions-tagger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Actions-R-Us/actions-tagger@latest
+        env:
+          GITHUB_TOKEN: "${{ github.token }}"
+        with:
+          publish_latest_tag: true
