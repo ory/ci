@@ -3,7 +3,7 @@ set -e
 
 # list Node licenses
 if [ -f package.json ]; then
-	npm exec --yes license-checker -- --csv --excludePrivatePackages --customPath .bin/license-template-node.json
+	npm exec --yes license-checker -- --production --csv --excludePrivatePackages --customPath .bin/license-template-node.json
 	{ echo; } 2>/dev/null
 fi
 
