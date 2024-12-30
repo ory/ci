@@ -11,6 +11,8 @@ ALLOWED_LICENSES=(
 	'(AFL-2.1 OR BSD-3-Clause)'
 	'Apache 2.0'
 	'Apache-2.0'
+	'(Apache-2.0 OR MPL-1.1)'
+	'Apache-2.0 AND MIT'
 	'Apache License, Version 2.0'
 	'Apache*'
 	'Artistic-2.0'
@@ -38,6 +40,7 @@ ALLOWED_LICENSES=(
 	'(MIT OR Apache-2.0)'
 	'(MIT OR CC0-1.0)'
 	'(MIT OR GPL-2.0)'
+	'(MIT AND CC-BY-3.0)
 	'MPL-2.0'
 	'(MPL-2.0 OR Apache-2.0)'
 	'Public Domain'
