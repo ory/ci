@@ -1,0 +1,25 @@
+name: 'Setup license checker'
+input:
+  token:
+    description: Personal access token
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        # We must fetch at least the immediate parents so that if this is
+        # a pull request then we can checkout the head.
+        fetch-depth: 2
+        token: ${{ inputs.token }}
+    - uses: actions/setup-go@v3
+      with:
+        go-version: "1.23"
+    - uses: actions/setup-node@v2
+      with:
+        node-version: "18"
+    - name: Install license scanner
+      run: curl https://raw.githubusercontent.com/ory/ci/master/licenses/install | sh
+      shell: bash

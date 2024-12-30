@@ -1,0 +1,10 @@
+name: 'Check license compliance'
+runs:
+  using: "composite"
+  steps:
+    - name: Install license scanner
+      run: curl https://raw.githubusercontent.com/ory/ci/master/licenses/install | sh
+      shell: bash
+    - name: Check licenses
+      run: .bin/licenses
+      shell: bash

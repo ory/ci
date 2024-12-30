@@ -1,0 +1,22 @@
+name: 'Generate license overview'
+description: 'List and check licenses'
+
+runs:
+  using: "composite"
+  steps:
+    - name: List and write licenses
+      run: |
+        mkdir -p .reports
+        .bin/list-licenses > .reports/dep-licenses.csv
+      shell: bash
+      if: ${{ inputs.write_if_match }}
+    - name: Commit Milestone Documentation
+      if: ${{ inputs.write_if_match }}
+      uses: EndBug/add-and-commit@v9.1.4
+      with:
+        message: "autogen(docs): update milestone document"
+        author_name: ory-bot
+        author_email: "60093411+ory-bot@users.noreply.github.com"
+    - name: Check licenses
+      run: .bin/licenses
+      shell: bash
