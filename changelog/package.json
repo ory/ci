@@ -1,5 +1,6 @@
 {
   "private": true,
+  "prettier": "ory-prettier-styles",
   "dependencies": {
     "conventional-changelog-cli": "2.1.1",
     "doctoc": "1.4.0",

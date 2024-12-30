@@ -1,5 +1,5 @@
-name: 'Changelog'
-description: 'Generate and commit CHANGELOG.md'
+name: "Changelog"
+description: "Generate and commit CHANGELOG.md"
 inputs:
   token:
     description: Personal access token
@@ -7,7 +7,7 @@ inputs:
     required: false
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - uses: ory/ci/checkout@master
       with:
