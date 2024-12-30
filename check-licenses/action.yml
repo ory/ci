@@ -5,6 +5,10 @@ input:
     description: Personal access token
     required: false
     default: ${{ github.token }}
+  write_if_match:
+    description: Write licenses if condition matches
+    required: false
+    default: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' }}
 
 runs:
   using: "composite"
@@ -29,9 +33,9 @@ runs:
         mkdir -p .reports
         .bin/list-licenses > .reports/dep-licenses.csv
       shell: bash
-      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+      if: ${{ inputs.write_if_match }}
     - name: Commit Milestone Documentation
-      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+      if: ${{ inputs.write_if_match }}
       uses: EndBug/add-and-commit@v9.1.4
       with:
         message: "autogen(docs): update milestone document"
@@ -40,4 +44,3 @@ runs:
     - name: Check licenses
       run: .bin/licenses
       shell: bash
-<
