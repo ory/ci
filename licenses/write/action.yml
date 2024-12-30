@@ -9,9 +9,10 @@ runs:
         mkdir -p .reports
         .bin/list-licenses > .reports/dep-licenses.csv
       shell: bash
-    - name: Commit Milestone Documentation
-      uses: EndBug/add-and-commit@v9.1.4
-      with:
-        message: "autogen(docs): update milestone document"
-        author_name: ory-bot
-        author_email: "60093411+ory-bot@users.noreply.github.com"
+    - name: Commit result
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add .
+        (git commit -m "autogen: update license overview" && git push) || true
+      shell: bash
