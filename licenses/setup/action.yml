@@ -1,11 +1,11 @@
-name: "Setup license checker"
+name: 'Setup license checker'
 inputs:
   token:
     description: Personal access token
     required: false
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - uses: actions/checkout@v3
       with:
@@ -15,10 +15,10 @@ runs:
         token: ${{ inputs.token || github.token }}
     - uses: actions/setup-go@v3
       with:
-        go-version: "1.23"
+        go-version: '1.23'
     - uses: actions/setup-node@v2
       with:
-        node-version: "22"
+        node-version: '22'
     - name: Install license scanner
       run:
         curl https://raw.githubusercontent.com/ory/ci/master/licenses/install |
