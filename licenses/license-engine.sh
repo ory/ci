@@ -66,6 +66,7 @@ APPROVED_MODULES=(
 	'github.com/ory-corp/cloud/.*'                                                        # Ory IP
 	'github.com/golang/freetype/.*'                                                       # FreeType license: https://freetype.sourceforge.net/FTL.TXT
 	'go.opentelemetry.io/otel/exporters/jaeger/internal/third_party/thrift/lib/go/thrift' # Incorrect detection, actually Apache-2.0: https://github.com/open-telemetry/opentelemetry-go/blob/exporters/jaeger/v1.17.0/exporters/jaeger/internal/third_party/thrift/LICENSE
+	'go.uber.org/zap/.*'                                                                  # MIT license is in root of monorepo at https://github.com/uber-go/zap/blob/exp/v0.3.0/LICENSE
 )
 
 # These lines in the output should be ignored (plain text, no regex).
