@@ -17,6 +17,3 @@ runs:
         message: 'autogen(docs): update milestone document'
         author_name: ory-bot
         author_email: '60093411+ory-bot@users.noreply.github.com'
-    - name: Check licenses
-      run: .bin/licenses
-      shell: bash
