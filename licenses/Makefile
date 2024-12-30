@@ -2,14 +2,19 @@ OS=$(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH=$(shell uname -m)
 ifeq ($(ARCH),x86_64)
 	ARCH=amd64
+	ARCH_SHCK=x86_64
 else ifeq ($(ARCH),arm64)
 	ARCH=arm64
+	ARCH_SHCK=arm64
 else ifeq ($(ARCH),aarch64)
 	ARCH=arm64
+	ARCH_SHCK=arm64
 else ifeq ($(ARCH),i386)
 	ARCH=386
+	ARCH_SHCK=386
 else ifeq ($(ARCH),i686)
 	ARCH=386
+	ARCH_SHCK=386
 endif
 
 format: .bin/shfmt node_modules  # formats the source code
@@ -29,7 +34,7 @@ test: .bin/shellcheck .bin/shfmt  # runs all automated tests
 
 .bin/shellcheck: Makefile
 	echo installing Shellcheck ...
-	curl -sSL https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.$(OS).$(ARCH).tar.xz | tar xJ
+	curl -sSL https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.$(OS).$(ARCH_SHCK).tar.xz | tar xJ
 	mkdir -p .bin
 	mv shellcheck-stable/shellcheck .bin
 	rm -rf shellcheck-stable
