@@ -29,7 +29,7 @@ test: .bin/shellcheck .bin/shfmt  # runs all automated tests
 
 .bin/shellcheck: Makefile
 	echo installing Shellcheck ...
-	curl -sSL https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar xJ
+	curl -sSL https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.$(OS).$(ARCH).tar.xz | tar xJ
 	mkdir -p .bin
 	mv shellcheck-stable/shellcheck .bin
 	rm -rf shellcheck-stable
