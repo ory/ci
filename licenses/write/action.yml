@@ -4,10 +4,10 @@ description: "List and check licenses"
 inputs:
   author-email:
     description: "Author email for git commits"
-    required: true
+    required: false
   author-name:
     description: "Author name for git commits"
-    required: true
+    required: false
 
 runs:
   using: "composite"
@@ -19,8 +19,12 @@ runs:
       shell: bash
     - name: Commit result
       run: |
-        git config --global user.email "${{ inputs.author-email }}"
-        git config --global user.name "${{ inputs.author-name }}"
+        if [ -n "${{ inputs.author-email }}" ]; then
+          git config --global user.email "${{ inputs.author-email }}"
+        fi
+        if [ -n "${{ inputs.author-name }}" ]; then
+          git config --global user.name "${{ inputs.author-name }}"
+        fi
         git add .
         git commit -m "autogen: update license overview" || true
         git push
