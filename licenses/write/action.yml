@@ -9,10 +9,14 @@ runs:
         mkdir -p .reports
         .bin/list-licenses > .reports/dep-licenses.csv
       shell: bash
-    - name: Commit result
+    - name: Set git config
+      if: secrets.ORY_BOT_PAT != ''
       run: |
         git config --global user.email "60093411+ory-bot@users.noreply.github.com"
         git config --global user.name "ory-bot"
+      shell: bash
+    - name: Commit result
+      run: |
         git add .
         git commit -m "autogen: update license overview" || true
         git push
