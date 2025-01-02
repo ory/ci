@@ -19,6 +19,7 @@ runs:
     - uses: actions/setup-node@v2
       with:
         node-version: "22"
+    - run: sudo apt-get install jq
     - name: Install license scanner
       run:
         curl https://raw.githubusercontent.com/ory/ci/master/licenses/install |
