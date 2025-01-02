@@ -20,6 +20,7 @@ runs:
       with:
         node-version: "22"
     - run: sudo apt-get install jq
+      shell: bash
     - name: Install license scanner
       run:
         curl https://raw.githubusercontent.com/ory/ci/master/licenses/install |
