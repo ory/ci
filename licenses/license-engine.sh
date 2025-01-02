@@ -73,6 +73,7 @@ APPROVED_MODULES=(
 	'github.com/jmespath/go-jmespath'                                                     # Apache-2.0 https://github.com/jmespath/go-jmespath/blob/master/LICENSE
 	'github.com/ory/keto/proto/ory/keto/opl/v1alpha1'                                     # Apache-2.0 - submodule of keto
 	'github.com/ory/keto/proto/ory/keto/relation_tuples/v1alpha2'                         # Apache-2.0 - submodule of keto
+	"golden-fleece@1.0.9"                                                                 # MIT: https://github.com/Rich-Harris/golden-fleece/blob/master/LICENSE
 )
 
 # These lines in the output should be ignored (plain text, no regex).
