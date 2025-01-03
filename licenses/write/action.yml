@@ -23,5 +23,6 @@ runs:
         git config --global user.name "${{ inputs.author-name }}"
         git add .
         git commit -m "autogen: update license overview" || true
+        git pull -ff || true
         git push
       shell: bash
