@@ -6,8 +6,8 @@ bin_dir="$(cd "$(dirname "$0")" && pwd)"
 # list Node licenses
 if [ -f package.json ]; then
 	if jq -e '.dependencies and (.dependencies | keys | length > 0)' package.json >/dev/null; then
-		npm ci --dev
-		npm exec --yes license-checker -- --production --csv --excludePrivatePackages --customPath "${bin_dir}"/license-template-node.json | grep -v '^$'
+		npm ci
+		npm x --yes license-checker -- --production --csv --excludePrivatePackages --customPath "${bin_dir}"/license-template-node.json | grep -v '^$'
 		echo
 	else
 		echo "No dependencies found in package.json" >&2
