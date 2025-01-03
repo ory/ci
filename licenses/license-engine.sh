@@ -79,6 +79,7 @@ APPROVED_MODULES=(
 	'github.com/ory-corp/webhook-target'                                                  # Ory IP
 	'@ory/keto-grpc-client.*'                                                             # Apache-2.0 - submodule of keto
 	'golden-fleece@1.0.9'                                                                 # MIT: https://github.com/Rich-Harris/golden-fleece/blob/master/LICENSE
+	'github.com/gogo/googleapis/.*'                                                       # Apache-2.0 https://github.com/gogo/googleapis/blob/master/LICENSE
 )
 
 # These lines in the output should be ignored (plain text, no regex).
