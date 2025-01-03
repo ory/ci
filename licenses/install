@@ -2,13 +2,13 @@
 set -e
 
 # Default mono-install to false
-MONO_INSTALL=false
+FULL_INSTALL=false
 
 # Parse command line arguments
 while [ "$#" -gt 0 ]; do
     case "$1" in
-        --mono-install)
-            MONO_INSTALL=true
+        --full-install)
+            FULL_INSTALL=true
             shift
             ;;
         *)
@@ -35,7 +35,7 @@ chmod +x .bin/licenses
 curl https://raw.githubusercontent.com/ory/ci/master/licenses/list-licenses -o .bin/list-licenses
 chmod +x .bin/list-licenses
 
-if [ "$MONO_INSTALL" = true ] || [ -f go.mod ]; then
+if [ "$FULL_INSTALL" = true ] || [ -f go.mod ]; then
     {
         echo
         echo "Installing the Go license checker ..."
@@ -45,7 +45,7 @@ if [ "$MONO_INSTALL" = true ] || [ -f go.mod ]; then
     curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-go.tpl -o .bin/license-template-go.tpl
 fi
 
-if [ "$MONO_INSTALL" = true ] || [ -f package.json ]; then
+if [ "$FULL_INSTALL" = true ] || [ -f package.json ]; then
     {
         echo
         echo "Installing the Node license checker ..."
