@@ -6,26 +6,26 @@ FULL_INSTALL=false
 
 # Parse command line arguments
 while [ "$#" -gt 0 ]; do
-    case "$1" in
-        --full-install)
-            FULL_INSTALL=true
-            shift
-            ;;
-        *)
-            echo "Unknown parameter: $1"
-            exit 1
-            ;;
-    esac
+	case "$1" in
+	--full-install)
+		FULL_INSTALL=true
+		shift
+		;;
+	*)
+		echo "Unknown parameter: $1"
+		exit 1
+		;;
+	esac
 done
 
 {
-    echo
-    echo "Installing license checker engine ..."
-    echo
+	echo
+	echo "Installing license checker engine ..."
+	echo
 } 2>/dev/null
 
 if [ ! -d .bin ]; then
-    mkdir .bin
+	mkdir .bin
 fi
 
 curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-engine.sh -o .bin/license-engine.sh
@@ -36,20 +36,20 @@ curl https://raw.githubusercontent.com/ory/ci/master/licenses/list-licenses -o .
 chmod +x .bin/list-licenses
 
 if [ "$FULL_INSTALL" = true ] || [ -f go.mod ]; then
-    {
-        echo
-        echo "Installing the Go license checker ..."
-        echo
-    } 2>/dev/null
-    GOBIN=$(pwd)/.bin go install github.com/google/go-licenses@master
-    curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-go.tpl -o .bin/license-template-go.tpl
+	{
+		echo
+		echo "Installing the Go license checker ..."
+		echo
+	} 2>/dev/null
+	GOBIN=$(pwd)/.bin go install github.com/google/go-licenses@master
+	curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-go.tpl -o .bin/license-template-go.tpl
 fi
 
 if [ "$FULL_INSTALL" = true ] || [ -f package.json ]; then
-    {
-        echo
-        echo "Installing the Node license checker ..."
-        echo
-    } 2>/dev/null
-    curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-node.json -o .bin/license-template-node.json
+	{
+		echo
+		echo "Installing the Node license checker ..."
+		echo
+	} 2>/dev/null
+	curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-node.json -o .bin/license-template-node.json
 fi
