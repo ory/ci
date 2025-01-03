@@ -30,9 +30,9 @@ if [ -f go.mod ]; then
 		echo "No Go modules found" >&2
 	else
 		# Workaround until https://github.com/google/go-licenses/issues/307 is fixed
-		# .bin/go-licenses report "$module_name" --template .bin/license-template-go.tpl 2>/dev/null
+		# "${bin_dir}"/go-licenses report "$module_name" --template "${bin_dir}"/license-template-go.tpl 2>/dev/null
 		#
-		echo "$go_modules" | xargs -I {} sh -c '.bin/go-licenses report --template .bin/license-template-go.tpl {}' | grep -v '^$'
+		echo "$go_modules" | xargs -I {} sh -c '"${bin_dir}"/go-licenses report --template "${bin_dir}"/license-template-go.tpl {}' | grep -v '^$'
 		echo
 	fi
 fi
