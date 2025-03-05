@@ -16,7 +16,7 @@ runs:
     - uses: ory/ci/checkout@master
       with:
         path: current-repo
-    - uses: actions/setup-go@v2
+    - uses: actions/setup-go@v4
       with:
         go-version: "1.22"
     - run: |
