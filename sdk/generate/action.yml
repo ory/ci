@@ -25,7 +25,7 @@ runs:
       with:
         path: current-repo
         token: ${{ inputs.token || github.token }}
-    - uses: actions/setup-go@v2
+    - uses: actions/setup-go@v4
       with:
         go-version: "1.22.1"
     - run: |
@@ -51,7 +51,7 @@ runs:
         mkdir ../internal
         cp -R internal/httpclient ../internal
       shell: bash
-    - uses: actions/cache@v2
+    - uses: actions/cache@v4
       with:
         path: |
           internal/httpclient

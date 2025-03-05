@@ -23,7 +23,7 @@ runs:
         token: ${{ inputs.token || github.token }}
         path: current-repo
         fetch-depth: 0
-    - uses: actions/setup-go@v2
+    - uses: actions/setup-go@v4
       with:
         go-version: "1.22"
     - run: |
