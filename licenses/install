@@ -41,7 +41,7 @@ if [ "$FULL_INSTALL" = true ] || [ -f go.mod ]; then
 		echo "Installing the Go license checker ..."
 		echo
 	} 2>/dev/null
-	GOBIN=$(pwd)/.bin go install github.com/google/go-licenses@master
+	GOBIN=$(pwd)/.bin go install github.com/google/go-licenses/v2@master
 	curl https://raw.githubusercontent.com/ory/ci/master/licenses/license-template-go.tpl -o .bin/license-template-go.tpl
 fi
 
