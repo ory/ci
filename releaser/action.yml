@@ -88,10 +88,10 @@ runs:
 
         if [[ "$OSTYPE" == "darwin"* ]]; then
           sed -i '' '/^# /d' "$notes"
-          sed -i '' '/^GitOrigin-RevId:/d' "$notes"
+          sed -i '' '/^[[:space:]]*GitOrigin-RevId:/ {N; d;}' "$notes"
         else
           sed -i '/^# /d' "$notes"
-          sed -i '/^GitOrigin-RevId:/d' "$notes"
+          sed -i '/^[[:space:]]*GitOrigin-RevId:/ {N; d;}' "$notes"
         fi
 
         npx prettier -w "$notes"
