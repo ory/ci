@@ -22,7 +22,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: ory/ci/checkout@53206fb2760d6580b0e3fa4e4d7547f5d7a0c109 # master
+    - uses: ory/ci/checkout@b405f7fc6a2f89b8f42d6bf0290c6820472224af # master
     - run: |
         git fetch origin +refs/tags/*:refs/tags/*
       shell: bash

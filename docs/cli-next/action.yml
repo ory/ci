@@ -20,54 +20,99 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: ory/ci/checkout@master
+    - uses: ory/ci/checkout@b405f7fc6a2f89b8f42d6bf0290c6820472224af # master
       with:
         token: ${{ inputs.token || github.token }}
         path: current-repo
         fetch-depth: 0
-    - uses: actions/setup-go@v4
+        persist-credentials: false
+    - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
       with:
-        go-version: "1.22"
-    - run: |
-        git config --global user.email "60093411+ory-bot@users.noreply.github.com"
-        git config --global user.name "ory-bot"
-      shell: bash
+        go-version-file: current-repo/go.mod
     - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
       shell: bash
 
-    - uses: actions/checkout@v2
+    - name: Build CLI docs
+      env:
+        CLI_DOC_ARG: ${{ inputs.arg }}
+      shell: bash
+      run: |
+        set -euo pipefail
+        cd current-repo
+        make .bin/clidoc
+        args=()
+        if [[ -n "$CLI_DOC_ARG" ]]; then
+          args+=("$CLI_DOC_ARG")
+        fi
+        .bin/clidoc "${args[@]}" "$RUNNER_TEMP/cli-docs"
+
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       with:
         repository: ory/docs
         path: docs
         ref: ${{ inputs.docs-branch }}
         fetch-depth: 0
-        token: ${{ inputs.token || github.token  }}
+        persist-credentials: false
 
-    - name: Build and push CLI docs
+    - name: Validate generated CLI docs
+      env:
+        OUTPUT_DIR: ${{ inputs.output-dir }}
       shell: bash
       run: |
-        cd current-repo
-        make .bin/clidoc
-        .bin/clidoc ${{ inputs.arg }} ../docs/${{ inputs.output-dir }}
+        set -euo pipefail
+        if [[ ! "$OUTPUT_DIR" =~ ^[A-Za-z0-9._/-]+$ ]] ||
+          [[ "$OUTPUT_DIR" == /* ]] || [[ "/$OUTPUT_DIR/" == */../* ]]; then
+          echo "output-dir must be a relative path without parent traversal"
+          exit 1
+        fi
+        if find "$RUNNER_TEMP/cli-docs" -type l | grep -q .; then
+          echo "generated documentation contains symlinks"
+          exit 1
+        fi
+        if find "$RUNNER_TEMP/cli-docs" -type f ! -name '*.md' | grep -q .; then
+          echo "generated documentation contains non-Markdown files"
+          exit 1
+        fi
+        if [[ -z "$(find "$RUNNER_TEMP/cli-docs" -type f -name '*.md' -print -quit)" ]]; then
+          echo "generated documentation is empty"
+          exit 1
+        fi
+        rm -rf "docs/$OUTPUT_DIR"
+        mkdir -p "docs/$OUTPUT_DIR"
+        cp -R "$RUNNER_TEMP/cli-docs/." "docs/$OUTPUT_DIR/"
 
-    - uses: ory/ci/prettier@master
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
       with:
-        dir: docs
-        action: write
-        target: ${{ inputs.output-dir }}
+        node-version: "24"
+    - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      with:
+        version: 10.34.5
+    - name: Format generated CLI docs
+      env:
+        OUTPUT_DIR: ${{ inputs.output-dir }}
+      working-directory: docs
+      shell: bash
+      run: pnpm dlx prettier@3.8.2 --write "$OUTPUT_DIR"
 
     - name: Push docs
       if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
+      env:
+        DOCS_BRANCH: ${{ inputs.docs-branch }}
+        ORY_BOT_PAT: ${{ inputs.token }}
       shell: bash
       run: |
+        set -euo pipefail
         cd docs
         if [[ -z "$(git status --porcelain)" ]]; then
           echo "Nothing to commit"
           exit 0
         fi
+        git config --local user.email "60093411+ory-bot@users.noreply.github.com"
+        git config --local user.name "ory-bot"
         git add -A
-        git stash
-        git pull --rebase origin ${{ inputs.docs-branch }}
-        git stash apply
-        git commit -a -m "autogen(docs): generate cli docs"
-        git push origin ${{ inputs.docs-branch }}
+        git stash --include-untracked
+        git pull --rebase origin "$DOCS_BRANCH"
+        git stash pop
+        git add -A
+        git commit -m "autogen(docs): generate cli docs"
+        git push "https://ory-bot:${ORY_BOT_PAT}@github.com/ory/docs.git" "HEAD:$DOCS_BRANCH"
