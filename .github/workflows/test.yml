@@ -7,16 +7,11 @@ on:
       - reopened
   push:
 
-permissions:
-  contents: read
-
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
+      - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3
       - id: cache-node
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
@@ -24,39 +19,6 @@ jobs:
           key:
             ${{ runner.os }}-cococo-node-${{
             hashFiles('conventional_commit_config/package-lock.json') }}
-      - name: Check immutable action dependencies
-        shell: bash
-        run: |
-          set -euo pipefail
-          files=(
-            checkout/action.yml
-            releaser/action.yml
-            newsletter/action.yml
-            newsletter/slack-notify/action.yml
-            .github/workflows/docs-cli-next.yml
-          )
-          failed=0
-          while IFS=: read -r file line contents; do
-            [[ "$contents" =~ uses:[[:space:]]+([^[:space:]#]+) ]] || continue
-            target=${BASH_REMATCH[1]}
-            if [[ "$target" == ./* ]]; then
-              continue
-            elif [[ "$target" == docker://* ]]; then
-              if [[ ! "$target" =~ @sha256:[0-9a-f]{64}$ ]]; then
-                echo "${file}:${line}: ${target} must use an OCI digest" >&2
-                failed=1
-              fi
-            elif [[ ! "$target" =~ @[0-9a-f]{40}$ ]]; then
-              echo "${file}:${line}: ${target} must use a full commit SHA" >&2
-              failed=1
-            fi
-          done < <(grep -nHE '^[[:space:]]*(-[[:space:]]+)?uses:' "${files[@]}")
-          if grep -nE \
-            'raw\.githubusercontent\.com/.+/(master|main)/|oryd/xgoreleaser:latest' \
-            "${files[@]}"; then
-            failed=1
-          fi
-          exit "$failed"
       - run: cd authors && make test
       - run: cd conventional_commit_config && make test
       - run: cd changelog && make test

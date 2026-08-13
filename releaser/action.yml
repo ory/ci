@@ -22,37 +22,37 @@ runs:
   using: "composite"
   steps:
     - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # main@2025-07-31
+      uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # main
       with:
+        # this might remove tools that are actually needed,
+        # if set to "true" but frees about 6 GB
         tool-cache: false
+
+        # all of these default to true, but feel free to set to
+        # "false" if necessary for your workflow
         android: true
         dotnet: true
         haskell: true
         large-packages: true
         docker-images: true
         swap-storage: true
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+    - uses: ory/ci/checkout@53206fb2760d6580b0e3fa4e4d7547f5d7a0c109 # master
       with:
         token: ${{ inputs.token }}
         fetch-depth: 0
-        persist-credentials: false
     - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
       with:
-        node-version: "24"
+        node-version: "16"
     - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
       with:
         go-version: "1.25"
-    - name: Configure the release author
-      run: |
+    - run: |
         git config --global user.email "60093411+ory-bot@users.noreply.github.com"
         git config --global user.name "ory-bot"
       shell: bash
-    - name: Configure Go environment
-      run: echo 'GOPATH='"$(go env GOPATH)" >> "$GITHUB_ENV"
+    - run: echo 'GOPATH='"$(go env GOPATH)" >> $GITHUB_ENV
       shell: bash
-    - name: Prepare release-note paths
-      run: |
-        set -euo pipefail
+    - run: |
         if [[ ! -e package.json ]]; then
           echo '{"private": true, "version": "0.0.0"}' > package.json
           git add package.json
@@ -60,24 +60,32 @@ runs:
           echo "package.json exists and needs not be written"
         fi
 
-        echo "notes=${RUNNER_TEMP}/release-notes.md" >> "$GITHUB_ENV"
+        echo 'notes='"$(mktemp).md" >> $GITHUB_ENV
       shell: bash
-    - name: Checkout changelog renderer
-      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+    - name: Install moreutils (for sponge)
+      shell: bash
+      run: |
+        sudo apt install -y moreutils
+    - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       with:
         repository: ory/changelog
-        ref: a084a3aeb57e581ad46f61f14f03889ece64d2f8 # master@2025-10-22
+        ref: a084a3aeb57e581ad46f61f14f03889ece64d2f8 # master
         path: changelog
-        persist-credentials: false
-    - name: Render release notes
-      env:
+        token: ${{ inputs.token }}
+
+    - env:
         CURRENT_TAG: ${{ github.ref_name }}
       run: |
-        set -euo pipefail
         npm --no-git-tag-version version "$CURRENT_TAG"
-        (cd "$GITHUB_WORKSPACE/changelog" && npm ci)
-        npx --yes conventional-changelog-cli@2.1.1 \
-          --config "changelog/index.js" -r 2 -o "$notes"
+
+        (
+          cd "$GITHUB_WORKSPACE/changelog";
+          npm i
+        )
+
+        git fetch origin +refs/tags/*:refs/tags/*
+
+        npx conventional-changelog-cli@v2.1.1 --config "changelog/index.js" -r 2 -o "$notes"
 
         if [[ "$OSTYPE" == "darwin"* ]]; then
           sed -i '' '/^# /d' "$notes"
@@ -87,13 +95,13 @@ runs:
           sed -i '/^[[:space:]]*GitOrigin-RevId:/ {N; d;}' "$notes"
         fi
 
-        npx --yes prettier@3.8.2 --write "$notes"
+        npx prettier -w "$notes"
         git reset --hard HEAD
       shell: bash
-    - uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8 # v4
-    - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4
-    - name: Build, sign, and publish the release
-      env:
+
+    - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
+    - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+    - env:
         GORELEASER_CURRENT_TAG: ${{ github.ref_name }}
         GORELEASER_KEY: ${{ inputs.goreleaser_key }}
         GITHUB_TOKEN: ${{ inputs.token }}
@@ -101,71 +109,53 @@ runs:
         DOCKER_USERNAME: ${{ inputs.docker_username }}
         DOCKER_PASSWORD: ${{ inputs.docker_password }}
       run: |
-        set -euo pipefail
         cat "$notes"
+        # clean up ory/changelog checkout
         rm -rf changelog
 
-        docker run --privileged \
-          --mount type=bind,source="$(pwd)",target=/project \
-          --mount type=bind,source="$notes",target=/notes.md \
-          --platform linux/amd64 \
-          -e GORELEASER_KEY \
-          -e GITHUB_TOKEN \
-          -e COSIGN_PWD \
-          -e DOCKER_USERNAME \
-          -e DOCKER_PASSWORD \
-          -e GORELEASER_CURRENT_TAG \
-          -v /var/run/docker.sock:/var/run/docker.sock \
-          oryd/xgoreleaser:1.26.0-2.14.1@sha256:635fdea1104f933c13298228601ceeda725eb7ce3ed3c1757aae712f44bdd773 \
-          release --release-header "/notes.md" --clean --timeout 60m
-      shell: bash
-    - name: Commit release artifacts
-      env:
-        ORY_BOT_PAT: ${{ inputs.token }}
-      run: |
+        docker pull --platform linux/amd64 oryd/xgoreleaser:1.26.0-2.14.1@sha256:635fdea1104f933c13298228601ceeda725eb7ce3ed3c1757aae712f44bdd773
+        docker run --privileged --mount type=bind,source="$(pwd)",target=/project \
+            --mount type=bind,source="$notes",target=/notes.md \
+            --platform linux/amd64 \
+            -e GORELEASER_KEY \
+            -e GITHUB_TOKEN \
+            -e COSIGN_PWD \
+            -e DOCKER_USERNAME \
+            -e DOCKER_PASSWORD \
+            -e GORELEASER_CURRENT_TAG \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            oryd/xgoreleaser:1.26.0-2.14.1@sha256:635fdea1104f933c13298228601ceeda725eb7ce3ed3c1757aae712f44bdd773 release --release-header "/notes.md" --clean --timeout 60m
+
         git add -A
         git stash || true
         git checkout master || true
         git stash pop || true
         git commit -a -m "autogen: update release artifacts" -m "[skip ci]" || true
-        git pull "https://x-access-token:${ORY_BOT_PAT}@github.com/${GITHUB_REPOSITORY}.git" \
-          master --rebase || true
+        git pull origin master --rebase || true
         if [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
-          git push "https://x-access-token:${ORY_BOT_PAT}@github.com/${GITHUB_REPOSITORY}.git" \
-            "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" || true
+          git push origin "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" || true
         fi
       shell: bash
-    - name: Configure documentation version
-      run: |
+    - run: |
         docs_version="$(echo "$GITHUB_REF_NAME" | awk -F'.' '{ printf("%s.%s", $1, $2) }')"
-        echo "DOCS_VERSION=${docs_version}" >> "$GITHUB_ENV"
+        echo 'DOCS_VERSION='"$docs_version" >> $GITHUB_ENV
       shell: bash
-    - name: Run post-release tasks
-      id: post_release
-      env:
-        DOCKER_TAG: ${{ github.ref_name }}
-      run: |
-        set -euo pipefail
+    - run: |
         if [[ $(git describe --tags) == *"pre"* ]]; then
           echo "This is a pre-release, skipping docs publishing."
           exit 0
         fi
 
         make post-release
-        echo "publish=true" >> "$GITHUB_OUTPUT"
-      shell: bash
-    - name: Commit post-release artifacts
-      if: ${{ steps.post_release.outputs.publish == 'true' }}
-      env:
-        ORY_BOT_PAT: ${{ inputs.token }}
-      run: |
+
         git add -A
         git stash || true
         git checkout master || true
-        git pull "https://x-access-token:${ORY_BOT_PAT}@github.com/${GITHUB_REPOSITORY}.git" \
-          master --ff-only || true
+        git pull -ff || true
         git stash pop || true
         git commit --allow-empty -a -m "autogen(docs): generate and bump docs" -m "[skip ci]" || true
-        git push "https://x-access-token:${ORY_BOT_PAT}@github.com/${GITHUB_REPOSITORY}.git" \
-          HEAD:master || true
+        git push origin HEAD:master || true
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        DOCKER_TAG: ${{ github.ref_name }}
       shell: bash
