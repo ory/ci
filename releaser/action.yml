@@ -22,7 +22,7 @@ runs:
   using: "composite"
   steps:
     - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@main
+      uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # main
       with:
         # this might remove tools that are actually needed,
         # if set to "true" but frees about 6 GB
@@ -36,14 +36,14 @@ runs:
         large-packages: true
         docker-images: true
         swap-storage: true
-    - uses: ory/ci/checkout@master
+    - uses: ory/ci/checkout@53206fb2760d6580b0e3fa4e4d7547f5d7a0c109 # master
       with:
         token: ${{ inputs.token }}
         fetch-depth: 0
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
       with:
         node-version: "16"
-    - uses: actions/setup-go@v6
+    - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
       with:
         go-version: "1.25"
     - run: |
@@ -66,9 +66,10 @@ runs:
       shell: bash
       run: |
         sudo apt install -y moreutils
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       with:
         repository: ory/changelog
+        ref: a084a3aeb57e581ad46f61f14f03889ece64d2f8 # master
         path: changelog
         token: ${{ inputs.token }}
 
@@ -98,8 +99,8 @@ runs:
         git reset --hard HEAD
       shell: bash
 
-    - uses: docker/setup-qemu-action@v3
-    - uses: docker/setup-buildx-action@v3
+    - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
+    - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
     - env:
         GORELEASER_CURRENT_TAG: ${{ github.ref_name }}
         GORELEASER_KEY: ${{ inputs.goreleaser_key }}
@@ -112,7 +113,7 @@ runs:
         # clean up ory/changelog checkout
         rm -rf changelog
 
-        docker pull --platform linux/amd64 oryd/xgoreleaser:latest
+        docker pull --platform linux/amd64 oryd/xgoreleaser:1.26.0-2.14.1@sha256:635fdea1104f933c13298228601ceeda725eb7ce3ed3c1757aae712f44bdd773
         docker run --privileged --mount type=bind,source="$(pwd)",target=/project \
             --mount type=bind,source="$notes",target=/notes.md \
             --platform linux/amd64 \
@@ -123,7 +124,7 @@ runs:
             -e DOCKER_PASSWORD \
             -e GORELEASER_CURRENT_TAG \
             -v /var/run/docker.sock:/var/run/docker.sock \
-            oryd/xgoreleaser:latest release --release-header "/notes.md" --clean --timeout 60m
+            oryd/xgoreleaser:1.26.0-2.14.1@sha256:635fdea1104f933c13298228601ceeda725eb7ce3ed3c1757aae712f44bdd773 release --release-header "/notes.md" --clean --timeout 60m
 
         git add -A
         git stash || true
