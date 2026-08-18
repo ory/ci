@@ -13,9 +13,18 @@ runs:
         # a pull request then we can checkout the head.
         fetch-depth: 2
         token: ${{ inputs.token || github.token }}
+    # Install the Go version the repository requires. With a fixed, older
+    # version, the go command fetches the required toolchain into the module
+    # cache instead, where go-licenses cannot identify standard-library
+    # packages and fails with "Package <std> does not have module info".
     - uses: actions/setup-go@7b8cf10d4e4a01d4992d18a89f4d7dc5a3e6d6f4 # v4
+      if: hashFiles('go.mod') != ''
       with:
-        go-version: "1.23"
+        go-version-file: go.mod
+    - uses: actions/setup-go@7b8cf10d4e4a01d4992d18a89f4d7dc5a3e6d6f4 # v4
+      if: hashFiles('go.mod') == ''
+      with:
+        go-version: "stable"
     - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
       with:
         python-version: "3.13"
