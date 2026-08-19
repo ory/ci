@@ -1,52 +1,197 @@
 #!/bin/sh
 set -e
 
-ORY_CI_REF=${ORY_CI_REF:-747531b2acc027b7308a27722efb2dc6d43377db}
+DEFAULT_SOURCE_REF=747531b2acc027b7308a27722efb2dc6d43377db
 
-install_asset() {
-	source_path=$1
-	destination=$2
-	mode=$3
-	if [ -n "${ORY_CI_ROOT:-}" ]; then
-		install -m "$mode" "${ORY_CI_ROOT}/licenses/${source_path}" "$destination"
-		return
-	fi
-	curl --fail --location --silent --show-error \
-		"https://raw.githubusercontent.com/ory/ci/${ORY_CI_REF}/licenses/${source_path}" \
-		-o "$destination"
-	chmod "$mode" "$destination"
+FULL_INSTALL=false
+SOURCE_DIR=
+SOURCE_REF=
+SOURCE_MODE=default
+STAGING_DIR=
+PREPARED_ASSETS=
+ROLLBACK_ASSETS=
+SHA256_TOOL=
+COMMIT_STARTED=false
+INSTALL_COMPLETE=false
+BIN_DIR_CREATED=false
+
+die() {
+	echo "licenses/install: $*" >&2
+	exit 1
 }
 
-# Default mono-install to false
-FULL_INSTALL=false
+usage() {
+	cat >&2 <<'EOF'
+Usage: licenses/install [--full-install] [--source-ref <40-hex SHA> | --source-dir <path>]
+EOF
+}
 
-# Parse command line arguments
+cleanup() {
+	set +e
+	if [ "$COMMIT_STARTED" = true ] && [ "$INSTALL_COMPLETE" = false ] && [ -f "$ROLLBACK_ASSETS" ]; then
+		while IFS='|' read -r destination backup_path existed; do
+			rm -f "$destination"
+			if [ "$existed" = true ]; then
+				mv -f "$backup_path" "$destination"
+			fi
+		done <"$ROLLBACK_ASSETS"
+	fi
+	if [ -n "$PREPARED_ASSETS" ] && [ -f "$PREPARED_ASSETS" ]; then
+		while IFS='|' read -r _source_path _destination _mode prepared_path; do
+			[ -z "$prepared_path" ] || rm -f "$prepared_path"
+		done <"$PREPARED_ASSETS"
+	fi
+	if [ -n "$STAGING_DIR" ] && [ -d "$STAGING_DIR" ]; then
+		rm -rf "$STAGING_DIR"
+	fi
+	if [ "$BIN_DIR_CREATED" = true ]; then
+		rmdir .bin 2>/dev/null
+	fi
+}
+
+trap cleanup 0
+trap 'exit 1' 1 2 15
+
 while [ "$#" -gt 0 ]; do
 	case "$1" in
 	--full-install)
 		FULL_INSTALL=true
 		shift
 		;;
+	--source-ref)
+		[ "$#" -ge 2 ] && [ -n "$2" ] || {
+			usage
+			die "--source-ref requires a value"
+		}
+		[ -z "$SOURCE_REF" ] || die "--source-ref may only be specified once"
+		[ -z "$SOURCE_DIR" ] || die "--source-ref and --source-dir are mutually exclusive"
+		SOURCE_REF=$(printf '%s' "$2" | tr 'A-F' 'a-f')
+		shift 2
+		;;
+	--source-dir)
+		[ "$#" -ge 2 ] && [ -n "$2" ] || {
+			usage
+			die "--source-dir requires a value"
+		}
+		[ -z "$SOURCE_DIR" ] || die "--source-dir may only be specified once"
+		[ -z "$SOURCE_REF" ] || die "--source-ref and --source-dir are mutually exclusive"
+		SOURCE_DIR=$2
+		shift 2
+		;;
 	*)
-		echo "Unknown parameter: $1"
-		exit 1
+		usage
+		die "unknown parameter: $1"
 		;;
 	esac
 done
 
-{
-	echo
-	echo "Installing license checker engine ..."
-	echo
-} 2>/dev/null
+if [ -n "$SOURCE_REF" ]; then
+	[ "${#SOURCE_REF}" -eq 40 ] || die "--source-ref must be a full 40-character commit SHA"
+	case "$SOURCE_REF" in
+	*[!0-9a-f]*) die "--source-ref must contain only hexadecimal characters" ;;
+	esac
+	SOURCE_MODE=ref
+elif [ -n "$SOURCE_DIR" ]; then
+	[ -d "$SOURCE_DIR" ] || die "source directory does not exist: $SOURCE_DIR"
+	SOURCE_MODE=dir
+else
+	SOURCE_REF=$DEFAULT_SOURCE_REF
+fi
+
+if command -v sha256sum >/dev/null 2>&1; then
+	SHA256_TOOL=sha256sum
+elif command -v shasum >/dev/null 2>&1; then
+	SHA256_TOOL=shasum
+elif command -v openssl >/dev/null 2>&1; then
+	SHA256_TOOL=openssl
+else
+	die "a SHA-256 implementation is required (sha256sum, shasum, or openssl)"
+fi
+
+sha256_file() {
+	case "$SHA256_TOOL" in
+	sha256sum)
+		sha256sum "$1" | awk '{print $1}'
+		;;
+	shasum)
+		shasum -a 256 "$1" | awk '{print $1}'
+		;;
+	openssl)
+		openssl dgst -sha256 -r "$1" | awk '{print $1}'
+		;;
+	esac
+}
+
+STAGING_DIR=$(mktemp -d "${TMPDIR:-/tmp}/ory-ci-licenses.XXXXXX") || die "unable to create staging directory"
+ASSET_LIST="$STAGING_DIR/assets"
+PREPARED_ASSETS="$STAGING_DIR/prepared-assets"
+ROLLBACK_ASSETS="$STAGING_DIR/rollback-assets"
+CHECKSUMS_FILE="$STAGING_DIR/checksums.sha256"
+: >"$ASSET_LIST"
+: >"$PREPARED_ASSETS"
+: >"$ROLLBACK_ASSETS"
+
+write_default_checksums() {
+	cat >"$CHECKSUMS_FILE" <<'EOF'
+05aec4e6acd68e3b2649937d7e02d219c46d15d2f9a88f9bd4c584a934feeef8  license-engine.sh
+2ca46be9e72520bfd7203d54bcf1533b963e07fcc8c5e54355a0d7e7a2a0bcca  licenses
+4e30b5e88b559a449835c0fc7e20f21b91eb580227b3637070cb61c9b322793c  list-licenses
+4dde5952bf6c8adad4479bff57233ea929c04ea92e2d106c4d573c19dfdde10e  license-template-go.tpl
+2b4af23297359dee7d6fa0483b95a31bd7c1e474ab88273e77e7072ab16fc6ae  license-template-node.json
+EOF
+}
+
+download() {
+	url=$1
+	destination=$2
+	curl --fail --location --silent --show-error "$url" -o "$destination"
+}
+
+case "$SOURCE_MODE" in
+default)
+	write_default_checksums
+	;;
+ref)
+	download \
+		"https://raw.githubusercontent.com/ory/ci/${SOURCE_REF}/licenses/checksums.sha256" \
+		"$CHECKSUMS_FILE"
+	;;
+dir)
+	[ -f "$SOURCE_DIR/checksums.sha256" ] || die "checksum manifest not found: $SOURCE_DIR/checksums.sha256"
+	install -m 0600 "$SOURCE_DIR/checksums.sha256" "$CHECKSUMS_FILE"
+	;;
+esac
+
+manifest_checksum() {
+	asset=$1
+	found=
+	while IFS=' ' read -r checksum filename extra; do
+		[ "$filename" = "$asset" ] || continue
+		[ -z "$extra" ] || die "malformed checksum entry for $asset"
+		[ -z "$found" ] || die "duplicate checksum entry for $asset"
+		found=$checksum
+	done <"$CHECKSUMS_FILE"
+
+	[ -n "$found" ] || die "checksum missing for $asset"
+	[ "${#found}" -eq 64 ] || die "malformed checksum for $asset"
+	case "$found" in
+	*[!0-9a-f]*) die "malformed checksum for $asset" ;;
+	esac
+	printf '%s\n' "$found"
+}
+
+add_asset() {
+	printf '%s|%s|%s\n' "$1" "$2" "$3" >>"$ASSET_LIST"
+}
+
+add_asset license-engine.sh .bin/license-engine.sh 0755
+add_asset licenses .bin/licenses 0755
+add_asset list-licenses .bin/list-licenses 0755
 
 if [ ! -d .bin ]; then
 	mkdir .bin
+	BIN_DIR_CREATED=true
 fi
-
-install_asset license-engine.sh .bin/license-engine.sh 0755
-install_asset licenses .bin/licenses 0755
-install_asset list-licenses .bin/list-licenses 0755
 
 if [ "$FULL_INSTALL" = true ] || [ -f go.mod ]; then
 	{
@@ -54,8 +199,11 @@ if [ "$FULL_INSTALL" = true ] || [ -f go.mod ]; then
 		echo "Installing the Go license checker ..."
 		echo
 	} 2>/dev/null
-	GOBIN="$(pwd)/.bin" go install github.com/google/go-licenses/v2@v2.0.1
-	install_asset license-template-go.tpl .bin/license-template-go.tpl 0644
+	GO_BIN_DIR="$STAGING_DIR/go-bin"
+	mkdir "$GO_BIN_DIR"
+	GOBIN="$GO_BIN_DIR" go install github.com/google/go-licenses/v2@v2.0.1
+	[ -f "$GO_BIN_DIR/go-licenses" ] || die "go-licenses installation did not produce a binary"
+	add_asset license-template-go.tpl .bin/license-template-go.tpl 0644
 fi
 
 if [ "$FULL_INSTALL" = true ] || [ -f package.json ]; then
@@ -64,5 +212,68 @@ if [ "$FULL_INSTALL" = true ] || [ -f package.json ]; then
 		echo "Installing the Node license checker ..."
 		echo
 	} 2>/dev/null
-	install_asset license-template-node.json .bin/license-template-node.json 0644
+	add_asset license-template-node.json .bin/license-template-node.json 0644
 fi
+
+{
+	echo
+	echo "Installing license checker engine ..."
+	echo
+} 2>/dev/null
+
+# Fetch and verify every requested asset before preparing any destination.
+while IFS='|' read -r source_path _destination _mode; do
+	staged_path="$STAGING_DIR/$source_path"
+	case "$SOURCE_MODE" in
+	dir)
+		[ -f "$SOURCE_DIR/$source_path" ] || die "source asset not found: $SOURCE_DIR/$source_path"
+		install -m 0600 "$SOURCE_DIR/$source_path" "$staged_path"
+		;;
+	*)
+		download \
+			"https://raw.githubusercontent.com/ory/ci/${SOURCE_REF}/licenses/${source_path}" \
+			"$staged_path"
+		;;
+	esac
+
+	expected=$(manifest_checksum "$source_path")
+	actual=$(sha256_file "$staged_path") || die "unable to checksum $source_path"
+	[ "$actual" = "$expected" ] || die "checksum mismatch for $source_path"
+done <"$ASSET_LIST"
+
+# Prepare every destination before replacing any existing installed asset.
+while IFS='|' read -r source_path destination mode; do
+	prepared_path=$(mktemp "${destination}.tmp.XXXXXX") || die "unable to prepare $destination"
+	printf '%s|%s|%s|%s\n' "$source_path" "$destination" "$mode" "$prepared_path" >>"$PREPARED_ASSETS"
+	install -m "$mode" "$STAGING_DIR/$source_path" "$prepared_path"
+
+	expected=$(manifest_checksum "$source_path")
+	actual=$(sha256_file "$prepared_path") || die "unable to checksum prepared $source_path"
+	[ "$actual" = "$expected" ] || die "checksum mismatch while preparing $source_path"
+done <"$ASSET_LIST"
+
+if [ -n "${GO_BIN_DIR:-}" ]; then
+	prepared_path=$(mktemp ".bin/go-licenses.tmp.XXXXXX") || die "unable to prepare .bin/go-licenses"
+	printf '%s|%s|%s|%s\n' generated .bin/go-licenses 0755 "$prepared_path" >>"$PREPARED_ASSETS"
+	install -m 0755 "$GO_BIN_DIR/go-licenses" "$prepared_path"
+fi
+
+# Snapshot existing destinations so a failed final rename can roll back the
+# complete install set.
+rollback_index=0
+while IFS='|' read -r _source_path destination _mode _prepared_path; do
+	rollback_index=$((rollback_index + 1))
+	backup_path="$STAGING_DIR/backup-$rollback_index"
+	if [ -e "$destination" ]; then
+		cp -p "$destination" "$backup_path"
+		printf '%s|%s|true\n' "$destination" "$backup_path" >>"$ROLLBACK_ASSETS"
+	else
+		printf '%s||false\n' "$destination" >>"$ROLLBACK_ASSETS"
+	fi
+done <"$PREPARED_ASSETS"
+
+COMMIT_STARTED=true
+while IFS='|' read -r _source_path destination _mode prepared_path; do
+	mv -f "$prepared_path" "$destination"
+done <"$PREPARED_ASSETS"
+INSTALL_COMPLETE=true

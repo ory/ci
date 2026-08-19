@@ -4,8 +4,8 @@ runs:
   steps:
     - name: Install license scanner
       run: |
-        ORY_CI_ROOT="${{ github.action_path }}/../.." \
-          sh "${{ github.action_path }}/../install"
+        sh "$GITHUB_ACTION_PATH/../install" \
+          --source-dir "$GITHUB_ACTION_PATH/.."
       shell: bash
     - name: Check licenses
       run: .bin/licenses

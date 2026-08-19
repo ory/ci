@@ -28,6 +28,7 @@ test: .bin/shellcheck .bin/shfmt  # runs all automated tests
 	echo running tests ...
 	find . -type f | grep -v node_modules | grep -v '^\.\/\.bin\/' | grep -v '\.json$$' | grep -v '\.yml$$' | xargs grep -l '^\#!\/' | xargs .bin/shellcheck
 	.bin/shfmt --diff .
+	./test.sh
 
 .bin/shellcheck: Makefile
 	echo installing Shellcheck ...
