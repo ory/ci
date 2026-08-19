@@ -1,5 +1,5 @@
-#!/bin/sh
-set -e
+#!/bin/bash
+set -eo pipefail
 
 bin_dir="$(cd "$(dirname "$0")" && pwd)"
 
@@ -32,7 +32,7 @@ if [ -f go.mod ]; then
 	if [ -z "$go_packages" ]; then
 		echo "No Go modules found" >&2
 	else
-		echo "$go_packages" | xargs -I {} sh -c '.bin/go-licenses report --template .bin/license-template-go.tpl {}' | grep -v '^$'
+		echo "$go_packages" | xargs -I {} "${bin_dir}/go-licenses" report --template "${bin_dir}/license-template-go.tpl" {} | grep -v '^$'
 		echo
 	fi
 fi
