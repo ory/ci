@@ -69,7 +69,7 @@ runs:
     - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       with:
         repository: ory/changelog
-        ref: a084a3aeb57e581ad46f61f14f03889ece64d2f8 # master
+        ref: 3fb01ca0df0a6b0f2cef3f62a4c2e0c3a5c942b9 # master
         path: changelog
         token: ${{ inputs.token }}
 
