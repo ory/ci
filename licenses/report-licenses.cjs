@@ -167,7 +167,7 @@ async function scanNode(cwd, evidence) {
         .split(path.sep)
         .includes("node_modules"),
       detected_license: Array.isArray(info.licenses)
-        ? info.licenses.join(" AND ")
+        ? info.licenses.join("; ")
         : info.licenses || "UNKNOWN",
     }
     return applyReview(record, info.path, evidence)

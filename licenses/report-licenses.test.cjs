@@ -104,7 +104,7 @@ test("classifies pnpm packages from their real directories without losing transi
     const b = join(directory, "node_modules/.pnpm/b/node_modules/b")
     for (const [location, name, license] of [
       [a, "a", "MIT"],
-      [b, "b", "BSD-3-Clause"],
+      [b, "b", ["BSD-3-Clause", "MIT"]],
     ]) {
       mkdirSync(location, { recursive: true })
       writeFileSync(
@@ -145,7 +145,7 @@ test("classifies pnpm packages from their real directories without losing transi
     const rows = await scanNode(directory, [])
     assert.deepEqual(rows.map((r) => [r.name, r.detected_license]).sort(), [
       ["a@1.0.0", "MIT"],
-      ["b@1.0.0", "BSD-3-Clause"],
+      ["b@1.0.0", "BSD-3-Clause; MIT"],
     ])
   } finally {
     process.env.PATH = previousPath
