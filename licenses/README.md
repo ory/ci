@@ -54,3 +54,7 @@ its BSD and MIT notices.
 The historical Keto namespace package's Apache-2.0 grant was confirmed by an Ory
 maintainer. That record applies only to the exact published artifact; new
 releases should contain their own license metadata and text.
+
+The psx v1.2.77 license explicitly offers `BSD-3-Clause OR GPL-2.0-only`. Its
+reviewed record preserves that choice when the Go detector emits separate BSD
+and GPL rows; it does not infer OR from arbitrary lists of licenses.

@@ -152,3 +152,37 @@ test("classifies pnpm packages from their real directories without losing transi
     rmSync(directory, { recursive: true, force: true })
   }
 })
+
+test("psx's two detected licenses remain an explicit OR choice in CSV", () => {
+  const { readFileSync } = require("node:fs")
+  const evidence = JSON.parse(
+    readFileSync(join(__dirname, "reviewed-licenses.json")),
+  )
+  const directory = join(__dirname, "fixtures/psx-v1.2.77")
+  const name = "kernel.org/pub/linux/libs/security/libcap/psx"
+  const rows = ["BSD-3-Clause", "GPL-2.0"].map((detected_license) =>
+    applyReview(
+      { ecosystem: "go", name, version: "v1.2.77", detected_license },
+      directory,
+      evidence,
+    ),
+  )
+  assert.deepEqual(
+    rows.map((row) => row.detected_license),
+    ["BSD-3-Clause", "GPL-2.0"],
+  )
+  assert.ok(
+    rows.every(
+      (row) => row.reviewed_license === "BSD-3-Clause OR GPL-2.0-only",
+    ),
+  )
+  assert.equal(
+    toCSV(rows),
+    '"module name","licenses"\n"' + name + '","BSD-3-Clause OR GPL-2.0-only"\n',
+  )
+  assert.equal(
+    applyReview({ ...rows[0], version: "v1.2.76" }, directory, evidence)
+      .reviewed_license,
+    "",
+  )
+})

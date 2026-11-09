@@ -42,5 +42,15 @@
       "package.json": "c554ab5bd746e0958e5f308c8e94e1541eceb11cacb6d5f7ccdb70396c4b6029",
       "tsconfig.json": "9f681d77bd289cb3fea6a3bbda2c98856aa89692059623c29f58be52fd30b9c9"
     }
+  },
+  {
+    "ecosystem": "go",
+    "name": "kernel.org/pub/linux/libs/security/libcap/psx",
+    "version": "v1.2.77",
+    "reviewed_license": "BSD-3-Clause OR GPL-2.0-only",
+    "evidence": "https://kernel.googlesource.com/pub/scm/libs/libcap/libcap/+/refs/tags/libcap-korg-2.77/psx/License",
+    "files": {
+      "License": "279fa656c62857d42952b86a0789b98669ca1cb4b324a8d9e91397c174af4c14"
+    }
   }
 ]
