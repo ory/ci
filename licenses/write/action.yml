@@ -15,7 +15,10 @@ runs:
     - name: List and write licenses
       run: |
         mkdir -p .reports
-        .bin/list-licenses > .reports/dep-licenses.csv
+        report=$(mktemp .reports/dep-licenses.XXXXXX)
+        trap 'rm -f "$report"' EXIT
+        .bin/list-licenses > "$report"
+        mv "$report" .reports/dep-licenses.csv
       shell: bash
     - name: Commit result
       run: |

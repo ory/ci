@@ -1,0 +1,56 @@
+[
+  {
+    "ecosystem": "go",
+    "name": "github.com/golang/freetype/raster",
+    "version": "v0.0.0-20170609003504-e2365dfdc4a0",
+    "reviewed_license": "FTL OR GPL-2.0-or-later",
+    "evidence": "https://github.com/golang/freetype/blob/e2365dfdc4a0/LICENSE",
+    "files": {
+      "LICENSE": "d3ba056adc2b7909e95681deaae397fb37c97ed491a920f491214f07b62c41d0",
+      "licenses/ftl.txt": "f4b133e25df1f86ad3ffea453aa0e613f0474f34778dbbb3e437e7b2724937d8",
+      "licenses/gpl.txt": "c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18"
+    }
+  },
+  {
+    "ecosystem": "go",
+    "name": "github.com/jmespath/go-jmespath",
+    "version": "v0.4.0",
+    "reviewed_license": "Apache-2.0",
+    "evidence": "https://github.com/jmespath/go-jmespath/blob/v0.4.0/LICENSE",
+    "files": {
+      "LICENSE": "03cfaf331a260694d06227a589cdd2b5fcfab474697b72e250736696c313655a"
+    }
+  },
+  {
+    "ecosystem": "go",
+    "name": "github.com/t-k/fluent-logger-golang/fluent",
+    "version": "v1.0.0",
+    "reviewed_license": "Apache-2.0",
+    "evidence": "https://github.com/t-k/fluent-logger-golang/blob/v1.0.0/LICENSE",
+    "files": {
+      "LICENSE": "8a45a1d832c57a6eb6fb5b944ca6164c446a3e84a8ebef40780107fa9dc495f1"
+    }
+  },
+  {
+    "ecosystem": "node",
+    "name": "@ory/keto-namespace-types@0.10.0-alpha.0.pre.1",
+    "version": "0.10.0-alpha.0.pre.1",
+    "reviewed_license": "Apache-2.0",
+    "evidence": "Ory maintainer confirmation of the historical npm release, 2026-11-09",
+    "files": {
+      "index.d.ts": "baa989827e313598b85f50c096d180de48742c59515651823067543b1b8e08f1",
+      "package.json": "c554ab5bd746e0958e5f308c8e94e1541eceb11cacb6d5f7ccdb70396c4b6029",
+      "tsconfig.json": "9f681d77bd289cb3fea6a3bbda2c98856aa89692059623c29f58be52fd30b9c9"
+    }
+  },
+  {
+    "ecosystem": "go",
+    "name": "kernel.org/pub/linux/libs/security/libcap/psx",
+    "version": "v1.2.77",
+    "reviewed_license": "BSD-3-Clause OR GPL-2.0-only",
+    "evidence": "https://kernel.googlesource.com/pub/scm/libs/libcap/libcap/+/refs/tags/libcap-korg-2.77/psx/License",
+    "files": {
+      "License": "279fa656c62857d42952b86a0789b98669ca1cb4b324a8d9e91397c174af4c14"
+    }
+  }
+]
