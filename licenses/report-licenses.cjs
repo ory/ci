@@ -84,16 +84,14 @@ async function scanNode(cwd, evidence) {
       .length
   )
     return []
-  const checker = createRequire(path.join(cwd, "package.json"))(
-    "license-checker",
-  )
+  const checker = createRequire(__filename)("license-checker")
   const classify = (directory, direct) =>
     new Promise((resolve, reject) => {
       checker.init(
         {
           start: directory,
           direct,
-          production: true,
+          production: direct === undefined,
           excludePrivatePackages: true,
         },
         (error, data) => (error ? reject(error) : resolve(data)),
@@ -101,12 +99,31 @@ async function scanNode(cwd, evidence) {
     })
   let packages = []
   if (usesPnpm(cwd)) {
+    let installationRoot = cwd
+    while (
+      !fs.existsSync(
+        path.join(installationRoot, "node_modules/.modules.yaml"),
+      ) &&
+      path.dirname(installationRoot) !== installationRoot
+    )
+      installationRoot = path.dirname(installationRoot)
+    const args = ["list", "--prod", "--depth", "Infinity", "--json"]
+    if (
+      installationRoot !== cwd &&
+      fs.existsSync(path.join(installationRoot, "node_modules/.modules.yaml"))
+    )
+      args.unshift(
+        "--dir",
+        installationRoot,
+        "--filter",
+        "{./" + path.relative(installationRoot, cwd) + "}",
+      )
     const trees = JSON.parse(
-      execFileSync(
-        "pnpm",
-        ["list", "--prod", "--depth", "Infinity", "--json"],
-        { cwd, encoding: "utf8", maxBuffer: 128 * 1024 * 1024 },
-      ),
+      execFileSync("pnpm", args, {
+        cwd,
+        encoding: "utf8",
+        maxBuffer: 128 * 1024 * 1024,
+      }),
     )
     const tree = trees.find(
       (item) =>
