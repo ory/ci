@@ -47,6 +47,8 @@ fi
 install_asset license-engine.sh .bin/license-engine.sh 0755
 install_asset licenses .bin/licenses 0755
 install_asset list-licenses .bin/list-licenses 0755
+install_asset report-licenses.cjs .bin/report-licenses.cjs 0644
+install_asset reviewed-licenses.json .bin/reviewed-licenses.json 0644
 
 if [ "$FULL_INSTALL" = true ] || [ -f go.mod ]; then
 	{
@@ -56,6 +58,7 @@ if [ "$FULL_INSTALL" = true ] || [ -f go.mod ]; then
 	} 2>/dev/null
 	GOBIN="$(pwd)/.bin" go install github.com/google/go-licenses/v2@v2.0.1
 	install_asset license-template-go.tpl .bin/license-template-go.tpl 0644
+	install_asset license-template-go.json.tpl .bin/license-template-go.json.tpl 0644
 fi
 
 if [ "$FULL_INSTALL" = true ] || [ -f package.json ]; then
