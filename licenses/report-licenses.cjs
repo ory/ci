@@ -94,7 +94,10 @@ async function scanNode(cwd, evidence) {
           production: direct === undefined,
           excludePrivatePackages: true,
         },
-        (error, data) => (error ? reject(error) : resolve(data)),
+        (error, data) =>
+          error
+            ? reject(new Error(`${directory}: ${error.message}`))
+            : resolve(data),
       )
     })
   let packages = []
@@ -245,6 +248,10 @@ function scanGo(cwd, evidence) {
 }
 
 async function main() {
+  if (Number(process.versions.node.split(".")[0]) >= 26)
+    throw new Error(
+      "Use Node.js 22 or 24: license-checker does not support Node.js 26 metadata parsing.",
+    )
   if (process.argv.slice(2).some((arg) => arg !== "--json"))
     throw new Error("Usage: list-licenses [--json]")
   const cwd = process.cwd()

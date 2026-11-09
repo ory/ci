@@ -23,13 +23,12 @@ recognizes in the current directory.
 
 ## Inventory reports
 
-The scanner requires Node.js 18 or later and the installed `license-checker`
-package for JavaScript projects. Install the project's locked dependencies
-first. For pnpm projects, the scanner uses `pnpm list` to follow the installed
-dependency graph, including transitive packages in the virtual store. Missing
-required packages fail the scan. Optional packages absent on the current
-platform are not included. npm projects use the installed license-checker
-dependency walker.
+Use Node.js 22 or 24 and the installed `license-checker` package for JavaScript
+projects. Install the project's locked dependencies first. For pnpm projects,
+the scanner uses `pnpm list` to follow the installed dependency graph, including
+transitive packages in the virtual store. Missing required packages fail the
+scan. Optional packages absent on the current platform are not included. npm
+projects use the installed license-checker dependency walker.
 
 Go reports scan `./...` and its imports once. Set `GOFLAGS` for the build tags
 used by the product. Test-only imports, other build configurations, and non-Go
