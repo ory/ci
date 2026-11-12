@@ -45,7 +45,7 @@ runs:
         node-version: "16"
     - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
       with:
-        go-version: "1.25"
+        go-version: "1.27"
     - run: |
         git config --global user.email "60093411+ory-bot@users.noreply.github.com"
         git config --global user.name "ory-bot"
@@ -108,6 +108,10 @@ runs:
         COSIGN_PWD: ${{ inputs.cosign_pwd }}
         DOCKER_USERNAME: ${{ inputs.docker_username }}
         DOCKER_PASSWORD: ${{ inputs.docker_password }}
+        # The xgoreleaser image ships Go 1.26.0 with GOTOOLCHAIN=local, which
+        # refuses modules that declare go >= 1.27. Have it fetch Go 1.27.4
+        # instead, and switch higher if a go.mod asks for a newer toolchain.
+        GOTOOLCHAIN: go1.27.4+auto
       run: |
         cat "$notes"
         # clean up ory/changelog checkout
@@ -123,6 +127,7 @@ runs:
             -e DOCKER_USERNAME \
             -e DOCKER_PASSWORD \
             -e GORELEASER_CURRENT_TAG \
+            -e GOTOOLCHAIN \
             -v /var/run/docker.sock:/var/run/docker.sock \
             oryd/xgoreleaser:1.26.0-2.14.1@sha256:635fdea1104f933c13298228601ceeda725eb7ce3ed3c1757aae712f44bdd773 release --release-header "/notes.md" --clean --timeout 60m
 
