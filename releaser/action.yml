@@ -45,7 +45,7 @@ runs:
         node-version: "16"
     - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
       with:
-        go-version: "1.25"
+        go-version: "1.27"
     - run: |
         git config --global user.email "60093411+ory-bot@users.noreply.github.com"
         git config --global user.name "ory-bot"
@@ -113,7 +113,7 @@ runs:
         # clean up ory/changelog checkout
         rm -rf changelog
 
-        docker pull --platform linux/amd64 oryd/xgoreleaser:1.26.0-2.14.1@sha256:635fdea1104f933c13298228601ceeda725eb7ce3ed3c1757aae712f44bdd773
+        docker pull --platform linux/amd64 oryd/xgoreleaser:1.27.4-2.14.1@sha256:c70e99a0bcc3139304b40b96abc2df2094029100a41aefb4654a81355a8878ea
         docker run --privileged --mount type=bind,source="$(pwd)",target=/project \
             --mount type=bind,source="$notes",target=/notes.md \
             --platform linux/amd64 \
@@ -124,7 +124,7 @@ runs:
             -e DOCKER_PASSWORD \
             -e GORELEASER_CURRENT_TAG \
             -v /var/run/docker.sock:/var/run/docker.sock \
-            oryd/xgoreleaser:1.26.0-2.14.1@sha256:635fdea1104f933c13298228601ceeda725eb7ce3ed3c1757aae712f44bdd773 release --release-header "/notes.md" --clean --timeout 60m
+            oryd/xgoreleaser:1.27.4-2.14.1@sha256:c70e99a0bcc3139304b40b96abc2df2094029100a41aefb4654a81355a8878ea release --release-header "/notes.md" --clean --timeout 60m
 
         git add -A
         git stash || true
