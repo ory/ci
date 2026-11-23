@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-ORY_CI_REF=${ORY_CI_REF:-dc2188433f158842deb4d346483dade551897181}
+ORY_CI_REF=${ORY_CI_REF:-40fbcc38ee89b25691a31efee6e1a38cb56085d9}
 
 install_asset() {
 	source_path=$1
