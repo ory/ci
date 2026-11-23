@@ -82,6 +82,7 @@ APPROVED_MODULES=(
 	'@ory/keto-grpc-client.*'                                                             # Apache-2.0 - submodule of keto
 	'golden-fleece@1.0.9'                                                                 # MIT: https://github.com/Rich-Harris/golden-fleece/blob/master/LICENSE
 	'github.com/gogo/googleapis/.*'                                                       # Apache-2.0 https://github.com/gogo/googleapis/blob/master/LICENSE
+	'elkjs@0.12.1'                                                                        # EPL-2.0 (of EPL-2.0 OR GPL-3.0-or-later), used unmodified: https://github.com/kieler/elkjs/blob/0.12.1/LICENSE.md
 )
 
 # These lines in the output should be ignored (plain text, no regex).
